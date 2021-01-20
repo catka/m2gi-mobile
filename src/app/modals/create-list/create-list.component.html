@@ -1,0 +1,8 @@
+<form [formGroup]="listForm">
+    <ion-item>
+        <ion-label position="floating">List name</ion-label>
+        <ion-input formControlName="name" required></ion-input>
+    </ion-item>
+</form>
+
+<ion-button color="success" expand="block" (click)="submitForm()">Success</ion-button>
