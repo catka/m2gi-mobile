@@ -1,7 +1,8 @@
 import { ListService } from './../../services/list.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { List } from 'src/app/models/list';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-list',
@@ -9,22 +10,31 @@ import { List } from 'src/app/models/list';
   styleUrls: ['./create-list.component.scss'],
 })
 export class CreateListComponent implements OnInit {
-  listForm: FormGroup;
+  public listForm: FormGroup = new FormGroup({});
 
-  constructor(private _fb: FormBuilder, private listService: ListService) { }
+  constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController, public toastController: ToastController) {
+  }
 
   ngOnInit() {
     this.listForm = this._fb.group({
-      name: this._fb.control('', Validators.required),
+      name: ['', Validators.required],
     });
   }
 
-  submitForm() {
-    console.log(this.listForm);
+  onSubmit(formvalue) {
     if (this.listForm.valid) {
       this.listService.create(new List(this.listForm.get('name').value));
+      this.modalCtrl.dismiss();
     } else {
-      //TODO: Toast error msg
+      this.showErrorToast("List name cannot be empty.");
     }
+  }
+
+  async showErrorToast(err: string) {
+    const toast = await this.toastController.create({
+      message: err,
+      duration: 2000
+    });
+    toast.present();
   }
 }
