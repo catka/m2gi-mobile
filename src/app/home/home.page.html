@@ -1,29 +1,44 @@
 <ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title>
-            TODO Lists
-        </ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-title>
+      TODO Lists
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">TODO Lists</ion-title>
-        </ion-toolbar>
-    </ion-header>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">TODO Lists</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-    <div id="container">
-        <ion-list>
-            <ion-item *ngFor="let l of list">
-                <ion-label>{{ l.name }}</ion-label>
-            </ion-item>
-        </ion-list>
-    </div>
+  <div id="container">
+    <ion-list>
+      <ion-item-sliding *ngFor="let l of list">
+        <ion-item>
+          <ion-label (click)="goToList(l)">
+            {{ l.name }}
+          </ion-label>
+          <ion-note slot="end">
+            {{ l.stats }}
+          </ion-note>
+        </ion-item>
+        <ion-item-options>
+          <ion-item-option color="primary" (click)="update(l)">
+            <ion-icon slot="start" name="pencil"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="delete(l)">
+            <ion-icon slot="start" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
 
-    <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="newListModal()">
-        <ion-fab-button>
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="newListModal()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

@@ -1,8 +1,7 @@
 <form [formGroup]="listForm">
-    <ion-item>
-        <ion-label position="floating">List name</ion-label>
-        <ion-input formControlName="name" required></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">List name</ion-label>
+    <ion-input formControlName="name" required autofocus></ion-input>
+  </ion-item>
+  <ion-button color="success" expand="block" (click)="onSubmit()">{{ list ? 'Update' : 'Create' }} list</ion-button>
 </form>
-
-<ion-button color="success" expand="block" (click)="submitForm()">Success</ion-button>

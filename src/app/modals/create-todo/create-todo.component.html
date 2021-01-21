@@ -1,3 +1,11 @@
-<p>
-  create-todo works!
-</p>
+<form [formGroup]="todoForm">
+  <ion-item>
+    <ion-label position="floating">Todo name</ion-label>
+    <ion-input formControlName="name" required autofocus></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Todo description</ion-label>
+    <ion-input formControlName="description"></ion-input>
+  </ion-item>
+  <ion-button color="success" expand="block" (click)="onSubmit()">{{ todo ? 'Update' : 'Create' }} Todo</ion-button>
+</form>

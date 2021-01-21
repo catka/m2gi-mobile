@@ -1,5 +1,11 @@
 export class Todo {
-  private name: string;
-  private description: string;
-  private isDone: boolean = false;
+  name: string;
+  description: string;
+  isDone: boolean = false;
+
+  constructor(name: string, description?: string) {
+    this.name = name;
+    if(description)
+      this.description = description;
+  }
 }
