@@ -47,7 +47,11 @@ export class ListDetailsPage implements OnInit {
     this.newTodoModal(todo);
   }
 
-  deleteTodo(todo: Todo) : void {
+  deleteTodo(todo: Todo): void {
     this.todoService.delete(todo, this.list);
+  }
+
+  goToTodo(todo: Todo): void{
+      this.router.navigateByUrl('/todos/' + todo.id);
   }
 }

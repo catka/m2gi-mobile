@@ -1,9 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>todo-details</ion-title>
+    <ion-title *ngIf="todo"> {{ todo.name }} ({{todo.isDone ? 'Done' : 'Not done'}})</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ng-container *ngIf="todo">
+    <ion-item>
+      <ion-label>{{ todo.description }}</ion-label>
+    </ion-item>
+  </ng-container>
 </ion-content>

@@ -15,8 +15,8 @@
     <ion-list>
       <ion-item-sliding *ngFor="let todo of list.todos">
         <ion-item>
-          <ion-label>{{ todo.name }}</ion-label>
-          <ion-checkbox slot="start" [(ngModel)]="todo.isDone"></ion-checkbox>
+          <ion-label (click)="goToTodo(todo)">{{ todo.name }}</ion-label>
+          <ion-toggle slot="start" [(ngModel)]="todo.isDone"></ion-toggle>
           <ion-note slot="end">
             {{ todo.description }}
           </ion-note>
