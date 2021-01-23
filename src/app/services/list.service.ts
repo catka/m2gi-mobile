@@ -1,6 +1,7 @@
 import { List } from './../models/list';
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
+import {TodoService} from './todo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ export class ListService {
   private lists: List[] = [];
   currentListId = 0;
 
-  constructor() {
+  constructor(private todoService: TodoService) {
     let l = new List("Test list", this.nextId());
-    l.todos.push(new Todo("Task1", "This is a first task"));
+    // l.todos.push(new Todo("Task1", "This is a first task"));
+    todoService.create(new Todo("Task 1", "This is a first task"), l);
     this.lists.push(l);
   }
 
@@ -33,7 +35,7 @@ export class ListService {
   }
 
   delete(list: List): void{
-    this.lists = this.lists.filter((l) => l != list);
+    this.lists = this.lists.filter((l) => l !== list);
   }
 
   nextId(): number{

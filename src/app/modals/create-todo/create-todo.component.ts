@@ -4,6 +4,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { List } from 'src/app/models/list';
 import { Todo } from 'src/app/models/todo';
 import { ListService } from 'src/app/services/list.service';
+import {TodoService} from '../../services/todo.service';
 
 @Component({
   selector: 'app-create-todo',
@@ -15,7 +16,7 @@ export class CreateTodoComponent implements OnInit {
   @Input() list: List;
   @Input() todo: Todo;
 
-  constructor(private _fb: FormBuilder, private modalCtrl: ModalController, public toastController: ToastController) {
+  constructor(private _fb: FormBuilder, private modalCtrl: ModalController, public toastController: ToastController, private todoService: TodoService) {
   }
 
   ngOnInit() {
@@ -32,7 +33,8 @@ export class CreateTodoComponent implements OnInit {
   onSubmit() {
     if (this.todoForm.valid) {
       if (!this.todo) {
-        this.list.todos.push(new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value));
+        // this.list.todos.push(new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value));
+        this.todoService.create(new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value), this.list);
       } else {
         console.log('this is an update');
         const index = this.list.todos.findIndex((t) => t === this.todo);

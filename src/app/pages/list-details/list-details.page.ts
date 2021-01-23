@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { List } from 'src/app/models/list';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from 'src/app/models/todo';
+import {TodoService} from '../../services/todo.service';
 
 @Component({
   selector: 'app-list-details',
@@ -14,7 +15,7 @@ import { Todo } from 'src/app/models/todo';
 export class ListDetailsPage implements OnInit {
   list: List;
 
-  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController) { }
+  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -44,5 +45,9 @@ export class ListDetailsPage implements OnInit {
 
   updateTodo(todo: Todo) : void {
     this.newTodoModal(todo);
+  }
+
+  deleteTodo(todo: Todo) : void {
+    this.todoService.delete(todo, this.list);
   }
 }
