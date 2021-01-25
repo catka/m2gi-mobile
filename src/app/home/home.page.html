@@ -13,7 +13,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
+  <ng-container>
     <ion-list>
       <ion-item-sliding *ngFor="let l of list">
         <ion-item>
@@ -34,7 +34,7 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
-  </div>
+  </ng-container>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="newListModal()">
     <ion-fab-button>

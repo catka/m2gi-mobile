@@ -15,17 +15,17 @@
     <ion-list>
       <ion-item-sliding *ngFor="let todo of list.todos">
         <ion-item>
-          <ion-label>{{ todo.name }}</ion-label>
-          <ion-checkbox slot="start" [(ngModel)]="todo.isDone"></ion-checkbox>
+          <ion-label (click)="goToTodo(todo)">{{ todo.name }}</ion-label>
+          <ion-toggle slot="start" [(ngModel)]="todo.isDone"></ion-toggle>
           <ion-note slot="end">
             {{ todo.description }}
           </ion-note>
         </ion-item>
         <ion-item-options>
-          <ion-item-option color="primary">
-            <ion-icon slot="start" name="pencil" (click)="updateTodo(todo)"></ion-icon>
+          <ion-item-option color="primary" (click)="updateTodo(todo)">
+            <ion-icon slot="start" name="pencil"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger">
+          <ion-item-option color="danger" (click)="deleteTodo(todo)">
             <ion-icon slot="start" name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>
