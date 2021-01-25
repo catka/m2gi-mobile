@@ -20,6 +20,11 @@ export class TodoService {
         list.todos.push(todo);
     }
 
+
+    update(todo: Todo, value): void {
+        todo = Object.assign(todo, value);
+    }
+
     delete(todoForDelete: Todo, list: List): void {
         // Remove from list and then from service list
         list.todos = list.todos.filter((todo) => todo !== todoForDelete);
