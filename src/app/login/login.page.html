@@ -1,18 +1,18 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
   <form [formGroup]="loginForm">
     <ion-item>
-      <ion-label position="floating">login</ion-label>
-      <ion-input formControlName="login" required autofocus></ion-input>
+      <ion-label position="floating">E-mail</ion-label>
+      <ion-input type=email formControlName="email" required autofocus></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input formControlName="password" required autofocus></ion-input>
+      <ion-input type=password formControlName="password" required autofocus></ion-input>
     </ion-item>
     <ion-button color="success" expand="block" (click)="login()">Login</ion-button>
   </form>
