@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "todolist-9bb18": {
+      "hosting": {
+        "app": [
+          "todolist-9bb18"
+        ]
+      }
+    }
+  }
+}

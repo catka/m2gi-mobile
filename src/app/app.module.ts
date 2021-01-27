@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateTodoComponent } from './modals/create-todo/create-todo.component';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,9 @@ import { CreateTodoComponent } from './modals/create-todo/create-todo.component'
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+      AngularFireModule.initializeApp(environment.firebase),
+      AngularFireAnalyticsModule,
+      AngularFirestoreModule
   ],
   providers: [
     StatusBar,
