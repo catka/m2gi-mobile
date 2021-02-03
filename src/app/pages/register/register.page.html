@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+    <ion-buttons slot="start">
+        <ion-buttons slot="start">
+            <ion-back-button (click)="back()"></ion-back-button>
+        </ion-buttons>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="registerForm">
+    <ion-item>
+      <ion-label position="floating">Username (email)</ion-label>
+      <ion-input formControlName="username" required autofocus></ion-input>
+  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input formControlName="password" type="password" required autofocus></ion-input>
+  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password confirmation</ion-label>
+      <ion-input formControlName="passwordConfirm" type="password" required autofocus></ion-input>
+  </ion-item>
+  <ion-button color="success" expand="block" (click)="onSubmit()">Create account!</ion-button>
+  </form>
+</ion-content>

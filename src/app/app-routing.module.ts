@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {canActivate, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
@@ -18,18 +18,21 @@ const routes: Routes = [
   {
     path: 'lists',
     ...canActivate(redirectUnauthorizedToLogin),
-    loadChildren: () => import('./pages/list-details/list-details.module').then( m => m.ListDetailsPageModule)
+    loadChildren: () => import('./pages/list-details/list-details.module').then(m => m.ListDetailsPageModule)
   },
   {
     path: 'todos',
     ...canActivate(redirectUnauthorizedToLogin),
-    loadChildren: () => import('./pages/todo-details/todo-details.module').then( m => m.TodoDetailsPageModule)
+    loadChildren: () => import('./pages/todo-details/todo-details.module').then(m => m.TodoDetailsPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
-
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
+  },
 ];
 
 @NgModule({
