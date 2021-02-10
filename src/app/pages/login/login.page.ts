@@ -63,4 +63,12 @@ export class LoginPage implements OnInit {
   goToRegister() {
     this.router.navigateByUrl('register');
   }
+
+  fbLogin() {
+    this.showToast('To be implemented', false);
+  }
+
+  googleLogin() {
+    this.showToast('To be implemented', false);
+  }
 }

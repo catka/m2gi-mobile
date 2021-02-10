@@ -23,7 +23,10 @@
     </ng-container>
     <ion-button color="success" expand="block" (click)="login()">Login</ion-button>
   </form>
-  
   <ion-button color="primary" expand="block" (click)="goToRegister()">No account yet? Register</ion-button>
   <ion-button expand="block" disabled>Reset password</ion-button>
+  <div class="or">OR</div>
+  <ion-button color="light" expand="block" class="google loginwith" (click)="googleLogin()"><ion-icon slot="start" name="logo-google"></ion-icon> Login with google</ion-button>
+  <ion-button expand="block" class="facebook loginwith" (click)="fbLogin()"><ion-icon slot="start" name="logo-facebook"></ion-icon> Login with facebook</ion-button>
+  <div class="or"></div>
 </ion-content>
