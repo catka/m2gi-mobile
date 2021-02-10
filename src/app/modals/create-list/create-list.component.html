@@ -3,5 +3,8 @@
     <ion-label position="floating">List name</ion-label>
     <ion-input formControlName="name" required autofocus></ion-input>
   </ion-item>
+  <ng-container *ngIf="(listForm.get('name').dirty || listForm.get('name').touched)">
+    <div class="form-error" *ngIf="listForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The list name is required.</div>
+  </ng-container>
   <ion-button color="success" expand="block" (click)="onSubmit()">{{ list ? 'Update' : 'Create' }} list</ion-button>
 </form>

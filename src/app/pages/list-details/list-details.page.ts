@@ -18,12 +18,10 @@ export class ListDetailsPage implements OnInit {
   constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      if (params && params['id']) {
-        this.list = this.listService.getOne(+params['id']);
-      }
-    })
-    
+    const listId = this.route.snapshot.paramMap.get('id');
+    if (listId) {
+      this.list = this.listService.getOne(+listId);
+    }
   }
 
   back(): void{
