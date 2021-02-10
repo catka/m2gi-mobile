@@ -64,8 +64,8 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl('register');
   }
   goToResetPassword() {
-    this.router.navigateByUrl('password-reset');
-
+      this.router.navigateByUrl('password-reset');
+  }
   fbLogin() {
     this.showToast('To be implemented', false);
   }
