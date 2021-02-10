@@ -27,14 +27,13 @@ export class TodoDetailsPage implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params.subscribe((params) => {
-            if (params && params['id']) {
-                this.todo = this.todoService.getOne(+params['id']);
-                if (this.todo){
-                    this.todoDetailsForm.patchValue(this.todo);
-                }
-            }
-        });
+        const todoId = this.route.snapshot.paramMap.get('id');
+        if (todoId) {
+          this.todo = this.todoService.getOne(+todoId);
+          if (this.todo){
+            this.todoDetailsForm.patchValue(this.todo);
+          }
+        }
     }
 
     onSubmit() {
