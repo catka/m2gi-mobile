@@ -1,3 +1,4 @@
+import { matchingPasswordsValidator } from './../../validators/matching-password-validator';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,7 +22,7 @@ export class RegisterPage implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8)]]
       // TODO: add validator for password match
-    });
+    }, {validators: [matchingPasswordsValidator]});
   }
 
   onSubmit() {
