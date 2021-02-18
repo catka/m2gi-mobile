@@ -27,6 +27,6 @@
   <ion-button color="secondary" expand="block" (click)="goToResetPassword()">Reset Password</ion-button>
   <div class="or">OR</div>
   <ion-button color="light" expand="block" class="google loginwith" (click)="googleLogin()"><ion-icon slot="start" name="logo-google"></ion-icon> Login with google</ion-button>
-  <ion-button expand="block" class="facebook loginwith" (click)="fbLogin()"><ion-icon slot="start" name="logo-facebook"></ion-icon> Login with facebook</ion-button>
+  <ion-button expand="block" class="facebook loginwith" (click)="authService.FacebookAuth()"><ion-icon slot="start" name="logo-facebook"></ion-icon> Login with facebook</ion-button>
   <div class="or"></div>
 </ion-content>

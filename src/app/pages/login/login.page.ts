@@ -4,6 +4,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import firebase from 'firebase';
+import {AuthService} from '../../services/auth.service';
 
 
 @Component({
@@ -15,13 +16,20 @@ export class LoginPage implements OnInit {
 
     public loginForm: FormGroup = new FormGroup({});
 
-    constructor(private _fb: FormBuilder, public  afAuth: AngularFireAuth, private router: Router, public toastController: ToastController) {
+    constructor(private _fb: FormBuilder, public  afAuth: AngularFireAuth, private router: Router, public toastController: ToastController, public authService: AuthService) {
     }
 
     ngOnInit() {
         this.loginForm = this._fb.group({
             email: ['', [Validators.email, Validators.required]],
             password: ['', Validators.required],
+        });
+        this.afAuth.getRedirectResult().then((userCredential) => {
+            if (userCredential.user !== null){
+                this.showToast('Logged in with Facebook.', false);
+                this.router.navigateByUrl('home');
+            }
+        }).catch((error) => {
         });
     }
 
@@ -68,66 +76,6 @@ export class LoginPage implements OnInit {
 
     goToResetPassword() {
         this.router.navigateByUrl('password-reset');
-    }
-
-// Auth logic to run auth providers
-    AuthLogin(provider) {
-        return this.afAuth.signInWithRedirect(provider).then((result: any) => {
-            this.showToast('FB LOGIN!.', false);
-
-            // const credential = result.credential;
-            // // The signed-in user info.
-            // const user = result.user;
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            // let accessToken = credential.accessToken;
-
-            // ...
-        })
-        .catch((error) => {
-            this.showToast('FB ERROR!.', false);
-
-            // Handle Errors here.
-            // let errorCode = error.code;
-            // let errorMessage = error.message;
-            // // The email of the user's account used.
-            // let email = error.email;
-            // // The firebase.auth.AuthCredential type that was used.
-            // let credential = error.credential;
-
-            // ...
-        });
-    }
-
-    fbLogin() {
-        const provider = new firebase.auth.FacebookAuthProvider();
-        return this.AuthLogin(provider);
-
-        // fbAuth.auth()
-        //     .signInWithPopup()
-        //     .then((result) => {
-        //         /** @type {firebase.auth.OAuthCredential} */
-        //         let credential = result.credential;
-        //
-        //         // The signed-in user info.
-        //         let user = result.user;
-        //
-        //         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        //         // let accessToken = credential.accessToken;
-        //
-        //         // ...
-        //     })
-        //     .catch((error) => {
-        //         // Handle Errors here.
-        //         let errorCode = error.code;
-        //         let errorMessage = error.message;
-        //         // The email of the user's account used.
-        //         let email = error.email;
-        //         // The firebase.auth.AuthCredential type that was used.
-        //         let credential = error.credential;
-        //
-        //         // ...
-        //     });
-        // // this.showToast('To be implemented', false);
     }
 
     googleLogin() {
