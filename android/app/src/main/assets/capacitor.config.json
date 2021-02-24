@@ -1,12 +1,20 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "myApp",
+  "appName": "TodoList",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
+    },
+    "GoogleAuth": {
+      "scopes": [
+        "profile",
+        "email"
+      ],
+      "serverClientId": "502746517752-2ui6tl8nv42c4bthdj9q0ocpp11olr8a.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
     }
   },
   "cordova": {}
