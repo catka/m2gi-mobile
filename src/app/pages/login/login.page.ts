@@ -4,7 +4,9 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import firebase from 'firebase';
-import {AuthService} from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { Plugins } from '@capacitor/core';
+import "@codetrix-studio/capacitor-google-auth";
 
 
 @Component({
@@ -78,7 +80,9 @@ export class LoginPage implements OnInit {
         this.router.navigateByUrl('password-reset');
     }
 
-    googleLogin() {
-        this.showToast('To be implemented', false);
+    async googleLogin() {
+        let googleUser = await Plugins.GoogleAuth.signIn() as any;
+        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
+        await this.afAuth.signInAndRetrieveDataWithCredential(credential);
     }
 }
