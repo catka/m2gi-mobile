@@ -16,6 +16,12 @@ export class ListService {
   private listCollection: AngularFirestoreCollection<List>;
 
   constructor(private todoService: TodoService, private af: AngularFirestore) {
+    // this.listCollection = this.af.collection('lists', ref => {
+    //   return ref
+    //       // .where('canRead', 'array-contains', 'AzzaujI8wCcnXJujpOBrhVKLYOP2');
+    //       .where('owner', '==', 'AzzaujI8wCcnXJujpOBrhVKLYOP2'])
+    //   ;
+    // });
     this.listCollection = this.af.collection('lists');
   }
 
@@ -25,11 +31,11 @@ export class ListService {
     );
   }
 
-  getOne(id: number): List{
+  getOne(id: string): List{
     return this.lists.find((l) => l.id === id);
   }
 
-  getOneObs(id: number): Observable<List>{
+  getOneObs(id: string): Observable<List>{
     return this.listCollection.doc(id + '').snapshotChanges().pipe(
         map(actions => this.convertSingleSnapshotData<List>(actions))
     );
@@ -44,7 +50,7 @@ export class ListService {
 
 
   create(list: List): Promise<void>{
-    return this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list));
+    return this.listCollection.doc().set(this.getJSObject(list));
   }
 
   update(list: List, value): Promise<void>{

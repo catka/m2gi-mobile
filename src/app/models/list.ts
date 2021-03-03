@@ -1,14 +1,20 @@
 import { Todo } from './todo';
 
 export class List {
-  id: number;
+  id: string;
   name: string;
+  owner: string;
+  canRead: string[];
+  canWrite: string[];
   todos: Todo[] = [];
 
-  constructor(name: string, id?: number) {
+  constructor(name: string, ownerId?: string, canRead?: string[], canWrite?: string[]) {
     this.name = name;
-    if(id)
-      this.id = id;
+    this.owner = ownerId;
+    this.canRead = canRead;
+    this.canWrite = canWrite;
+    // if(id)
+    //   this.id = id;
   }
 
   get stats(): string {

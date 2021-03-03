@@ -3,6 +3,18 @@
     <ion-label position="floating">List name</ion-label>
     <ion-input formControlName="name" required autofocus></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="floating">Can read</ion-label>
+    <ion-select multiple="true" formControlName="canRead">
+      <ion-select-option *ngFor="let uid of availableUserIds" value="{{uid}}">{{uid}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+  <ion-label position="floating">Can write</ion-label>
+    <ion-select multiple="true" formControlName="canWrite">
+      <ion-select-option *ngFor="let uid of availableUserIds" value="{{uid}}">{{uid}}</ion-select-option>
+    </ion-select>
+  </ion-item>
   <ng-container *ngIf="(listForm.get('name').dirty || listForm.get('name').touched)">
     <div class="form-error" *ngIf="listForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The list name is required.</div>
   </ng-container>
