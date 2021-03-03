@@ -16,16 +16,7 @@ export class ListService {
   private listCollection: AngularFirestoreCollection<List>;
 
   constructor(private todoService: TodoService, private af : AngularFirestore) {
-    const l = new List('Test list', this.nextId());
-    // l.todos.push(new Todo("Task1", "This is a first task"));
-    todoService.create(new Todo('Task 1', 'This is a first task'), l);
-    this.lists.push(l);
-
     this.listCollection = this.af.collection('lists');
-  }
-
-  getAllOld(): List[]{
-    return this.lists;
   }
 
   getAll(): Observable<List[]> {
@@ -38,36 +29,25 @@ export class ListService {
     return this.lists.find((l) => l.id === id);
   }
 
-  create(list: List): void{
-    this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list)).then(() => {
-      console.log("Document successfully created!");
-    })
-      .catch((error) => {
-        console.error("Error creating document: ", error);
-      });
+  create(list: List): Promise<void>{
+    return this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list));
+    //     .then(() => {
+    //   console.log("Document successfully created!");
+    // })
+    //   .catch((error) => {
+    //     console.error("Error creating document: ", error);
+    //   });
 
     // list.id = this.nextId();
     // this.lists.push(list);
   }
 
-  update(list: List, value): void{
-    this.listCollection.doc(list.id + '').set(value).then(() => {
-      console.log("Document successfully written!");
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
-    });
-
-    // list = Object.assign(list, value);
+  update(list: List, value): Promise<void>{
+    return this.listCollection.doc(list.id + '').set(value);
   }
 
-  delete(list: List): void{
-    this.listCollection.doc(list.id + '').delete().then(() => {
-      console.log("Document successfully deleted!");
-    }).catch((error) => {
-      console.error("Error removing document: ", error);
-    });
-    // this.lists = this.lists.filter((l) => l !== list);
+  delete(list: List): Promise<void>{
+    return this.listCollection.doc(list.id + '').delete();
   }
 
   nextId(): number{

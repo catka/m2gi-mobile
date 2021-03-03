@@ -29,21 +29,47 @@ export class CreateListComponent implements OnInit {
   onSubmit() {
     if (this.listForm.valid) {
       if (!this.list) {
-        this.listService.create(new List(this.listForm.get('name').value));
+        this.listService.create(new List(this.listForm.get('name').value))
+            .then(() => {
+              // this.showErrorToast('Created!!');
+              this.showToast('List successfully created!', false);
+            })
+            .catch((error) => {
+              console.error('Error updating list: ', error);
+              this.showToast('There was an error creating the list', false);
+            });
       } else {
-        this.listService.update(this.list, this.listForm.value);
+        this.listService.update(this.list, this.listForm.value)
+            .then(() => {
+              this.showToast('List successfully updated!', false);
+            })
+          .catch((error) => {
+            console.error('Error updating list: ', error);
+            this.showToast('There was an error removing the updating the list', false);
+          });
       }
       this.modalCtrl.dismiss();
     } else {
-      this.showErrorToast("List name cannot be empty.");
+      this.showToast('List name cannot be empty.', true);
     }
   }
 
-  async showErrorToast(err: string) {
+
+  async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({
-      message: err,
-      duration: 2000
+      message: alertMessage,
+      duration: 2000,
+      color: error ? 'danger' : 'primary',
     });
-    toast.present();
+    await toast.present();
   }
+
+
+  // async showErrorToast(err: string) {
+  //   const toast = await this.toastController.create({
+  //     message: err,
+  //     duration: 2000
+  //   });
+  //   toast.present();
+  // }
 }
