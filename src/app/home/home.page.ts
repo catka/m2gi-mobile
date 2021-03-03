@@ -4,20 +4,33 @@ import { Component, OnInit } from '@angular/core';
 import { List } from '../models/list';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import {Observable} from 'rxjs';
+import {test} from 'fuzzy';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{  
+export class HomePage implements OnInit{
+
+  currentLists: Observable<List[]>;
+
   constructor(private listService: ListService, public modalController: ModalController, private router: Router) { }
-  
+
+
   ngOnInit(): void {
+    this.currentLists = this.listService.getAll();
+    this.listService.getAll().subscribe((newList) => this.listTestToDelete(newList));
+  }
+
+
+  listTestToDelete(ttt){
+    debugger;
   }
 
   get list(): List[]{
-    return  this.listService.getAll();
+    return  this.listService.getAllOld();
   }
 
   delete(list: List): void {

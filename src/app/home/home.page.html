@@ -15,14 +15,14 @@
 
   <ng-container>
     <ion-list>
-      <ion-item-sliding *ngFor="let l of list">
+      <ion-item-sliding *ngFor="let l of currentLists | async">
         <ion-item>
           <ion-label (click)="goToList(l)">
             {{ l.name }}
           </ion-label>
-          <ion-note slot="end">
-            {{ l.stats }}
-          </ion-note>
+<!--          <ion-note slot="end">-->
+<!--            {{ l.stats }}-->
+<!--          </ion-note>-->
         </ion-item>
         <ion-item-options>
           <ion-item-option color="primary" (click)="update(l)">
