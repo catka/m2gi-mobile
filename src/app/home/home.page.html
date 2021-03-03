@@ -15,7 +15,7 @@
 
   <ng-container>
     <ion-list>
-      <ion-item-sliding *ngFor="let l of list">
+      <ion-item-sliding *ngFor="let l of currentLists | async">
         <ion-item>
           <ion-label (click)="goToList(l)">
             {{ l.name }}

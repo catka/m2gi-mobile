@@ -2,6 +2,9 @@ import { List } from './../models/list';
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
 import {TodoService} from './todo.service';
+import {Observable} from 'rxjs';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,36 +13,69 @@ export class ListService {
   private lists: List[] = [];
   currentListId = 0;
 
-  constructor(private todoService: TodoService) {
-    let l = new List("Test list", this.nextId());
-    // l.todos.push(new Todo("Task1", "This is a first task"));
-    todoService.create(new Todo("Task 1", "This is a first task"), l);
-    this.lists.push(l);
+  private listCollection: AngularFirestoreCollection<List>;
+
+  constructor(private todoService: TodoService, private af: AngularFirestore) {
+    this.listCollection = this.af.collection('lists');
   }
 
-  getAll(): List[]{
-    return this.lists;
+  getAll(): Observable<List[]> {
+    return this.listCollection.snapshotChanges().pipe(
+        map(actions => this.convertSnapshotData<List>(actions))
+    );
   }
 
   getOne(id: number): List{
     return this.lists.find((l) => l.id === id);
   }
 
-  create(list: List): void{
-    list.id = this.nextId();
-    this.lists.push(list);
+  getOneObs(id: number): Observable<List>{
+    return this.listCollection.doc(id + '').snapshotChanges().pipe(
+        map(actions => this.convertSingleSnapshotData<List>(actions))
+    );
   }
 
-  update(list: List, value): void{
-    list = Object.assign(list, value);
+
+
+  // testDebug(singleDoc){
+  //   debugger;
+  //   return singleDoc;
+  // }
+
+
+  create(list: List): Promise<void>{
+    return this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list));
   }
 
-  delete(list: List): void{
-    this.lists = this.lists.filter((l) => l !== list);
+  update(list: List, value): Promise<void>{
+    return this.listCollection.doc(list.id + '').set(value);
+  }
+
+  delete(list: List): Promise<void>{
+    return this.listCollection.doc(list.id + '').delete();
   }
 
   nextId(): number{
     this.currentListId++;
     return this.currentListId;
+  }
+
+  private convertSnapshotData<T>(actions){
+    return actions.map(a => {
+      const data = a.payload.doc.data();
+      const id = a.payload.doc.id;
+      return { id, ...data} as T;
+    });
+  }
+  private convertSingleSnapshotData<T>(actions){
+    const data = actions.payload.data();
+    const id = actions.payload.id;
+    return { id, ...data} as T;
+  }
+
+
+
+  private getJSObject(customObj: any){
+    return Object.assign({}, customObj);
   }
 }
