@@ -15,7 +15,7 @@ export class ListService {
 
   private listCollection: AngularFirestoreCollection<List>;
 
-  constructor(private todoService: TodoService, private af : AngularFirestore) {
+  constructor(private todoService: TodoService, private af: AngularFirestore) {
     this.listCollection = this.af.collection('lists');
   }
 
@@ -29,17 +29,22 @@ export class ListService {
     return this.lists.find((l) => l.id === id);
   }
 
+  getOneObs(id: number): Observable<List>{
+    return this.listCollection.doc(id + '').snapshotChanges().pipe(
+        map(actions => this.convertSingleSnapshotData<List>(actions))
+    );
+  }
+
+
+
+  // testDebug(singleDoc){
+  //   debugger;
+  //   return singleDoc;
+  // }
+
+
   create(list: List): Promise<void>{
     return this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list));
-    //     .then(() => {
-    //   console.log("Document successfully created!");
-    // })
-    //   .catch((error) => {
-    //     console.error("Error creating document: ", error);
-    //   });
-
-    // list.id = this.nextId();
-    // this.lists.push(list);
   }
 
   update(list: List, value): Promise<void>{
@@ -62,6 +67,14 @@ export class ListService {
       return { id, ...data} as T;
     });
   }
+  private convertSingleSnapshotData<T>(actions){
+    const data = actions.payload.data();
+    const id = actions.payload.id;
+    return { id, ...data} as T;
+  }
+
+
+
   private getJSObject(customObj: any){
     return Object.assign({}, customObj);
   }
