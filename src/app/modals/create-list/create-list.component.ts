@@ -21,8 +21,9 @@ export class CreateListComponent implements OnInit {
   ngOnInit() {
     this.listForm = this._fb.group({
       name: ['', Validators.required],
-      canRead: ['', Validators.required],
-      canWrite: ['', Validators.required],
+      canRead: [''],
+      canWrite: [''],
+      owner: [''],
     });
     if (this.list) {
       this.listForm.patchValue(this.list);
@@ -44,6 +45,7 @@ export class CreateListComponent implements OnInit {
               this.showToast('There was an error creating the list', false);
             });
       } else {
+        debugger;
         this.listService.update(this.list, this.listForm.value)
             .then(() => {
               this.showToast('List successfully updated!', false);

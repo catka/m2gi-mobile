@@ -16,6 +16,12 @@ export class ListService {
   private listCollection: AngularFirestoreCollection<List>;
 
   constructor(private todoService: TodoService, private af: AngularFirestore) {
+    // this.listCollection = this.af.collection('lists', ref => {
+    //   return ref
+    //       // .where('canRead', 'array-contains', 'AzzaujI8wCcnXJujpOBrhVKLYOP2');
+    //       .where('owner', '==', 'AzzaujI8wCcnXJujpOBrhVKLYOP2'])
+    //   ;
+    // });
     this.listCollection = this.af.collection('lists');
   }
 
