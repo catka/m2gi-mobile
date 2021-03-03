@@ -24,9 +24,9 @@ export class ListDetailsPage implements OnInit {
   ngOnInit() {
     const listId = this.route.snapshot.paramMap.get('id');
     if (listId) {
-      this.list = this.listService.getOne(+listId);
+      this.list = this.listService.getOne(listId);
     }
-    this.currentList = this.listService.getOneObs(+listId);
+    this.currentList = this.listService.getOneObs(listId);
     // this.listService.getOneObs(+listId).subscribe((newList) => this.debugList(newList));
   }
 
