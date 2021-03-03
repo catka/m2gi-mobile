@@ -25,7 +25,7 @@ export class ListService {
     );
   }
 
-  getOne(id: number): List{
+  getOne(id: string): List{
     return this.lists.find((l) => l.id === id);
   }
 
@@ -34,14 +34,6 @@ export class ListService {
         map(actions => this.convertSingleSnapshotData<List>(actions))
     );
   }
-
-
-
-  // testDebug(singleDoc){
-  //   debugger;
-  //   return singleDoc;
-  // }
-
 
   create(list: List): Promise<void>{
     return this.listCollection.doc(this.nextId() + '').set(this.getJSObject(list));
@@ -72,8 +64,6 @@ export class ListService {
     const id = actions.payload.id;
     return { id, ...data} as T;
   }
-
-
 
   private getJSObject(customObj: any){
     return Object.assign({}, customObj);

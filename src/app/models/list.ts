@@ -1,11 +1,11 @@
 import { Todo } from './todo';
 
 export class List {
-  id: number;
+  id: string;
   name: string;
   todos: Todo[] = [];
 
-  constructor(name: string, id?: number) {
+  constructor(name: string, id?: string) {
     this.name = name;
     if(id)
       this.id = id;

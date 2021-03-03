@@ -5,18 +5,18 @@
         <ion-back-button defaultHref="/"></ion-back-button>
       </ion-buttons>
     </ion-buttons>
-    <ion-title> {{ (currentList | async) ? (currentList | async)?.name : "List not found" }}</ion-title>
+    <ion-title> {{ (list | async) ? (list | async)?.name : "List not found" }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button *ngIf="!(currentList | async)" expand="block" fill="outline" (click)="back()">Back to home</ion-button>
-  <ng-container *ngIf="(currentList | async)">
+  <ion-button *ngIf="!(list | async)" expand="block" fill="outline" (click)="back()">Back to home</ion-button>
+  <ng-container *ngIf="(list | async)">
     <ion-list>
-      <ion-item-sliding *ngFor="let todo of (currentList | async)?.todos">
+      <ion-item-sliding *ngFor="let todo of (list | async)?.todos">
         <ion-item>
           <ion-label (click)="goToTodo(todo)">{{ todo.name }}</ion-label>
-          <ion-toggle slot="start" [(ngModel)]="todo.isDone"></ion-toggle>
+          <ion-toggle slot="start" [ngModel]="todo.isDone" (click)="toggleTodoDone(todo)"></ion-toggle>
           <ion-note slot="end">
             {{ todo.description }}
           </ion-note>

@@ -21,11 +21,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/list-details/list-details.module').then(m => m.ListDetailsPageModule)
   },
   {
-    path: 'todos',
-    ...canActivate(redirectUnauthorizedToLogin),
-    loadChildren: () => import('./pages/todo-details/todo-details.module').then(m => m.TodoDetailsPageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },

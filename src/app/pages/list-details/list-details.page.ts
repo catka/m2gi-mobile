@@ -3,10 +3,11 @@ import { ToastController, ModalController } from '@ionic/angular';
 import { ListService } from './../../services/list.service';
 import { Component, OnInit } from '@angular/core';
 import { List } from 'src/app/models/list';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Todo } from 'src/app/models/todo';
 import {TodoService} from '../../services/todo.service';
 import {Observable} from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-details',
@@ -14,27 +15,26 @@ import {Observable} from 'rxjs';
   styleUrls: ['./list-details.page.scss'],
 })
 export class ListDetailsPage implements OnInit {
-
-  list: List;
-  currentList: Observable<List>;
+  list: Observable<List>;
+  listId: string;
 
 
   constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService) { }
 
   ngOnInit() {
-    const listId = this.route.snapshot.paramMap.get('id');
-    if (listId) {
-      this.list = this.listService.getOne(+listId);
-    }
-    this.currentList = this.listService.getOneObs(+listId);
-    // this.listService.getOneObs(+listId).subscribe((newList) => this.debugList(newList));
+    const listId = this.route.snapshot.paramMap.get('listId');
+    this.list = this.listService.getOneObs(+listId).pipe(
+      switchMap((l: List) => this.todoService.getListTodos(l).pipe(
+          map((todos) => l.todos = todos),
+          map((_) => l.todos.sort((a: Todo, b: Todo) => a.createdAt - b.createdAt)),
+          map((_) => l),
+        ))
+    );
+
+    this.list.subscribe((list) => {
+      this.listId = list.id;
+    });
   }
-
-  //
-  // debugList(ttt){
-  //   debugger;
-  // }
-
 
   back(): void{
     this.router.navigateByUrl('/home');
@@ -45,7 +45,7 @@ export class ListDetailsPage implements OnInit {
       component: CreateTodoComponent,
       cssClass: 'create-todo',
       componentProps: {
-        list: this.list,
+        listId: this.listId,
         todo: todo,
       }
     });
@@ -58,10 +58,17 @@ export class ListDetailsPage implements OnInit {
   }
 
   deleteTodo(todo: Todo): void {
-    this.todoService.delete(todo, this.list);
+    if (confirm("This Todo task will be deleted, are you sure?")) {
+      this.todoService.delete(todo.id, this.listId);
+    }
   }
 
   goToTodo(todo: Todo): void{
-      this.router.navigateByUrl('/todos/' + todo.id);
+      this.router.navigateByUrl('/lists/' + this.listId + '/todos/' + todo.id);
+  }
+
+  toggleTodoDone(todo: Todo) {
+    todo.isDone = !todo.isDone;
+    this.todoService.update(todo, this.listId);
   }
 }

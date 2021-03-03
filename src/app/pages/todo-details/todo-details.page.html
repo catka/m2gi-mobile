@@ -5,12 +5,13 @@
                 <ion-back-button (click)="back()"></ion-back-button>
             </ion-buttons>
         </ion-buttons>
-        <ion-title *ngIf="todo"> {{ todo.name }} ({{todo.isDone ? 'Done' : 'Not done'}})</ion-title>
+        <ion-title *ngIf="todo | async"> {{ (todo | async)?.name }} ({{ (todo | async)?.isDone ? 'Done' : 'Not done'}})</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ng-container *ngIf="todo">
+    <ion-button *ngIf="!(todo | async)" expand="block" fill="outline" (click)="back()">Back to list</ion-button>
+    <ng-container *ngIf="todo | async">
         <form [formGroup]="todoDetailsForm">
             <ion-item>
                 <ion-toggle formControlName="isDone"></ion-toggle>
