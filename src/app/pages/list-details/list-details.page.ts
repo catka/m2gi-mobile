@@ -23,7 +23,7 @@ export class ListDetailsPage implements OnInit {
 
   ngOnInit() {
     const listId = this.route.snapshot.paramMap.get('listId');
-    this.list = this.listService.getOneObs(+listId).pipe(
+    this.list = this.listService.getOneObs(listId).pipe(
       switchMap((l: List) => this.todoService.getListTodos(l).pipe(
           map((todos) => l.todos = todos),
           map((_) => l.todos.sort((a: Todo, b: Todo) => a.createdAt - b.createdAt)),

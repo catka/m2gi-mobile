@@ -6,7 +6,7 @@ import {ToastController} from '@ionic/angular';
 import firebase from 'firebase';
 import { AuthService } from '../../services/auth.service';
 import { Plugins } from '@capacitor/core';
-import "@codetrix-studio/capacitor-google-auth";
+import '@codetrix-studio/capacitor-google-auth';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
 
     login() {
         if (this.loginForm.valid) {
-            this.afAuth.signInWithEmailAndPassword(this.loginForm.get('email').value, this.loginForm.get('password').value)
+            this.authService.login(this.loginForm.get('email').value, this.loginForm.get('password').value)
                 .then((userCredential) => {
                     // Signed in
                     const user = userCredential.user;
