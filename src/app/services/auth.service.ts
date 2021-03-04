@@ -3,6 +3,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Subject, BehaviorSubject} from 'rxjs';
 import firebase from 'firebase';
+import {Plugins} from '@capacitor/core';
 
 @Injectable({
     providedIn: 'root'
@@ -42,6 +43,11 @@ export class AuthService {
         return cred.user;
     }
 
+    async googleLogin() {
+        let googleUser = await Plugins.GoogleAuth.signIn() as any;
+        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
+        return this.afAuth.signInAndRetrieveDataWithCredential(credential);
+    }
 
     // Sign in with Facebook
     FacebookAuth() {
