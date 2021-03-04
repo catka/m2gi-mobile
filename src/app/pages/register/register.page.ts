@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AngularFireAuth } from '@angular/fire/auth';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
 
-  constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, public auth: AngularFireAuth) { }
+  constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, public auth: AngularFireAuth, private authService: AuthService) { }
 
   ngOnInit() {
     this.registerForm = this._fb.group({
@@ -25,22 +26,38 @@ export class RegisterPage implements OnInit {
     }, {validators: [matchingPasswordsValidator]});
   }
 
-  onSubmit() {
-    if (!this.registerForm.valid) {
-      this.showToast('Form is not valid! Please check your input an try again.', true);
-    } else {
-      // TODO: register with firebase
-      this.auth.createUserWithEmailAndPassword(this.registerForm.get('username').value, this.registerForm.get('password').value).then((result) => {
-        console.log(result);
-        if (result && result.operationType) {
-          this.showToast("Operation successful: " + result.operationType, false);
-          this.router.navigateByUrl('home');
-        }
-      }, (reject) => {
-          this.showToast("Registration failed: " + reject.message, true);
-      });
+  // onSubmit() {
+  //   if (!this.registerForm.valid) {
+  //     this.showToast('Form is not valid! Please check your input an try again.', true);
+  //   } else {
+  //     // TODO: register with firebase
+  //     // this.auth.createUserWithEmailAndPassword(this.registerForm.get('username').value, this.registerForm.get('password').value).then((result) => {
+  //     this.authService.register(this.registerForm.get('username').value, this.registerForm.get('password').value).then((result) => {
+  //       console.log(result);
+  //       // if (result && result.operationType) {
+  //         this.showToast('Operation successful: ' + result.operationType, false);
+  //         this.router.navigateByUrl('home');
+  //       }
+  //     }, (reject) => {
+  //         this.showToast('Registration failed: ' + reject.message, true);
+  //     });
+  //   }
+
+
+
+  async onSubmit() {
+    if (this.registerForm.valid) {
+      try {
+        const user = await this.authService.register(this.registerForm.get('username').value,
+            this.registerForm.get('password').value);
+        this.showToast(`User created, an email confirmation as been sent to ${user.email}`, false);
+        await this.router.navigateByUrl('login');
+      } catch (e) {
+        await this.showToast(e.message, true);
+      }
     }
   }
+
 
   async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({
