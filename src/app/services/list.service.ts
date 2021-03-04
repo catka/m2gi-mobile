@@ -41,14 +41,6 @@ export class ListService {
     );
   }
 
-
-
-  // testDebug(singleDoc){
-  //   debugger;
-  //   return singleDoc;
-  // }
-
-
   create(list: List): Promise<void>{
     return this.listCollection.doc().set(this.getJSObject(list));
   }
@@ -78,8 +70,6 @@ export class ListService {
     const id = actions.payload.id;
     return { id, ...data} as T;
   }
-
-
 
   private getJSObject(customObj: any){
     return Object.assign({}, customObj);

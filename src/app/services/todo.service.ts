@@ -1,4 +1,7 @@
 import {Injectable} from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {List} from '../models/list';
 import {Todo} from '../models/todo';
 
@@ -6,29 +9,23 @@ import {Todo} from '../models/todo';
     providedIn: 'root'
 })
 export class TodoService {
-
     private todos: Todo[] = [];
     currentListId = 0;
 
-    constructor() {
+    constructor(private af: AngularFirestore) {}
+
+    create(todo: Todo, listId: string): Promise<any> {
+        let afList = this.af.doc('lists/' + listId);
+        return afList.collection('todos').add(this.getJSObject(todo));
     }
 
-
-    create(todo: Todo, list: List): void {
-        todo.id = this.nextId();
-        this.todos.push(todo);
-        list.todos.push(todo);
+    update(todo: Todo, listId: string): Promise<void> {
+        let afList = this.af.doc('lists/' + listId);
+        return afList.collection('todos').doc(todo.id).set(this.getJSObject(todo));
     }
 
-
-    update(todo: Todo, value): void {
-        todo = Object.assign(todo, value);
-    }
-
-    delete(todoForDelete: Todo, list: List): void {
-        // Remove from list and then from service list
-        list.todos = list.todos.filter((todo) => todo !== todoForDelete);
-        this.todos = this.todos.filter((todo) => todo !== todoForDelete);
+    delete(todoId: string, listId: string): Promise<void> {
+        return this.af.collection('lists').doc(listId).collection('todos').doc(todoId).delete();
     }
 
     nextId(): number {
@@ -36,8 +33,34 @@ export class TodoService {
         return this.currentListId;
     }
 
-    getOne(id: number): Todo{
-        return this.todos.find((todo) => todo.id === id);
+    getOneObs(todoId: string, listId: string): Observable<Todo> {
+        return this.af.collection('lists').doc(listId).collection('todos').doc(todoId).snapshotChanges().pipe(
+            map(actions => this.convertSingleSnapshotData<Todo>(actions))
+        );
+    }
+
+    
+    getListTodos(list: List): Observable<Todo[]>{
+        return this.af.collection('lists').doc(list.id + '').collection('todos').snapshotChanges().pipe(
+            map(actions => this.convertSnapshotData<Todo>(actions))
+        );
+    }
+
+    private convertSnapshotData<T>(actions){
+        return actions.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        return { id, ...data} as T;
+        });
+    }
+    private convertSingleSnapshotData<T>(actions) {
+        const data = actions.payload.data();
+        const id = actions.payload.id;
+        return { id, ...data} as T;
+    }
+
+    private getJSObject(customObj: any){
+        return Object.assign({}, customObj);
     }
 
 }

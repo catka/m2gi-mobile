@@ -5,8 +5,8 @@ import {Todo} from 'src/app/models/todo';
 import {ListService} from 'src/app/services/list.service';
 import {TodoService} from '../../services/todo.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {List} from '../../models/list';
 import {Location} from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-todo-details',
@@ -15,8 +15,9 @@ import {Location} from '@angular/common';
 })
 export class TodoDetailsPage implements OnInit {
     public todoDetailsForm: FormGroup = new FormGroup({});
-
-    todo: Todo;
+    listId: string;
+    todoId: string;
+    todo: Observable<Todo>;
 
     constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router, private modalController: ModalController, private todoService: TodoService, private _location: Location, public toastController: ToastController) {
         this.todoDetailsForm = this._fb.group({
@@ -27,21 +28,26 @@ export class TodoDetailsPage implements OnInit {
     }
 
     ngOnInit() {
-        const todoId = this.route.snapshot.paramMap.get('id');
-        if (todoId) {
-          this.todo = this.todoService.getOne(+todoId);
-          if (this.todo){
-            this.todoDetailsForm.patchValue(this.todo);
-          }
-        }
+        this.listId = this.route.snapshot.paramMap.get('listId');
+        this.todoId = this.route.snapshot.paramMap.get('todoId');
+
+        this.todo = this.todoService.getOneObs(this.todoId, this.listId);
+
+        this.todo.subscribe((todo) => {
+            this.todoDetailsForm.patchValue(todo);
+        });
     }
 
     onSubmit() {
         if (this.todoDetailsForm.valid) {
-            if(this.todo){
-                this.todoService.update(this.todo, this.todoDetailsForm.value);
-                this.showToast('Updated successfully.', false);
+            if (this.todoId) {
+                let todo = new Todo();
+                todo.id = this.todoId;
+                Object.assign(todo, this.todoDetailsForm.value);
+                this.todoService.update(todo, this.listId);
 
+                this.showToast('Updated successfully.', false);
+                this.backToList();
             } else{
                 console.log('Cannot update empty todo object!');
             }
@@ -52,6 +58,10 @@ export class TodoDetailsPage implements OnInit {
 
     back(): void {
         this._location.back();
+    }
+
+    backToList(): void{
+        this.router.navigateByUrl('/lists/' + this.listId);
     }
 
     async showToast(alertMessage: string, error: boolean) {

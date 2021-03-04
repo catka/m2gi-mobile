@@ -13,7 +13,7 @@ import {TodoService} from '../../services/todo.service';
 })
 export class CreateTodoComponent implements OnInit {
   public todoForm: FormGroup = new FormGroup({});
-  @Input() list: List;
+  @Input() listId: string;
   @Input() todo: Todo;
 
   constructor(private _fb: FormBuilder, private modalCtrl: ModalController, public toastController: ToastController, private todoService: TodoService) {
@@ -33,12 +33,14 @@ export class CreateTodoComponent implements OnInit {
   onSubmit() {
     if (this.todoForm.valid) {
       if (!this.todo) {
-        // this.list.todos.push(new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value));
-        this.todoService.create(new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value), this.list);
+        this.todo = new Todo(this.todoForm.get('name').value, this.todoForm.get('description').value);
+        this.todoService.create(this.todo, this.listId).then((result) => {
+          this.todo.id = result.id;
+        });
       } else {
         console.log('this is an update');
-        const index = this.list.todos.findIndex((t) => t === this.todo);
-        this.list.todos[index] = Object.assign(this.todo, this.todoForm);
+        Object.assign(this.todo, this.todoForm.value);
+        this.todoService.update(this.todo, this.listId);
       }
       this.modalCtrl.dismiss();
     } else {

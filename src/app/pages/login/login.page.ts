@@ -84,5 +84,6 @@ export class LoginPage implements OnInit {
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         await this.afAuth.signInAndRetrieveDataWithCredential(credential);
+        this.router.navigateByUrl('home');
     }
 }
