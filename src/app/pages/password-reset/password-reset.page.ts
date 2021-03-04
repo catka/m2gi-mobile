@@ -4,6 +4,7 @@ import {ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
     selector: 'app-password-reset',
@@ -14,7 +15,7 @@ export class PasswordResetPage implements OnInit {
 
     resetPasswordForm: FormGroup;
 
-    constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, public auth: AngularFireAuth) {
+    constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -23,15 +24,14 @@ export class PasswordResetPage implements OnInit {
         });
     }
 
-    onSubmit() {
+    async onSubmit() {
       if (this.resetPasswordForm.valid) {
-        const username = this.resetPasswordForm.get('username').value;
-        this.auth.sendPasswordResetEmail(username)
-            .then(() => {
+          const username = this.resetPasswordForm.get('username').value;
+          try {
+              await this.authService.sendPasswordResetEmail(username);
               this.showToast(`Reset password email sent for user: ${username}`, false);
-              this.router.navigateByUrl('login');
-            })
-            .catch((error) => {
+              await this.router.navigateByUrl('login');
+          } catch (error) {
               const errorCode = error.code;
               if (errorCode === 'auth/user-not-found') {
                   this.showToast('User not found', true);
@@ -41,10 +41,28 @@ export class PasswordResetPage implements OnInit {
                   this.showToast('Login unsuccessful', true);
                   console.log(errorCode);
               }
-            });
-      } else {
-        this.showToast('Invalid inputs.', true);
+          }
+      } else{
+            this.showToast('Invalid inputs.', true);
       }
+      //       .then(() => {
+      //         this.showToast(`Reset password email sent for user: ${username}`, false);
+      //         this.router.navigateByUrl('login');
+      //       })
+      //       .catch((error) => {
+      //         const errorCode = error.code;
+      //         if (errorCode === 'auth/user-not-found') {
+      //             this.showToast('User not found', true);
+      //         } else if (errorCode === 'auth/invalid-email') {
+      //             this.showToast('Email not found', true);
+      //         } else {
+      //             this.showToast('Login unsuccessful', true);
+      //             console.log(errorCode);
+      //         }
+      //       });
+      // } else {
+      //   this.showToast('Invalid inputs.', true);
+      // }
     }
 
 

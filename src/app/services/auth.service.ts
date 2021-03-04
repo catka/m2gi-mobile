@@ -43,6 +43,10 @@ export class AuthService {
         return cred.user;
     }
 
+    async sendPasswordResetEmail(username: string) {
+        return await this.afAuth.sendPasswordResetEmail(username);
+    }
+
     async googleLogin() {
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
