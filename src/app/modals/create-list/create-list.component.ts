@@ -28,6 +28,7 @@ export class CreateListComponent implements OnInit {
     if (this.list) {
       this.listForm.patchValue(this.list);
     }
+
     this.availableUserIds = this.authService.getAllUserIds();
   }
 

@@ -26,18 +26,18 @@ export class AccountInfoService {
     );
   }
 
-  create(accountInfo: AccountInfo, id: string): Promise<void>{
-    // Account info id not automatically generated
+  createOrUpdate(accountInfo: AccountInfo, id: string): Promise<void>{
+    // Account info id not automatically generated, can pass in id
     return this.accountInfoCollection.doc(id).set(this.getJSObject(accountInfo));
   }
-
-  update(accountInfo: AccountInfo, value): Promise<void>{
-    return this.accountInfoCollection.doc(accountInfo.id + '').set(value);
-  }
-
-  delete(accountInfo: AccountInfo): Promise<void>{
-    return this.accountInfoCollection.doc(accountInfo.id + '').delete();
-  }
+  //
+  // update(accountInfo: AccountInfo, value): Promise<void>{
+  //   return this.accountInfoCollection.doc(accountInfo.id + '').set(value);
+  // }
+  //
+  // delete(accountInfo: AccountInfo): Promise<void>{
+  //   return this.accountInfoCollection.doc(accountInfo.id + '').delete();
+  // }
 
   private convertSnapshotData<T>(actions){
     return actions.map(a => {

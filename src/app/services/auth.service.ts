@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import {Plugins} from '@capacitor/core';
 import {AccountInfoService} from './account-info.service';
 import {AccountInfo} from '../models/accountInfo';
+import User = firebase.User;
 
 @Injectable({
     providedIn: 'root'
@@ -15,15 +16,33 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore, accountInfoService: AccountInfoService) {
+                private af: AngularFirestore, private accountInfoService: AccountInfoService) {
 
         this.user$ = new BehaviorSubject(null);
         this.afAuth.onAuthStateChanged(user => {
                 this.user$.next(user);
-                const newAccount = new AccountInfo(user.email);
-                accountInfoService.create(newAccount, user.uid + '');
+                // If sign in
+                if (user){
+                    // Search for user
+                    this.accountInfoService.getOneObs(user.uid).subscribe(
+                        (snapshot) => this.createSudoNameIfEmpty(snapshot, user),
+                        (error) => console.log(error)
+                    );
+                }
         }
     );
+    }
+
+    // Create sudo name using email in firebase
+    createSudoNameIfEmpty(accountInfo: AccountInfo, user: User){
+        // If sudo name doesnt not exist, id already set in account info
+        if (accountInfo.sudoName === undefined){
+            // TODO : USER INPUT HERE W/MODAL INSTEAD OF USER INFO???
+            accountInfo.sudoName = user.email;
+            return this.accountInfoService.createOrUpdate(accountInfo, user.uid + '');
+        } else{
+            console.log('Sudo name already registered');
+        }
     }
 
     getConnectedUser() {
