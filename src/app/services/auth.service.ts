@@ -4,6 +4,8 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {Subject, BehaviorSubject} from 'rxjs';
 import firebase from 'firebase';
 import {Plugins} from '@capacitor/core';
+import {AccountInfoService} from './account-info.service';
+import {AccountInfo} from '../models/accountInfo';
 
 @Injectable({
     providedIn: 'root'
@@ -13,11 +15,15 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore) {
+                private af: AngularFirestore, accountInfoService: AccountInfoService) {
 
         this.user$ = new BehaviorSubject(null);
-        this.afAuth.onAuthStateChanged(user =>
-            this.user$.next(user));
+        this.afAuth.onAuthStateChanged(user => {
+                this.user$.next(user);
+                const newAccount = new AccountInfo(user.email);
+                accountInfoService.create(newAccount, user.uid + '');
+        }
+    );
     }
 
     getConnectedUser() {
@@ -25,6 +31,7 @@ export class AuthService {
     }
 
     async login(email: string, password: string) {
+        // TODO : CHECK IF ACCOUNTINFO EXISTS - IF NOT, CREATE ONE!
         return await this.afAuth.signInWithEmailAndPassword(email, password);
     }
 

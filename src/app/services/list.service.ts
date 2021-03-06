@@ -1,7 +1,6 @@
 import { List } from './../models/list';
 import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
-import {TodoService} from './todo.service';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
@@ -11,11 +10,10 @@ import {map} from 'rxjs/operators';
 })
 export class ListService {
   private lists: List[] = [];
-  currentListId = 0;
 
   private listCollection: AngularFirestoreCollection<List>;
 
-  constructor(private todoService: TodoService, private af: AngularFirestore) {
+  constructor(private af: AngularFirestore) {
     // this.listCollection = this.af.collection('lists', ref => {
     //   return ref
     //       // .where('canRead', 'array-contains', 'AzzaujI8wCcnXJujpOBrhVKLYOP2');
@@ -51,11 +49,6 @@ export class ListService {
 
   delete(list: List): Promise<void>{
     return this.listCollection.doc(list.id + '').delete();
-  }
-
-  nextId(): number{
-    this.currentListId++;
-    return this.currentListId;
   }
 
   private convertSnapshotData<T>(actions){
