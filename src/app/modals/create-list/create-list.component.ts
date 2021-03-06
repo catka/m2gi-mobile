@@ -4,6 +4,9 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { List } from 'src/app/models/list';
 import { ModalController, ToastController } from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
+import {AccountInfoService} from '../../services/account-info.service';
+import {Observable} from 'rxjs';
+import {AccountInfo} from '../../models/accountInfo';
 
 @Component({
   selector: 'app-create-list',
@@ -13,9 +16,11 @@ import {AuthService} from '../../services/auth.service';
 export class CreateListComponent implements OnInit {
   public listForm: FormGroup = new FormGroup({});
   public availableUserIds: string[] = [];
+  accountInfos: Observable<AccountInfo[]>;
   @Input() list: List;
 
-  constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController, public toastController: ToastController, private authService: AuthService) {
+  constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController,
+              public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService) {
   }
 
   ngOnInit() {
@@ -28,8 +33,8 @@ export class CreateListComponent implements OnInit {
     if (this.list) {
       this.listForm.patchValue(this.list);
     }
-
     this.availableUserIds = this.authService.getAllUserIds();
+    this.accountInfos = this.accountInfoService.getAll();
   }
 
   onSubmit() {

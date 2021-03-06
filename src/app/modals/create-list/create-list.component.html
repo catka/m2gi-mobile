@@ -6,13 +6,13 @@
   <ion-item>
     <ion-label position="floating">Can read</ion-label>
     <ion-select multiple="true" formControlName="canRead">
-      <ion-select-option *ngFor="let uid of availableUserIds" value="{{uid}}">{{uid}}</ion-select-option>
+      <ion-select-option *ngFor="let acc of accountInfos | async" value="accountInfo/{{acc.id}}">{{acc.sudoName}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
   <ion-label position="floating">Can write</ion-label>
     <ion-select multiple="true" formControlName="canWrite">
-      <ion-select-option *ngFor="let uid of availableUserIds" value="{{uid}}">{{uid}}</ion-select-option>
+      <ion-select-option *ngFor="let acc of accountInfos | async" value="accountInfo/{{acc.id}}">{{acc.sudoName}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ng-container *ngIf="(listForm.get('name').dirty || listForm.get('name').touched)">
