@@ -15,12 +15,14 @@ import { CreateTodoComponent } from './modals/create-todo/create-todo.component'
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import {HeaderComponent} from './components/header/header.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         CreateListComponent,
         CreateTodoComponent,
+        HeaderComponent,
     ],
     entryComponents: [],
     imports: [
