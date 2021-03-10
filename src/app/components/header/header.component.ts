@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, NavigationEnd, Event} from '@angular/router';
-import { filter } from 'rxjs/operators';
+import {filter, switchMap} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ListService } from 'src/app/services/list.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,6 +8,10 @@ import firebase from 'firebase';
 import User = firebase.User;
 import {Location} from '@angular/common';
 import {TodoService} from '../../services/todo.service';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {AccountInfoService} from '../../services/account-info.service';
+import {List} from '../../models/list';
+import {AccountInfo} from '../../models/accountInfo';
 
 @Component({
   selector: 'app-header',
@@ -18,18 +22,43 @@ export class HeaderComponent implements OnInit {
 
   public title: string;
   public user: User;
-  private route: Observable<Event>;
+  public pseudoName: string;
+  private accountInfo$: Observable<AccountInfo>;
+  private route$: Observable<Event>;
   routeWithBack = true;
 
-  constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location, private todoService: TodoService) {
-    this.route = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
+  constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location, private todoService: TodoService, private accountInfoService: AccountInfoService) {
+    this.route$ = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
   }
 
   ngOnInit() {
+    // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
+    this.auth.getConnectedUser().subscribe(user => {
+      this.user = user;
+      if (user){
+        // Search for user
+        this.accountInfo$ = this.accountInfoService.getOneObs(user.uid);
 
-    this.auth.getConnectedUser().subscribe(user => this.user = user);
+        // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
+      } else{
+        this.accountInfo$ = null;
+      }
+    });
+    // this.auth.getConnectedUser().pipe(
+    //   switchMap((user: User) => this.accountInfoService.getOneObs(user?.uid)
+    // ));
 
-    this.route.subscribe(route => {
+    // this.auth.getConnectedUser().subscribe(user => {
+    //   this.user = user;
+    //   if (user){
+    //     // Search for user
+    //     this.accountInfo = this.accountInfoService.getOneObs(user.uid);
+    //
+    //     // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
+    //   }
+    // });
+
+    this.route$.subscribe(route => {
 
 
       // TODO : ADD BACK BUTTON
@@ -45,6 +74,9 @@ export class HeaderComponent implements OnInit {
           break;
         case 'register':
           this.title = 'Register';
+          break;
+        case 'user-settings':
+          this.title = 'User Settings';
           break;
         case 'password-reset':
           this.title = 'Password Recovery';
@@ -90,7 +122,19 @@ export class HeaderComponent implements OnInit {
     await this.router.navigate(['login']);
   }
 
+  toUserSettings(){
+    this.router.navigateByUrl('/user-settings');
+  }
+
   back() {
     this.location.back();
   }
+
+  textReduce(stringLong){
+    if (stringLong !== null && stringLong.length > 25){
+      return stringLong.substr(0, 22) + '...';
+    }
+    return stringLong;
+  }
+
 }

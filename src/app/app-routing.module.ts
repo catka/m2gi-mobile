@@ -17,12 +17,17 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'lists',
+    loadChildren: () => import('./pages/list-details/list-details.module').then(m => m.ListDetailsPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
-    path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
+    path: 'user-settings',
+    loadChildren: () => import('./pages/user-settings/user-settings.module').then(m => m.UserSettingsPageModule)
   },
   {
     path: 'password-reset',
@@ -33,6 +38,11 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
+  {
+    path: 'user-settings',
+    loadChildren: () => import('./pages/user-settings/user-settings.module').then( m => m.UserSettingsPageModule)
+  },
+
 ];
 
 @NgModule({

@@ -7,9 +7,9 @@
     </ion-buttons>
     <ion-title>{{title}}</ion-title>
     <ion-buttons slot="end">
-<!--      <ion-button (click)="back()" >-->
-<!--        <ion-icon slot="icon-only" name="caret-back-outline"></ion-icon>-->
-<!--      </ion-button>-->
+      <ion-button *ngIf="(accountInfo$ | async) as acc" (click)="toUserSettings()">
+        {{textReduce(acc.sudoName)}}
+      </ion-button>
       <ion-button color="secondary" (click)="loginOrOut()">
         <ion-icon slot="icon-only" [name]="user ? 'log-out-outline' : 'person-outline'"></ion-icon>
       </ion-button>

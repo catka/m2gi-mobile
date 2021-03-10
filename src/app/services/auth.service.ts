@@ -7,6 +7,7 @@ import {Plugins} from '@capacitor/core';
 import {AccountInfoService} from './account-info.service';
 import {AccountInfo} from '../models/accountInfo';
 import User = firebase.User;
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore, private accountInfoService: AccountInfoService) {
+                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router) {
 
         this.user$ = new BehaviorSubject(null);
         this.afAuth.onAuthStateChanged(user => {
@@ -25,7 +26,14 @@ export class AuthService {
                 if (user){
                     // Search for user
                     this.accountInfoService.getOneObs(user.uid).subscribe(
-                        (snapshot) => this.createSudoNameIfEmpty(snapshot, user),
+                        (snapshot) => {
+                            if (snapshot.sudoName === undefined){
+                                // TODO : ADD GOOGLE PSEUDO?
+                                // Create user settings w/ default sudo name and redirect to user settings to change it
+                                this.createSudoNameIfEmpty(snapshot, user).then(() => this.router.navigateByUrl('/user-settings'));
+                            }
+                            console.log('Sudo name already registered');
+                        },
                         (error) => console.log(error)
                     );
                 }
@@ -35,14 +43,8 @@ export class AuthService {
 
     // Create sudo name using email in firebase
     createSudoNameIfEmpty(accountInfo: AccountInfo, user: User){
-        // If sudo name doesnt not exist, id already set in account info
-        if (accountInfo.sudoName === undefined){
-            // TODO : USER INPUT HERE W/MODAL INSTEAD OF USER INFO???
-            accountInfo.sudoName = user.email;
-            return this.accountInfoService.createOrUpdate(accountInfo, user.uid + '');
-        } else{
-            console.log('Sudo name already registered');
-        }
+        accountInfo.sudoName = 'Pseudo - ' + user.uid.substring(0, 4);
+        return this.accountInfoService.createOrUpdate(accountInfo, user.uid + '');
     }
 
     getConnectedUser() {
@@ -75,6 +77,7 @@ export class AuthService {
 
     async googleLogin() {
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
+        // let pseudo = googleUser.name;
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         return this.afAuth.signInAndRetrieveDataWithCredential(credential);
     }

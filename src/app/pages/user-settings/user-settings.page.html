@@ -1,0 +1,15 @@
+<ion-content  [fullscreen]="true">
+  <ng-container *ngIf="(accountInfo$ | async) as acc">
+    <form [formGroup]="userSettingsForm">
+      <ion-item>
+        <ion-label position="floating">Pseudonym</ion-label>
+        <ion-input formControlName="sudoName" required autofocus></ion-input>
+      </ion-item>
+      <ion-button color="success" expand="block" (click)="onSubmit(acc.id)">Update Settings</ion-button>
+    </form>
+  </ng-container>
+  <ion-footer style="text-align: center">
+    <ion-note>Your pseudo name will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <b>you are advised to change it</b> on order for others to identify you.</ion-note>
+  </ion-footer>
+</ion-content>
+
