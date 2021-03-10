@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { CreateListComponent } from './../modals/create-list/create-list.component';
 import { ListService } from './../services/list.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,14 +15,15 @@ import {Location} from '@angular/common';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit{
-
+  currentUid: string = '';
   currentLists: Observable<List[]>;
 
-  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController) { }
+  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController, private auth: AuthService) { }
 
 
   ngOnInit(): void {
     this.currentLists = this.listService.getAll();
+    this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user.uid });
     // this.listService.getAll().subscribe((newList) => this.debugList(newList));
   }
 
