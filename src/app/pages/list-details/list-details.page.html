@@ -10,7 +10,7 @@
 <!--</ion-header>-->
 
 <ion-content>
-  <ion-button *ngIf="!(list | async)" expand="block" fill="outline" (click)="back()">Back to home</ion-button>
+<!--  <ion-button *ngIf="!(list | async)" expand="block" fill="outline" (click)="back()">Back to home</ion-button>-->
   <ng-container *ngIf="(list | async)">
     <ion-list>
       <ion-item-sliding *ngFor="let todo of (list | async)?.todos">

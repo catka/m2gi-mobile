@@ -10,7 +10,7 @@
 <!--</ion-header>-->
 
 <ion-content [fullscreen]="true">
-    <ion-button *ngIf="!(todo | async)" expand="block" fill="outline" (click)="back()">Back to list</ion-button>
+<!--    <ion-button *ngIf="!(todo | async)" expand="block" fill="outline" (click)="back()">Back to list</ion-button>-->
     <ng-container *ngIf="todo | async">
         <form [formGroup]="todoDetailsForm">
             <ion-item>
