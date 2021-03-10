@@ -7,6 +7,8 @@ import {AuthService} from '../../services/auth.service';
 import {AccountInfoService} from '../../services/account-info.service';
 import {Observable} from 'rxjs';
 import {AccountInfo} from '../../models/accountInfo';
+import firebase from 'firebase';
+import User = firebase.User;
 
 @Component({
   selector: 'app-create-list',
@@ -15,32 +17,39 @@ import {AccountInfo} from '../../models/accountInfo';
 })
 export class CreateListComponent implements OnInit {
   public listForm: FormGroup = new FormGroup({});
-  public availableUserIds: string[] = [];
+  // public availableUserIds: string[] = [];
   accountInfos: Observable<AccountInfo[]>;
   @Input() list: List;
+  public user: User;
 
   constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController,
               public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService) {
   }
 
   ngOnInit() {
+
+    this.authService.getConnectedUser().subscribe(user => this.user = user);
+
     this.listForm = this._fb.group({
       name: ['', Validators.required],
       canRead: [''],
       canWrite: [''],
       owner: [''],
     });
+
     if (this.list) {
       this.listForm.patchValue(this.list);
     }
-    this.availableUserIds = this.authService.getAllUserIds();
+    // this.availableUserIds = this.authService.getAllUserIds();
     this.accountInfos = this.accountInfoService.getAll();
   }
 
   onSubmit() {
     if (this.listForm.valid) {
       if (!this.list) {
-        const listToCreate = new List(this.listForm.get('name').value, this.authService.getLoggedInUser(), this.listForm.get('canRead').value, this.listForm.get('canWrite').value);
+        // getConnectedUser
+        // const listToCreate = new List(this.listForm.get('name').value, this.authService.getLoggedInUser(), this.listForm.get('canRead').value, this.listForm.get('canWrite').value);
+        const listToCreate = new List(this.listForm.get('name').value, this.user.uid, this.listForm.get('canRead').value, this.listForm.get('canWrite').value);
         this.listService.create(listToCreate)
             .then(() => {
               // this.showErrorToast('Created!!');

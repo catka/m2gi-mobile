@@ -95,14 +95,14 @@ export class AuthService {
         // return this.afAuth.idToken;
     }
 
-    // TODO :: THIS NEEDS TO BE ACTUAL AVAILABLE USERS
-    getAllUserIds(): string[] {
-        return [
-            'AzzaujI8wCcnXJujpOBrhVKLYOP2',
-            'cNeSKu5b27MKxPFJMIkXD4GEvS62',
-        ];
-
-    }
+    // // TODO :: THIS NEEDS TO BE ACTUAL AVAILABLE USERS
+    // getAllUserIds(): string[] {
+    //     return [
+    //         'AzzaujI8wCcnXJujpOBrhVKLYOP2',
+    //         'cNeSKu5b27MKxPFJMIkXD4GEvS62',
+    //     ];
+    //
+    // }
 
 }
 
