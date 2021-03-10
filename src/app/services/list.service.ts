@@ -7,6 +7,7 @@ import {map} from 'rxjs/operators';
 import {AuthService} from './auth.service';
 import firebase from 'firebase';
 import User = firebase.User;
+import { combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,29 +15,35 @@ import User = firebase.User;
 export class ListService {
   private lists: List[] = [];
 
-  private owningCollection: AngularFirestoreCollection<List>;
-  private readSharedCollection: AngularFirestoreCollection<List>;
+  private owningCollection: AngularFirestoreCollection<List> = null;
+  private readSharedCollection: AngularFirestoreCollection<List> = null;
+  private writeSharedCollection: AngularFirestoreCollection<List> = null;
   public user: User;
 
   constructor(private af: AngularFirestore, private authService: AuthService) {
+    this.getLists();
+  }
+
+  private getLists() {
     // TODO : IS THERE A WAY TO MAKE THIS CLEANER??
-    this.owningCollection = null;
     this.authService.getConnectedUser().subscribe(user => {
+      // Cannot have 'OR' queries in Firebase
       if (user && user.uid){
-        this.owningCollection = this.af.collection('lists', ref => {
-          return ref.where('owner', '==', user.uid);
-          // return t;
-        });
+        this.owningCollection = this.af.collection('lists', ref => ref.where('owner', '==', user.uid));
+        this.readSharedCollection = this.af.collection('lists', ref => ref.where('canRead', 'array-contains', user.uid));
+        this.writeSharedCollection = this.af.collection('lists', ref => ref.where('canWrite', 'array-contains', user.uid));
       }
     });
+    
     // GET ALL FOR DEBUGGING
     // this.listCollection = this.af.collection('lists');
   }
 
 
   getAll(): Observable<List[]> {
-    return this.owningCollection?.snapshotChanges().pipe(
-        map(actions => this.convertSnapshotData<List>(actions))
+    return combineLatest(this.owningCollection.snapshotChanges(), this.readSharedCollection.snapshotChanges(), this.writeSharedCollection.snapshotChanges()).pipe(
+      map(arr => arr.reduce((acc, cur) => acc.concat(cur))),
+      map(actions => this.convertSnapshotData<List>(actions))
     );
   }
 

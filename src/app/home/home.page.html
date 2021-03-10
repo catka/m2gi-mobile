@@ -22,6 +22,7 @@
           </ion-label>
           <ion-note slot="end">
             {{ l.stats }}
+            <span *ngIf="l.owner != currentUid">Shared <ion-icon name="people-outline"></ion-icon></span>
           </ion-note>
         </ion-item>
         <ion-item-options>

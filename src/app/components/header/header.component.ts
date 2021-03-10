@@ -110,7 +110,7 @@ export class HeaderComponent implements OnInit {
           console.log(`Unknown url ${url}.`);
       }
 
-      this.routeWithBack = !(urlSplit[1] === 'login');
+      this.routeWithBack = !(urlSplit[1] === 'login') && !(urlSplit[1] === 'home');
 
     });
   }

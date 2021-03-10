@@ -33,6 +33,13 @@ export class LoginPage implements OnInit {
             }
         }).catch((error) => {
         });
+
+        // If already logged in, go to homepage
+        this.authService.getConnectedUser().subscribe((user) => {
+            if (user) {
+                this.router.navigateByUrl('home');
+            }
+        })
     }
 
     login() {

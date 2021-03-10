@@ -13,7 +13,6 @@ import {ActivatedRoute, Router} from '@angular/router';
     providedIn: 'root'
 })
 export class AuthService {
-
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
@@ -87,16 +86,17 @@ export class AuthService {
         return this.AuthLogin(new firebase.auth.FacebookAuthProvider());
     }
 
-// Auth logic to run auth providers
+    // Auth logic to run auth providers
     AuthLogin(provider) {
         return this.afAuth.signInWithRedirect(provider);
     }
 
     // TODO :: THIS NEEDS TO BE ACTUAL LOGGED IN USER
-    getLoggedInUser(): string {
-        return 'AzzaujI8wCcnXJujpOBrhVKLYOP2';
-        // return this.afAuth.idToken;
-    }
+    // Warning: unused
+    // getLoggedInUser(): string {
+    //     // return 'AzzaujI8wCcnXJujpOBrhVKLYOP2';
+    //     return this.afAuth.idToken;
+    // }
 
     // // TODO :: THIS NEEDS TO BE ACTUAL AVAILABLE USERS
     // getAllUserIds(): string[] {
