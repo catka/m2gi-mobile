@@ -23,7 +23,7 @@ export class HomePage implements OnInit{
 
   ngOnInit(): void {
     this.currentLists = this.listService.getAll();
-    this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user.uid });
+    this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user?.uid });
     // this.listService.getAll().subscribe((newList) => this.debugList(newList));
   }
 
