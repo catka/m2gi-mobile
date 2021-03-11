@@ -1,18 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import {NavigationEnd, Router} from '@angular/router';
-import {ListService} from '../../services/list.service';
-import {Location} from '@angular/common';
-import {TodoService} from '../../services/todo.service';
+import {Router} from '@angular/router';
 import {AccountInfoService} from '../../services/account-info.service';
-import {filter} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {AccountInfo} from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Todo} from '../../models/todo';
 import {ToastController} from '@ionic/angular';
+import {LanguageService} from '../../services/language.service';
 
 @Component({
     selector: 'app-user-settings',
@@ -25,15 +21,17 @@ export class UserSettingsPage implements OnInit {
     public user: User;
     public pseudoName: string;
     public accountInfo$: Observable<AccountInfo>;
+    public languages = [];
 
-    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private listService: ListService, private location: Location, private todoService: TodoService, private accountInfoService: AccountInfoService, public toastController: ToastController) {
+    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private accountInfoService: AccountInfoService, public toastController: ToastController, private languageService: LanguageService) {
         this.userSettingsForm = this._fb.group({
-            sudoName: ['', Validators.required]
+            sudoName: ['', Validators.required],
+            prefLanguage: []
         });
     }
 
     ngOnInit() {
-
+        this.languages = this.languageService.getAvailableLanguages();
         // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
         this.auth.getConnectedUser().subscribe(user => {
             this.user = user;
@@ -54,7 +52,7 @@ export class UserSettingsPage implements OnInit {
     async onSubmit(id) {
         if (this.userSettingsForm.valid) {
             try{
-                const userSettings = new AccountInfo(this.userSettingsForm.get('sudoName').value);
+                const userSettings = new AccountInfo(this.userSettingsForm.get('sudoName').value, this.userSettingsForm.get('prefLanguage').value);
                 userSettings.id = id;
                 await this.accountInfoService.createOrUpdate(userSettings, id);
                 this.showToast('Updated settings successfully.', false);

@@ -5,6 +5,13 @@
         <ion-label position="floating">Pseudonym</ion-label>
         <ion-input formControlName="sudoName" required autofocus></ion-input>
       </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Language</ion-label>
+        <ion-select multiple="false" formControlName="prefLanguage">
+          <ion-select-option *ngFor="let lang of languages" value="{{lang.key}}">{{lang.value}}</ion-select-option>
+        </ion-select>
+      </ion-item>
       <ion-button color="success" expand="block" (click)="onSubmit(acc.id)">Update Settings</ion-button>
     </form>
   </ng-container>
