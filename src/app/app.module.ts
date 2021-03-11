@@ -16,6 +16,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import {HeaderComponent} from './components/header/header.component';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
+export function createTranslateLoader(http : HttpClient){
+    return new TranslateHttpLoader(http, 'assets/i18n/', '.json')
+}
 
 @NgModule({
     declarations: [
@@ -33,7 +40,16 @@ import {HeaderComponent} from './components/header/header.component';
         ReactiveFormsModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAnalyticsModule,
-        AngularFirestoreModule
+        AngularFirestoreModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (createTranslateLoader),
+                deps: [HttpClient]
+            },
+
+        })
     ],
     providers: [
         StatusBar,

@@ -7,6 +7,7 @@ import firebase from 'firebase';
 import { AuthService } from '../../services/auth.service';
 import { Plugins } from '@capacitor/core';
 import '@codetrix-studio/capacitor-google-auth';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({

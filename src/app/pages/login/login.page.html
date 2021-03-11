@@ -3,7 +3,7 @@
 <ion-content>
   <form [formGroup]="loginForm">
     <ion-item>
-      <ion-label position="floating">E-mail</ion-label>
+      <ion-label position="floating">E-mail {{ "HOME.title" | translate }}</ion-label>
       <ion-input type="email" formControlName="email" required autofocus></ion-input>
     </ion-item>
     <ng-container *ngIf="(loginForm.get('email').dirty || loginForm.get('email').touched)">
