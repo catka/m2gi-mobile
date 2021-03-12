@@ -17,6 +17,7 @@ export class LanguageService {
   //   return this.translate.currentLang;
   // }
 
+  // TODO : ADD IMAGE WITH FLAG AND LOAD IN FORM
   getAvailableLanguages()
   {
     return [
@@ -25,8 +26,21 @@ export class LanguageService {
     ];
   }
 
+  getAvailableLanguageCodes()
+  {
+    const codes = [];
+    for (const lang of this.getAvailableLanguages()){
+      codes.push(lang.key);
+    }
+    return codes;
+  }
+
   setLanguage(lang){
-    this.translate.use(lang);
+    if (this.getAvailableLanguageCodes().includes(lang)){
+      this.translate.use(lang);
+    } else{
+      console.log('Language not supported ! ');
+    }
   }
 
 }

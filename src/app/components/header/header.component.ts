@@ -12,6 +12,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {AccountInfoService} from '../../services/account-info.service';
 import {List} from '../../models/list';
 import {AccountInfo} from '../../models/accountInfo';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +28,8 @@ export class HeaderComponent implements OnInit {
   private route$: Observable<Event>;
   routeWithBack = true;
 
-  constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location, private todoService: TodoService, private accountInfoService: AccountInfoService) {
+  constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location,
+              private todoService: TodoService, private accountInfoService: AccountInfoService, private translate: TranslateService) {
     this.route$ = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
   }
 
@@ -76,7 +78,8 @@ export class HeaderComponent implements OnInit {
           this.title = 'Register';
           break;
         case 'user-settings':
-          this.title = 'User Settings';
+          this.title = this.translate.instant('user_settings');
+          // this.title = 'User Settings';
           break;
         case 'password-reset':
           this.title = 'Password Recovery';

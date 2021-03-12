@@ -8,6 +8,7 @@ import {AccountInfoService} from './account-info.service';
 import {AccountInfo} from '../models/accountInfo';
 import User = firebase.User;
 import {ActivatedRoute, Router} from '@angular/router';
+import {LanguageService} from './language.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router) {
+                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService) {
 
         this.user$ = new BehaviorSubject(null);
         this.afAuth.onAuthStateChanged(user => {
@@ -26,12 +27,12 @@ export class AuthService {
                     // Search for user
                     this.accountInfoService.getOneObs(user.uid).subscribe(
                         (snapshot) => {
+                            languageService.setLanguage(snapshot.prefLanguage);
                             if (snapshot.sudoName === undefined){
                                 // TODO : ADD GOOGLE PSEUDO?
                                 // Create user settings w/ default sudo name and redirect to user settings to change it
                                 this.createSudoNameIfEmpty(snapshot, user).then(() => this.router.navigateByUrl('/user-settings'));
                             }
-                            console.log('Sudo name already registered');
                         },
                         (error) => console.log(error)
                     );
