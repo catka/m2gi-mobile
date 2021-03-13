@@ -19,6 +19,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { UserPanelComponent } from './modals/user-panel/user-panel.component';
 
 export function createTranslateLoader(http : HttpClient){
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json')
@@ -30,6 +31,7 @@ export function createTranslateLoader(http : HttpClient){
         CreateListComponent,
         CreateTodoComponent,
         HeaderComponent,
+        UserPanelComponent,
     ],
     entryComponents: [],
     imports: [

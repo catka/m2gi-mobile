@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, NavigationEnd, Event} from '@angular/router';
-import {filter, switchMap} from 'rxjs/operators';
+import {filter, map, switchMap} from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ListService } from 'src/app/services/list.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,11 +8,11 @@ import firebase from 'firebase';
 import User = firebase.User;
 import {Location} from '@angular/common';
 import {TodoService} from '../../services/todo.service';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {AccountInfoService} from '../../services/account-info.service';
-import {List} from '../../models/list';
 import {AccountInfo} from '../../models/accountInfo';
+import { MenuController } from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
+import { appInitialize } from '@ionic/angular/app-initialize';
 
 @Component({
   selector: 'app-header',
@@ -26,10 +26,11 @@ export class HeaderComponent implements OnInit {
   public pseudoName: string;
   private accountInfo$: Observable<AccountInfo>;
   private route$: Observable<Event>;
+  photoUrl$: Observable<string>;
   routeWithBack = true;
 
   constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location,
-              private todoService: TodoService, private accountInfoService: AccountInfoService, private translate: TranslateService) {
+              private todoService: TodoService, private accountInfoService: AccountInfoService, private translate: TranslateService, private menu: MenuController) {
     this.route$ = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
   }
 
@@ -40,6 +41,7 @@ export class HeaderComponent implements OnInit {
       if (user){
         // Search for user
         this.accountInfo$ = this.accountInfoService.getOneObs(user.uid);
+        this.photoUrl$ = this.accountInfo$.pipe(map((ai) => ai.photoUrl));
 
         // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
       } else{
@@ -118,15 +120,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  async loginOrOut(){
-    if (this.user) {
-      await this.auth.logout();
-    }
-    await this.router.navigate(['login']);
-  }
-
-  toUserSettings(){
-    this.router.navigateByUrl('/user-settings');
+  openEnd() {
+    this.menu.open('end');
   }
 
   back() {

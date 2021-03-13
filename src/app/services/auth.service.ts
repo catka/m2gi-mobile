@@ -1,3 +1,4 @@
+import { AccountInfo } from './../models/accountInfo';
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
@@ -5,7 +6,6 @@ import {Subject, BehaviorSubject} from 'rxjs';
 import firebase from 'firebase';
 import {Plugins} from '@capacitor/core';
 import {AccountInfoService} from './account-info.service';
-import {AccountInfo} from '../models/accountInfo';
 import User = firebase.User;
 import {ActivatedRoute, Router} from '@angular/router';
 import {LanguageService} from './language.service';
@@ -28,11 +28,11 @@ export class AuthService {
                     this.accountInfoService.getOneObs(user.uid).subscribe(
                         (snapshot) => {
                             languageService.setLanguage(snapshot.prefLanguage);
-                            if (snapshot.sudoName === undefined){
-                                // TODO : ADD GOOGLE PSEUDO?
+                            if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined){
                                 // Create user settings w/ default sudo name and redirect to user settings to change it
-                                this.createSudoNameIfEmpty(snapshot, user).then(() => this.router.navigateByUrl('/user-settings'));
+                                this.updateAccountInfoWhenEmpty(snapshot, user).then(() => this.router.navigateByUrl('/user-settings'));
                             }
+                            
                         },
                         (error) => console.log(error)
                     );
@@ -42,8 +42,13 @@ export class AuthService {
     }
 
     // Create sudo name using email in firebase
-    createSudoNameIfEmpty(accountInfo: AccountInfo, user: User){
-        accountInfo.sudoName = 'Pseudo - ' + user.uid.substring(0, 4);
+    updateAccountInfoWhenEmpty(accountInfo: AccountInfo, user: User) {
+        if (!accountInfo.photoUrl) {
+            accountInfo.photoUrl = user.photoURL;
+        }
+        if (!accountInfo.sudoName) {
+            accountInfo.sudoName = user.displayName ? user.displayName : 'Pseudo - ' + user.uid.substring(0, 4);
+        }
         return this.accountInfoService.createOrUpdate(accountInfo, user.uid + '');
     }
 

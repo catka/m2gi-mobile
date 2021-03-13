@@ -1,3 +1,14 @@
+<ion-menu side="end" type="overlay" contentId="main">
+  <ion-header>
+    <ion-toolbar class="menu-header" color="primary" *ngIf="(accountInfo$ | async) as acc">
+      <img class="pp" *ngIf="photoUrl$|async as p" src="{{ p }}" />
+      <ion-title>{{ acc.sudoName }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <app-user-panel></app-user-panel>
+  </ion-content>
+</ion-menu>
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start" *ngIf="routeWithBack">
@@ -7,11 +18,8 @@
     </ion-buttons>
     <ion-title>{{title}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="(accountInfo$ | async) as acc" (click)="toUserSettings()">
-        {{textReduce(acc.sudoName)}}
-      </ion-button>
-      <ion-button color="secondary" (click)="loginOrOut()">
-        <ion-icon slot="icon-only" [name]="user ? 'log-out-outline' : 'person-outline'"></ion-icon>
+      <ion-button color="secondary" (click)="openEnd()" *ngIf="user">
+        <ion-icon slot="icon-only" [name]="'person-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

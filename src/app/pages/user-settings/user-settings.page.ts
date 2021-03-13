@@ -56,7 +56,7 @@ export class UserSettingsPage implements OnInit {
                 userSettings.id = id;
                 await this.accountInfoService.createOrUpdate(userSettings, id);
                 this.showToast('Updated settings successfully.', false);
-                await this.router.navigateByUrl('home');
+                this.router.navigateByUrl('home');
             } catch (error){
                 this.showToast('Error submitting settings', true);
             }
