@@ -10,6 +10,7 @@ import {Location} from '@angular/common';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { List } from 'src/app/models/list';
+import {LocationService} from '../../services/location.service';
 
 @Component({
     selector: 'app-todo-details',
@@ -25,11 +26,14 @@ export class TodoDetailsPage implements OnInit {
     owner: boolean = false;
     canWrite: boolean = false;
 
-    constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router, private modalController: ModalController, private todoService: TodoService, private _location: Location, public toastController: ToastController, private auth: AuthService) {
+    constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router, 
+                private modalController: ModalController, private todoService: TodoService, private _location: Location, 
+                public toastController: ToastController, private auth: AuthService, private locationService: LocationService) {
         this.todoDetailsForm = this._fb.group({
             name: ['', Validators.required],
             isDone: [false],
             description: [''],
+            address: [''],
         });
     }
 
@@ -54,11 +58,36 @@ export class TodoDetailsPage implements OnInit {
         });
     }
 
-    onSubmit() {
+    async onSubmit() {
         if (this.canWrite) {
             if (this.todoDetailsForm.valid) {
                 if (this.todoId) {
-                    let todo = new Todo();
+                    const todo = new Todo();
+                    const addressInput = this.todoDetailsForm.get('address');
+                    const addressInputValue = addressInput.value;
+                    // No need to recall API and reset geopoint if address hasn't changed
+                    if (addressInput.touched){
+                        if (addressInputValue === ''){
+                            // Reset geopoint to null when address emptied
+                            todo.setLocation(null);
+                        } else{
+                            try{
+                                let latAndLong;
+                                latAndLong = await this.locationService.geocode(addressInputValue);
+                                todo.setLocationWithLatAndLong(latAndLong[0], latAndLong[1]);
+                            } catch (error){
+                                console.log('Error geocoding location: ' + error.message + ', error code = ' + error.status);
+                                // If the api returned an empty list (this.locationService.ADDRESS_NOT_FOUND_ERROR) or the api status is 422. It is highly likely to be a User input error
+                                if (error.message === this.locationService.ADDRESS_NOT_FOUND_ERROR || error.status === 422){
+                                    this.showToast('Error finding address, please check your address input before saving or empty the field.', true);
+                                } else{
+                                    this.showToast('Error finding address, please check your address input before saving or empty the field. If this problem persists, please contact the administrator', true);
+                                }
+                                return;
+                            }
+                        }
+
+                    }
                     todo.id = this.todoId;
                     Object.assign(todo, this.todoDetailsForm.value);
                     this.todoService.update(todo, this.listId);

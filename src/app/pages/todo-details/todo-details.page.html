@@ -24,6 +24,10 @@
                 <ion-label position="floating">Todo description</ion-label>
                 <ion-input formControlName="description" [disabled]="!canWrite"></ion-input>
             </ion-item>
+            <ion-item>
+                <ion-label position="floating">Todo address</ion-label>
+                <ion-input formControlName="address" [disabled]="!canWrite"></ion-input>
+            </ion-item>
             <ion-button color="success" expand="block" (click)="onSubmit()" [disabled]="!canWrite">Update Todo</ion-button>
         </form>
     </ng-container>
