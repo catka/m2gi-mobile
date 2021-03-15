@@ -27,6 +27,8 @@ export class TodoDetailsPage implements OnInit {
   distanceFromPosition$: Observable<number>;
   owner = false;
   canWrite = false;
+  mapUrl = 'https://maps.google.com/maps?daddr=';
+  locationSpecificMapUrl = null;
 
   constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router,
               private modalController: ModalController, private todoService: TodoService, private _location: Location,
@@ -58,6 +60,8 @@ export class TodoDetailsPage implements OnInit {
     this.todo.subscribe(
       (todo) => {
         this.todoDetailsForm.patchValue(todo);
+        this.locationSpecificMapUrl = todo.address ? encodeURI(`${this.mapUrl}${todo.address}`) : null;
+
         // When todo loads, the distance is defined by the difference with the todo geopoint and the geolocation promise
         if (todo.location !== null){
           this.distanceFromPosition$ = this.locationService.distanceFromCurrentPositionInKm(todo.location);
@@ -66,18 +70,14 @@ export class TodoDetailsPage implements OnInit {
         }
       }
     );
+  }
 
-
-
-    // from(Geolocation.getCurrentPosition()).subscribe()
-    // Geolocation.getCurrentPosition().
-    //
-    //   .subscribe(pipe(
-    //   map((geoPosition: GeolocationPosition) => {
-    //     return
-    //   })
-    // ));
-
+  openMapUrl(){
+    if (this.locationSpecificMapUrl){
+      window.open(this.locationSpecificMapUrl, '_blank');
+    } else{
+      console.log('location cannot be opened in maps');
+    }
   }
 
   // Location is set on the todo object dependent on the address field on the form

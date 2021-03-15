@@ -12,7 +12,8 @@ Get translate in html: {{ "translate_key" | translate }}
 
 + A user can choose a location of a todo with specifying an address in the todo form.
 + An API call to is used to geocode the address and the lat and long are saved as a GeoPoint in firebase.
-+ If the owner/sharing user views the todo, they will be able to calculate how far away they are from the Todo location using the Capacitor geolocation plugin. 
++ If the owner/sharing user views the todo, they will be able to estimate how far away they are from the Todo location using the Capacitor geolocation plugin and comparing with the GeoPoint. 
++ There is also non-native link to open the location with google maps on the to-do details page.
 
 positionstack.com was used instead of the google geocoder as the first 25,000 calls a free. Even though there is a free amount with the google geocoder we found two issues with it:
 + The geocoder plugin is only supported with cordova which should be avoided with new ionic applications
@@ -20,5 +21,3 @@ positionstack.com was used instead of the google geocoder as the first 25,000 ca
 
 It should be noted however that the free subscription for positionstack.com doesn't not use a TLS handshake call. For production, a paid subscription would be needed (or it could easily be replaced by another API).
 
-A lat and long (GeoPoint in firebase) and an address.
-A user can save a todos 
