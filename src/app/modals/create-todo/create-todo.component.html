@@ -10,5 +10,9 @@
     <ion-label position="floating">Todo description</ion-label>
     <ion-input formControlName="description"></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="floating">Todo address</ion-label>
+    <ion-input formControlName="address"></ion-input>
+  </ion-item>
   <ion-button color="success" expand="block" (click)="onSubmit()">{{ todo ? 'Update' : 'Create' }} Todo</ion-button>
 </form>

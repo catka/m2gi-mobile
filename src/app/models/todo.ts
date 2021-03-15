@@ -10,10 +10,14 @@ export class Todo {
   private location: GeoPoint;
   address: string;
 
-  constructor(name?: string, description?: string) {
+  constructor(name?: string, description?: string, address?: string) {
     this.name = name;
-    if(description)
+    if(description) {
       this.description = description;
+    }
+    if(address) {
+      this.address = address;
+    }
   }
 
   public setLocationWithLatAndLong(lat: number, long: number){
