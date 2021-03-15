@@ -7,8 +7,9 @@ export class Todo {
   description: string;
   isDone: boolean = false;
   createdAt: any = new Date().getTime();
-  private location: GeoPoint;
+  location: GeoPoint;
   address: string;
+
 
   constructor(name?: string, description?: string, address?: string) {
     this.name = name;
@@ -21,11 +22,7 @@ export class Todo {
   }
 
   public setLocationWithLatAndLong(lat: number, long: number){
-    this.setLocation(new GeoPoint(lat, long));
-  }
-
-  public setLocation(location: GeoPoint){
-    this.location = location;
+    this.location = new GeoPoint(lat, long);
   }
 
 }

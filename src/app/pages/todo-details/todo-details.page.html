@@ -28,6 +28,9 @@
                 <ion-label position="floating">Todo address</ion-label>
                 <ion-input formControlName="address" [disabled]="!canWrite"></ion-input>
             </ion-item>
+            <ion-item color="secondary" *ngIf="(distanceFromPosition$ | async) as dist">
+                <ion-text>Approximately {{ dist }} km from your location</ion-text>
+            </ion-item>
             <ion-button color="success" expand="block" (click)="onSubmit()" [disabled]="!canWrite">Update Todo</ion-button>
         </form>
     </ng-container>

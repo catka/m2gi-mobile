@@ -40,7 +40,7 @@ export class CreateTodoComponent implements OnInit {
     if (addressInput.touched) {
       if (addressInputValue === '') {
         // Reset geopoint to null when address emptied
-        todo.setLocation(null);
+        todo.location = null;
       } else {
         let latAndLong;
         latAndLong = await this.locationService.geocode(addressInputValue);
