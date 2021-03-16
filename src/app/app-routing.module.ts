@@ -34,6 +34,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
   },
   {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

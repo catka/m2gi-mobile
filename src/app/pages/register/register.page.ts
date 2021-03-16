@@ -22,28 +22,8 @@ export class RegisterPage implements OnInit {
       username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       passwordConfirm: ['', [Validators.required, Validators.minLength(8)]]
-      // TODO: add validator for password match
     }, {validators: [matchingPasswordsValidator]});
   }
-
-  // onSubmit() {
-  //   if (!this.registerForm.valid) {
-  //     this.showToast('Form is not valid! Please check your input an try again.', true);
-  //   } else {
-  //     // TODO: register with firebase
-  //     // this.auth.createUserWithEmailAndPassword(this.registerForm.get('username').value, this.registerForm.get('password').value).then((result) => {
-  //     this.authService.register(this.registerForm.get('username').value, this.registerForm.get('password').value).then((result) => {
-  //       console.log(result);
-  //       // if (result && result.operationType) {
-  //         this.showToast('Operation successful: ' + result.operationType, false);
-  //         this.router.navigateByUrl('home');
-  //       }
-  //     }, (reject) => {
-  //         this.showToast('Registration failed: ' + reject.message, true);
-  //     });
-  //   }
-
-
 
   async onSubmit() {
     if (this.registerForm.valid) {

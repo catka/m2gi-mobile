@@ -1,3 +1,4 @@
+import { PhotoService } from './photo.service';
 import { AccountInfo } from './../models/accountInfo';
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -17,7 +18,7 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
 
     constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService) {
+                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService, private photoService: PhotoService) {
 
         this.user$ = new BehaviorSubject(null);
         this.afAuth.onAuthStateChanged(user => {
@@ -30,7 +31,10 @@ export class AuthService {
                             languageService.setLanguage(snapshot.prefLanguage);
                             if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined){
                                 // Create user settings w/ default sudo name and redirect to user settings to change it
-                                this.updateAccountInfoWhenEmpty(snapshot, user).then(() => this.router.navigateByUrl('/user-settings'));
+                                this.updateAccountInfoWhenEmpty(snapshot, user).then(() => {
+                                    if (user.emailVerified) this.router.navigateByUrl('/user-settings');
+                                    else this.logout();
+                                });
                             }
                             
                         },
@@ -42,9 +46,12 @@ export class AuthService {
     }
 
     // Create sudo name using email in firebase
-    updateAccountInfoWhenEmpty(accountInfo: AccountInfo, user: User) {
+    async updateAccountInfoWhenEmpty(accountInfo: AccountInfo, user: User) {
         if (!accountInfo.photoUrl) {
-            accountInfo.photoUrl = user.photoURL;
+            if(user.photoURL)
+                accountInfo.photoUrl = user.photoURL;
+            else
+                accountInfo.photoUrl = await this.photoService.getDefaultUserPicture();
         }
         if (!accountInfo.sudoName) {
             accountInfo.sudoName = user.displayName ? user.displayName : 'Pseudo - ' + user.uid.substring(0, 4);

@@ -50,6 +50,10 @@ export class LoginPage implements OnInit {
                     // Signed in
                     const user = userCredential.user;
                     console.log('login successful');
+                    if (!user.emailVerified) {
+                        this.showToast('Please confirm your email address before loggin in', true);
+                        return;
+                    }
                     this.showToast(user.email + ' logged in successfully', false);
                     this.router.navigateByUrl('home');
                 })
