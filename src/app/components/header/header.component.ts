@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {Router, NavigationEnd, Event} from '@angular/router';
-import {filter, map, switchMap} from 'rxjs/operators';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { filter, flatMap, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ListService } from 'src/app/services/list.service';
 import { AuthService } from 'src/app/services/auth.service';
 import firebase from 'firebase';
 import User = firebase.User;
-import {Location} from '@angular/common';
-import {TodoService} from '../../services/todo.service';
-import {AccountInfoService} from '../../services/account-info.service';
-import {AccountInfo} from '../../models/accountInfo';
+import { Location, TitleCasePipe } from '@angular/common';
+import { TodoService } from '../../services/todo.service';
+import { AccountInfoService } from '../../services/account-info.service';
+import { AccountInfo } from '../../models/accountInfo';
 import { MenuController } from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { appInitialize } from '@ionic/angular/app-initialize';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -21,16 +22,17 @@ import { appInitialize } from '@ionic/angular/app-initialize';
 })
 export class HeaderComponent implements OnInit {
 
-  public title: string;
+  public title$: Observable<any>;
   public user: User;
   public pseudoName: string;
   private accountInfo$: Observable<AccountInfo>;
   private route$: Observable<Event>;
   photoUrl$: Observable<string>;
-  routeWithBack = true;
+  routeWithBack$: Observable<boolean>;
+  routeLogin = false;
 
   constructor(private auth: AuthService, private router: Router, private listService: ListService, private location: Location,
-              private todoService: TodoService, private accountInfoService: AccountInfoService, private translate: TranslateService, private menu: MenuController) {
+    private todoService: TodoService, private accountInfoService: AccountInfoService, private translate: TranslateService, private menu: MenuController) {
     this.route$ = this.router.events.pipe(filter(event => event instanceof NavigationEnd));
   }
 
@@ -38,85 +40,59 @@ export class HeaderComponent implements OnInit {
     // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
     this.auth.getConnectedUser().subscribe(user => {
       this.user = user;
-      if (user){
+      if (user) {
         // Search for user
         this.accountInfo$ = this.accountInfoService.getOneObs(user.uid);
         this.photoUrl$ = this.accountInfo$.pipe(map((ai) => ai.photoUrl));
 
         // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
-      } else{
+      } else {
         this.accountInfo$ = null;
       }
     });
-    // this.auth.getConnectedUser().pipe(
-    //   switchMap((user: User) => this.accountInfoService.getOneObs(user?.uid)
-    // ));
 
-    // this.auth.getConnectedUser().subscribe(user => {
-    //   this.user = user;
-    //   if (user){
-    //     // Search for user
-    //     this.accountInfo = this.accountInfoService.getOneObs(user.uid);
-    //
-    //     // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
-    //   }
-    // });
+    this.title$ = this.route$.pipe(
+      startWith(this.translate.instant('home')),
+      map((route) => {
+        const url = this.router.url;
+        const urlSplit = url.split('/');
 
-    this.route$.subscribe(route => {
-
-
-      // TODO : ADD BACK BUTTON
-      // TODO : ADD ROUTE ID SPECIFIC INFO. E.G. TODO NAME
-      const url = this.router.url;
-      const urlSplit = url.split('/');
-      switch (urlSplit[1]) {
-        case 'home':
-          this.title = 'Home';
-          break;
-        case 'login':
-          this.title = 'Login';
-          break;
-        case 'register':
-          this.title = 'Register';
-          break;
-        case 'user-settings':
-          this.title = this.translate.instant('user_settings');
-          // this.title = 'User Settings';
-          break;
-        case 'password-reset':
-          this.title = 'Password Recovery';
-          break;
-        case 'lists':
-          if (urlSplit.length > 3){
-            if (urlSplit[3] === 'todos'){
-              // TODO : DO WE NEED AN AWAIT HERE?
-              this.todoService.getOneObs(urlSplit[4], urlSplit[2]).subscribe(
-                  (todo) => this.title = todo && todo.name
-              );
-              // this.title = 'todo';
-              break;
+        return urlSplit;
+      }),
+      flatMap((urlSplit) => {
+        console.log(urlSplit[1]);
+        switch (urlSplit[1]) {
+          case 'lists':
+            if (urlSplit.length > 3) {
+              if (urlSplit[3] === 'todos') {
+                return this.todoService.getOneObs(urlSplit[4], urlSplit[2]).pipe(
+                  map((todo) => todo.name)
+                );
+              }
             }
-          }
-          // this.title = 'List details';
-          // TODO : DO WE NEED AN AWAIT HERE?
-          this.listService.getOneObs(urlSplit[2]).subscribe(
-              (list) => this.title = list && list.name
-          );
-          // this.title = 'List details';
-          break;
-        // case 'todos':
-        //   this.title = 'Todos';
-        //   break;
-        // case 'list-details':
-        //   const list = this.listService.getOne(url.split('/')[2]);
-        //   this.title = list && list.name;
-        //   break;
-        default:
-          console.log(`Unknown url ${url}.`);
-      }
-
-      this.routeWithBack = !(urlSplit[1] === 'login') && !(urlSplit[1] === 'home');
-
+            return this.listService.getOneObs(urlSplit[2]).pipe(
+              map((list) => list.name)
+            );
+            break;
+          case '':
+          case null:
+            return this.translate.instant('home');
+            break;
+          default:
+            return of(this.translate.instant(urlSplit[1].replace('-', '_')));
+        }
+    })
+    );
+    this.routeWithBack$ = this.route$.pipe(
+      map((route) => {
+        const url = this.router.url;
+        const urlSplit = url.split('/');
+        return  !(urlSplit[1] === 'login') && !(urlSplit[1] === 'home');
+      }),
+      startWith(false)
+    );
+    this.route$.subscribe((route) => {
+      this.routeLogin = this.router.url.split('/')[1] === 'login';
     });
   }
 
@@ -128,8 +104,8 @@ export class HeaderComponent implements OnInit {
     this.location.back();
   }
 
-  textReduce(stringLong){
-    if (stringLong !== null && stringLong.length > 25){
+  textReduce(stringLong) {
+    if (stringLong !== null && stringLong.length > 25) {
       return stringLong.substr(0, 22) + '...';
     }
     return stringLong;
