@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
-import {Router} from '@angular/router';
-import {AccountInfoService} from '../../services/account-info.service';
-import {Observable} from 'rxjs';
-import {AccountInfo} from '../../models/accountInfo';
+import { UserSettingsImagePopoverComponent } from './../../modals/user-settings-image-popover/user-settings-image-popover.component';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { AccountInfoService } from '../../services/account-info.service';
+import { Observable } from 'rxjs';
+import { AccountInfo } from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ToastController} from '@ionic/angular';
-import {LanguageService} from '../../services/language.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PopoverController, ToastController } from '@ionic/angular';
+import { LanguageService } from '../../services/language.service';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-user-settings',
@@ -22,8 +24,11 @@ export class UserSettingsPage implements OnInit {
     public pseudoName: string;
     public accountInfo$: Observable<AccountInfo>;
     public languages = [];
+    photoUrl$: Observable<string>;
+    oldPhotoUrl: string = null;
+    newPhotoUrl: string = null;
 
-    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private accountInfoService: AccountInfoService, public toastController: ToastController, private languageService: LanguageService) {
+    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private accountInfoService: AccountInfoService, public toastController: ToastController, private languageService: LanguageService, public popoverController: PopoverController) {
         this.userSettingsForm = this._fb.group({
             sudoName: ['', Validators.required],
             prefLanguage: []
@@ -38,9 +43,11 @@ export class UserSettingsPage implements OnInit {
             if (user) {
                 // Search for user
                 this.accountInfo$ = this.accountInfoService.getOneObs(user.uid);
+                this.photoUrl$ = this.accountInfo$.pipe(map((ai) => ai.photoUrl));
                 this.accountInfo$.subscribe((accountInfo) => {
                     this.userSettingsForm.patchValue(accountInfo);
                 });
+                this.photoUrl$.subscribe((p) => this.oldPhotoUrl = p);
                 // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
             } else {
                 this.accountInfo$ = null;
@@ -51,13 +58,17 @@ export class UserSettingsPage implements OnInit {
 
     async onSubmit(id) {
         if (this.userSettingsForm.valid) {
-            try{
+            try {
                 const userSettings = new AccountInfo(this.userSettingsForm.get('sudoName').value, this.userSettingsForm.get('prefLanguage').value);
                 userSettings.id = id;
+                userSettings.photoUrl = this.oldPhotoUrl;
+                if (this.newPhotoUrl) {
+                    userSettings.photoUrl = this.newPhotoUrl;
+                }
                 await this.accountInfoService.createOrUpdate(userSettings, id);
                 this.showToast('Updated settings successfully.', false);
                 this.router.navigateByUrl('home');
-            } catch (error){
+            } catch (error) {
                 this.showToast('Error submitting settings', true);
             }
         } else {
@@ -74,5 +85,20 @@ export class UserSettingsPage implements OnInit {
         await toast.present();
     }
 
-
+    async imagePopover(ev: any) {
+        const popover = await this.popoverController.create({
+            component: UserSettingsImagePopoverComponent,
+            componentProps: {uid: this.user.uid, photoUrl$: this.photoUrl$},
+            cssClass: 'popover-img',
+            event: ev,
+            translucent: true
+        });
+        popover.onDidDismiss().then((result) => {
+            if (result && result.data) {
+                this.photoUrl$ = result.data;
+                result.data.subscribe((p) => { if (p) this.newPhotoUrl = p });
+            }
+        });
+        return await popover.present();
+    }
 }
