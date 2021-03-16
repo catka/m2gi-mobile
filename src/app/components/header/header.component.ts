@@ -60,7 +60,6 @@ export class HeaderComponent implements OnInit {
         return urlSplit;
       }),
       flatMap((urlSplit) => {
-        console.log(urlSplit[1]);
         switch (urlSplit[1]) {
           case 'lists':
             if (urlSplit.length > 3) {
