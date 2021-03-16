@@ -1,0 +1,22 @@
+<ion-list>
+  <ion-item *ngIf="loading">
+    <ion-spinner></ion-spinner>
+  </ion-item>
+  <ion-item button (click)="camera()">
+    <ion-icon slot="start" name="camera-outline"></ion-icon> 
+    <ion-label>Take a new picture</ion-label>
+  </ion-item>
+  <ion-item button (click)="triggerUploadFile()">
+    <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+    <ion-label>Upload a file</ion-label>
+  </ion-item>
+  <ion-item button (click)="removePic()">
+    <ion-icon slot="start" color="danger" name="trash-outline"></ion-icon>
+    <ion-label color="danger">Remove picture</ion-label>
+  </ion-item>
+  <ion-item lines="none" detail="false" button (click)="dismissPopover()">
+    <ion-icon slot="start" name="close-outline"></ion-icon> 
+    <ion-label>Cancel</ion-label>
+  </ion-item>
+  <input type="file" name="file" #file id="file" (change)="uploadFile($event.target.files)" style="opacity:0;">
+</ion-list>

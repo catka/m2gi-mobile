@@ -14,6 +14,14 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+
+      <ion-item (click)="imagePopover()">
+        <ion-label>Picture</ion-label>
+        <ion-thumbnail slot="end">
+          <img class="pp" *ngIf="photoUrl$|async as p" src="{{ p }}" />
+        </ion-thumbnail>
+      </ion-item>
+      <span class="hint" *ngIf="newPhotoUrl">You must save changes to save your new picture.</span>
       <ion-button color="success" expand="block" (click)="onSubmit(acc.id)">Update Settings</ion-button>
     </form>
   </ng-container>

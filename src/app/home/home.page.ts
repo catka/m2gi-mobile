@@ -1,48 +1,58 @@
+import { AccountInfoService } from 'src/app/services/account-info.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CreateListComponent } from './../modals/create-list/create-list.component';
 import { ListService } from './../services/list.service';
 import { Component, OnInit } from '@angular/core';
 import { List } from '../models/list';
-import {ModalController, ToastController} from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import {Observable} from 'rxjs';
-import {test} from 'fuzzy';
-import {Location} from '@angular/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit {
   currentUid: string = '';
   currentLists: Observable<List[]>;
 
-  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController, private auth: AuthService) { }
+  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController, private auth: AuthService, private accountInfoService: AccountInfoService) { }
 
 
   ngOnInit(): void {
-    this.currentLists = this.listService.getAll();
+    this.currentLists = this.listService.getAll().pipe(
+      map((lists) => {
+        lists.forEach(async (l) => {
+          l.ownerObj = this.accountInfoService.getOneObs(l.owner);
+        });
+        return lists;
+      })
+    );
     this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user?.uid });
-    // this.listService.getAll().subscribe((newList) => this.debugList(newList));
   }
 
-  // debugList(ttt){
-  //   debugger;
-  // }
-
   delete(list: List): void {
+    if (this.currentUid != list.owner && list.canWrite.indexOf(this.currentUid) < 0)
+      return;
     this.listService.delete(list)
-        .then(() => { // TODO : ADD TO TOAST
-          this.showToast('List successfully deleted!', false);
+      .then(() => { // TODO : ADD TO TOAST
+        this.showToast('List successfully deleted!', false);
       }).catch((error) => {
         console.error('Error removing list: ', error);
         this.showToast('There was an error removing the list', false);
-    });
+      });
   }
 
   update(list: List): void {
+    if (this.currentUid != list.owner && list.canWrite.indexOf(this.currentUid) < 0)
+      return;
     this.newListModal(list);
+  }
+
+  toastSharerName(name: string) {
+    this.showToast("List shared by " + name, false);
   }
 
   async newListModal(list?: List) {
@@ -57,7 +67,7 @@ export class HomePage implements OnInit{
     return await modal.present();
   }
 
-  goToList(l: List): void{
+  goToList(l: List): void {
     this.router.navigateByUrl('/lists/' + l.id);
   }
 

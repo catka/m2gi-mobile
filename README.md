@@ -1,5 +1,11 @@
 # ToDo List Application
 
+## Environment parameters
+See Microsoft Teams channel *Group 2* for the environment files.
+
+## Form advanced validation
+On registering on the app with an email/password, a custom form validator was set up to check the matching of the two passwords.
+
 ## Internationalization
 Translations stored in the assets/i18n folder. This is set to the default browser lang (TranslatorService.getBrowserLang()) or en otherwise.
 
@@ -21,3 +27,6 @@ positionstack.com was used instead of the google geocoder as the first 25,000 ca
 
 It should be noted however that the free subscription for positionstack.com doesn't not use a TLS handshake call. For production, a paid subscription would be needed (or it could easily be replaced by another API).
 
+## Firebase Firestorage of images for user profile pictures + camera
+User can upload a picture file (from file selection) or take a new picture (with the camera), which will be saved in Firebase/Firestore (base image is Google profile picture if the user signed with Google). It is retreived by URL and display in the app.
+A plugin (@ionic/pwa-elements) was included to have the camera working on the web app environment.

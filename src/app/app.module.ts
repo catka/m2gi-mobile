@@ -20,6 +20,9 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import { UserPanelComponent } from './modals/user-panel/user-panel.component';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { CommonModule } from '@angular/common';
+import { UserSettingsImagePopoverComponent } from './modals/user-settings-image-popover/user-settings-image-popover.component';
 
 export function createTranslateLoader(http : HttpClient){
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json')
@@ -32,9 +35,11 @@ export function createTranslateLoader(http : HttpClient){
         CreateTodoComponent,
         HeaderComponent,
         UserPanelComponent,
+        UserSettingsImagePopoverComponent
     ],
     entryComponents: [],
     imports: [
+        CommonModule,
         BrowserModule,
         IonicModule.forRoot(),
         AppRoutingModule,
@@ -43,6 +48,7 @@ export function createTranslateLoader(http : HttpClient){
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAnalyticsModule,
         AngularFirestoreModule,
+        AngularFireStorageModule,
         HttpClientModule,
         TranslateModule.forRoot({
             loader: {
@@ -56,7 +62,7 @@ export function createTranslateLoader(http : HttpClient){
     providers: [
         StatusBar,
         SplashScreen,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ],
     bootstrap: [AppComponent]
 })

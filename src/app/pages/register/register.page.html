@@ -13,7 +13,7 @@
   <form [formGroup]="registerForm">
     <ion-item>
       <ion-label position="floating">Username (email)</ion-label>
-      <ion-input formControlName="username" required autofocus></ion-input>
+      <ion-input formControlName="username" type="email" required autofocus></ion-input>
   </ion-item>
   <ng-container *ngIf="(registerForm.get('username').dirty || registerForm.get('username').touched)">
     <div class="form-error" *ngIf="registerForm.get('username').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The email is required.</div>

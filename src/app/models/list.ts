@@ -1,9 +1,12 @@
+import { AccountInfo } from 'src/app/models/accountInfo';
+import { Observable } from 'rxjs';
 import { Todo } from './todo';
 
 export class List {
   id: string;
   name: string;
   owner: string;
+  ownerObj: Observable<AccountInfo> = null;
   canRead: string[];
   canWrite: string[];
   todos: Todo[] = [];

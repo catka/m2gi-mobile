@@ -22,14 +22,18 @@
           </ion-label>
           <ion-note slot="end">
             {{ l.stats }}
-            <span *ngIf="l.owner != currentUid">Shared <ion-icon name="people-outline"></ion-icon></span>
+            <span *ngIf="l.owner != currentUid">
+              <ng-container *ngIf="(l.ownerObj | async) as o">
+                <img *ngIf="o.photoUrl" (click)="toastSharerName(o.sudoName)" class="share-pic" [src]="o.photoUrl" />
+                <ion-icon *ngIf="!o.photoUrl" (click)="toastSharerName(o.sudoName)" class="share-pic" name="person-outline"></ion-icon>
+              </ng-container></span>
           </ion-note>
         </ion-item>
         <ion-item-options>
-          <ion-item-option color="primary" (click)="update(l)">
+          <ion-item-option color="primary" (click)="update(l)" [disabled]="l.owner != currentUid && l.canWrite.indexOf(this.currentUid) < 0">
             <ion-icon slot="start" name="pencil"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger" (click)="delete(l)">
+          <ion-item-option color="danger" (click)="delete(l)" [disabled]="l.owner != currentUid && l.canWrite.indexOf(this.currentUid) < 0">
             <ion-icon slot="start" name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>

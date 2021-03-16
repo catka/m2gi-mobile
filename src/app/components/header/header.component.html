@@ -11,14 +11,14 @@
 </ion-menu>
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="routeWithBack">
+    <ion-buttons slot="start" *ngIf="routeWithBack$ | async">
       <ion-button (click)="back()" >
         <ion-icon slot="icon-only" name="caret-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{title}}</ion-title>
+    <ion-title>{{ title$ | async}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="secondary" (click)="openEnd()" *ngIf="user">
+      <ion-button color="secondary" (click)="openEnd()" *ngIf="user && !routeLogin">
         <ion-icon slot="icon-only" [name]="'person-outline'"></ion-icon>
       </ion-button>
     </ion-buttons>
