@@ -2,7 +2,6 @@ import { PhotoService } from './../../services/photo.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 @Component({
   selector: 'app-user-settings-image-popover',

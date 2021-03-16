@@ -23,7 +23,6 @@ import { UserPanelComponent } from './modals/user-panel/user-panel.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { CommonModule } from '@angular/common';
 import { UserSettingsImagePopoverComponent } from './modals/user-settings-image-popover/user-settings-image-popover.component';
-import { FileTransfer } from '@ionic-native/file-transfer';
 
 export function createTranslateLoader(http : HttpClient){
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json')

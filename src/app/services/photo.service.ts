@@ -1,14 +1,8 @@
-import { environment } from './../../environments/environment.prod';
 import { Injectable } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
-import {
-  Plugins, CameraResultType, Capacitor, FilesystemDirectory,
-  CameraPhoto, CameraSource
-} from '@capacitor/core';
-import { from, Observable, of } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Plugins, CameraResultType, CameraPhoto, CameraSource } from '@capacitor/core';
 
-const { Camera, Filesystem, Storage } = Plugins;
+const { Camera } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -36,18 +30,18 @@ export class PhotoService {
   }
 
 
-  async uploadUserPicture(file: File, name): Promise<string>{
-     // Create a root reference
-     var storageRef = this.afStorage.storage.ref();
-     // Ref to name.jpg
-      var imageRef = storageRef.child(`userpics/${name}.${file.name.split('.').pop()}`);
-      var metadata = {
-        contentType: file.type,
-      };
-      await imageRef.put(file, metadata).then((snapshot) => {
-        console.log(snapshot);
-        console.log('Uploaded a file!');
-      });
+  async uploadUserPicture(file: File, name): Promise<string> {
+    // Create a root reference
+    var storageRef = this.afStorage.storage.ref();
+    // Ref to name.jpg
+    var imageRef = storageRef.child(`userpics/${name}.${file.name.split('.').pop()}`);
+    var metadata = {
+      contentType: file.type,
+    };
+    await imageRef.put(file, metadata).then((snapshot) => {
+      console.log(snapshot);
+      console.log('Uploaded a file!');
+    });
 
     return imageRef.getDownloadURL();
   }
@@ -69,7 +63,7 @@ export class PhotoService {
     return imageRef.getDownloadURL();
   }
 
-  async getDefaultUserPicture(): Promise<string>{
+  async getDefaultUserPicture(): Promise<string> {
     var storageRef = this.afStorage.storage.ref();
     var imageRef = storageRef.child('userpics/basic_picture.png');
     return imageRef.getDownloadURL();
