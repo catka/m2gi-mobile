@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../../services/auth.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-password-reset',
@@ -15,7 +16,7 @@ export class PasswordResetPage implements OnInit {
 
     resetPasswordForm: FormGroup;
 
-    constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, private authService: AuthService) {
+    constructor(private _fb: FormBuilder, private toastController: ToastController, private router: Router, private location: Location, private authService: AuthService, private translate: TranslateService) {
     }
 
     ngOnInit() {
@@ -29,21 +30,23 @@ export class PasswordResetPage implements OnInit {
           const username = this.resetPasswordForm.get('username').value;
           try {
               await this.authService.sendPasswordResetEmail(username);
-              this.showToast(`Reset password email sent for user: ${username}`, false);
+              this.showToastWithKey('alerts.login.password_reset', false, {user : username});
               await this.router.navigateByUrl('login');
           } catch (error) {
               const errorCode = error.code;
               if (errorCode === 'auth/user-not-found') {
-                  this.showToast('User not found', true);
+                  this.showToastWithKey('alerts.login.user_not_found', true);
               } else if (errorCode === 'auth/invalid-email') {
-                  this.showToast('Email not found', true);
+                  this.showToastWithKey('alerts.login.email_not_found', true);
               } else {
-                  this.showToast('Login unsuccessful', true);
+                  this.showToastWithKey('alerts.login.login_unsuccessful', true);
                   console.log(errorCode);
               }
           }
       } else{
-            this.showToast('Invalid inputs.', true);
+            // this.showToast('Invalid inputs.', true);
+          this.showToastWithKey(this.translate.instant('alerts.login.input_error'), true);
+
       }
       //       .then(() => {
       //         this.showToast(`Reset password email sent for user: ${username}`, false);
@@ -65,6 +68,9 @@ export class PasswordResetPage implements OnInit {
       // }
     }
 
+    async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+        await this.showToast(this.translate.instant(translationKey, parameters), error);
+    }
 
     async showToast(alertMessage: string, error: boolean) {
         const toast = await this.toastController.create({

@@ -9,6 +9,7 @@ import { Todo } from 'src/app/models/todo';
 import { TodoService } from '../../services/todo.service';
 import { merge, Observable, combineLatest } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-details',
@@ -21,7 +22,7 @@ export class ListDetailsPage implements OnInit {
   owner: boolean = false;
   canWrite: boolean = false;
 
-  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService, private auth: AuthService) { }
+  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService, private auth: AuthService, private translate: TranslateService) { }
 
   ngOnInit() {
     const listId = this.route.snapshot.paramMap.get('listId');
@@ -72,7 +73,7 @@ export class ListDetailsPage implements OnInit {
 
   deleteTodo(todo: Todo): void {
     if (this.canWrite) {
-      if (confirm("This Todo task will be deleted, are you sure?")) {
+      if (confirm(this.translate.instant('alerts.todo.delete_confirm'))) {
         this.todoService.delete(todo.id, this.listId);
       }
     }

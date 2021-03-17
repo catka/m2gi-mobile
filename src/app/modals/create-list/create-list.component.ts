@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
 import {AccountInfo} from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-list',
@@ -23,7 +24,7 @@ export class CreateListComponent implements OnInit {
   public user: User;
 
   constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController,
-              public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService) {
+              public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService, private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -53,26 +54,31 @@ export class CreateListComponent implements OnInit {
         this.listService.create(listToCreate)
             .then(() => {
               // this.showErrorToast('Created!!');
-              this.showToast('List successfully created!', false);
+              this.showToastWithKey('alerts.list.created', false);
             })
             .catch((error) => {
               console.error('Error updating list: ', error);
-              this.showToast('There was an error creating the list', false);
+              this.showToastWithKey('alerts.list.created_error', false);
             });
       } else {
         this.listService.update(this.list, this.listForm.value)
             .then(() => {
-              this.showToast('List successfully updated!', false);
+              this.showToastWithKey('alerts.list.updated', false);
             })
           .catch((error) => {
             console.error('Error updating list: ', error);
-            this.showToast('There was an error removing the updating the list', false);
+            this.showToastWithKey('alerts.list.updated_error', false);
           });
       }
       this.modalCtrl.dismiss();
     } else {
-      this.showToast('List name cannot be empty.', true);
+      this.showToastWithKey('alerts.list.empty_list', true);
     }
+  }
+
+
+  async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+    await this.showToast(this.translate.instant(translationKey, parameters), error);
   }
 
 

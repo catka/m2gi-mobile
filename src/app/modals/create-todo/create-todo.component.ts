@@ -6,6 +6,7 @@ import {Todo} from 'src/app/models/todo';
 import {ListService} from 'src/app/services/list.service';
 import {TodoService} from '../../services/todo.service';
 import {LocationService} from '../../services/location.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-todo',
@@ -17,7 +18,8 @@ export class CreateTodoComponent implements OnInit {
   @Input() listId: string;
   @Input() todo: Todo;
 
-  constructor(private _fb: FormBuilder, private modalCtrl: ModalController, public toastController: ToastController, private todoService: TodoService, private locationService: LocationService) {
+  constructor(private _fb: FormBuilder, private modalCtrl: ModalController, public toastController: ToastController, private todoService: TodoService,
+              private locationService: LocationService, private translate: TranslateService) {
   }
 
   ngOnInit() {
@@ -59,9 +61,9 @@ export class CreateTodoComponent implements OnInit {
         console.log('Error geocoding location: ' + error.message + ', error code = ' + error.status);
         // If the api returned an empty list (this.locationService.ADDRESS_NOT_FOUND_ERROR) or the api status is 422. It is highly likely to be a User input error
         if (error.message === this.locationService.ADDRESS_NOT_FOUND_ERROR || error.status === 422) {
-          this.showToast('Error finding address, please check your address input before saving or empty the field.', true);
+          this.showToastWithKey('alerts.todo.error_address', true);
         } else {
-          this.showToast('Error finding address, please check your address input before saving or empty the field. If this problem persists, please contact the administrator', true);
+          this.showToastWithKey('alerts.todo.error_address_admin', true);
         }
         // Cancel submit
         return;
@@ -94,10 +96,14 @@ export class CreateTodoComponent implements OnInit {
       // }
       this.modalCtrl.dismiss();
     } else {
-      this.showToast('Todo name cannot be empty.', true);
+      this.showToastWithKey('alerts.todo.empty_name', true);
     }
   }
 
+
+  async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+    await this.showToast(this.translate.instant(translationKey, parameters), error);
+  }
 
   async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({

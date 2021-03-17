@@ -8,6 +8,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ export class HomePage implements OnInit {
   currentUid: string = '';
   currentLists: Observable<List[]>;
 
-  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController, private auth: AuthService, private accountInfoService: AccountInfoService) { }
+  constructor(private listService: ListService, public modalController: ModalController, private router: Router, public toastController: ToastController, private auth: AuthService, private accountInfoService: AccountInfoService, private translate: TranslateService) { }
 
 
   ngOnInit(): void {
@@ -38,10 +39,10 @@ export class HomePage implements OnInit {
       return;
     this.listService.delete(list)
       .then(() => { // TODO : ADD TO TOAST
-        this.showToast('List successfully deleted!', false);
+        this.showToastWithKey('alerts.home.deleted', false);
       }).catch((error) => {
         console.error('Error removing list: ', error);
-        this.showToast('There was an error removing the list', false);
+        this.showToastWithKey('alerts.home.deleted_error', true);
       });
   }
 
@@ -52,7 +53,7 @@ export class HomePage implements OnInit {
   }
 
   toastSharerName(name: string) {
-    this.showToast("List shared by " + name, false);
+    this.showToastWithKey('alerts.home.shared_by', false, {name});
   }
 
   async newListModal(list?: List) {
@@ -69,6 +70,10 @@ export class HomePage implements OnInit {
 
   goToList(l: List): void {
     this.router.navigateByUrl('/lists/' + l.id);
+  }
+
+  async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+    await this.showToast(this.translate.instant(translationKey, parameters), error);
   }
 
   async showToast(alertMessage: string, error: boolean) {

@@ -12,6 +12,7 @@ import {map} from 'rxjs/operators';
 import {List} from 'src/app/models/list';
 import {LocationService} from '../../services/location.service';
 import {Geolocation, GeolocationPosition} from '@capacitor/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-todo-details',
@@ -32,7 +33,7 @@ export class TodoDetailsPage implements OnInit {
 
   constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router,
               private modalController: ModalController, private todoService: TodoService, private _location: Location,
-              public toastController: ToastController, private auth: AuthService, private locationService: LocationService) {
+              public toastController: ToastController, private auth: AuthService, private locationService: LocationService, private translate: TranslateService) {
     this.todoDetailsForm = this._fb.group({
       name: ['', Validators.required],
       isDone: [false],
@@ -108,9 +109,9 @@ export class TodoDetailsPage implements OnInit {
             console.log('Error geocoding location: ' + error.message + ', error code = ' + error.status);
             // If the api returned an empty list (this.locationService.ADDRESS_NOT_FOUND_ERROR) or the api status is 422. It is highly likely to be a User input error
             if (error.message === this.locationService.ADDRESS_NOT_FOUND_ERROR || error.status === 422) {
-              this.showToast('Error finding address, please check your address input before saving or empty the field.', true);
+              this.showToastWithKey('alerts.todo.error_address', true);
             } else {
-              this.showToast('Error finding address, please check your address input before saving or empty the field. If this problem persists, please contact the administrator', true);
+              this.showToastWithKey('alerts.todo.error_address_admin', true);
             }
             // Cancel submit
             return;
@@ -118,17 +119,18 @@ export class TodoDetailsPage implements OnInit {
           todo.id = this.todoId;
           Object.assign(todo, this.todoDetailsForm.value);
           await this.todoService.update(todo, this.listId);
+          // this.showToast('Updated successfully.', false);
+          this.showToastWithKey('alerts.todo.success', false);
 
-          this.showToast('Updated successfully.', false);
           this.backToList();
         } else {
           console.log('Cannot update empty todo object!');
         }
       } else {
-        this.showToast('Todo name cannot be empty.', true);
+        this.showToastWithKey('alerts.todo.empty_name', true);
       }
     } else {
-      this.showToast('You do not have permission to update this item.', true);
+      this.showToastWithKey('alerts.todo.permissions_error', true);
     }
   }
 
@@ -138,6 +140,10 @@ export class TodoDetailsPage implements OnInit {
 
   backToList(): void {
     this.router.navigateByUrl('/lists/' + this.listId);
+  }
+
+  async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+    await this.showToast(this.translate.instant(translationKey, parameters), error);
   }
 
   async showToast(alertMessage: string, error: boolean) {
