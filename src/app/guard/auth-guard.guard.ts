@@ -14,8 +14,8 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.auth.getConnectedUser().pipe(map(
         (user: any) => {
-          if(!user || !user.emailVerified){
-            this.ngZone.run(() => this.route.navigate(['login']))
+          if(!user || (!user.emailVerified && user.providerData[0].providerId !== 'facebook.com')){
+            this.ngZone.run(() => this.route.navigate(['login']));
           }
           return true;
         }

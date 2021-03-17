@@ -30,3 +30,10 @@ It should be noted however that the free subscription for positionstack.com does
 ## Firebase Firestorage of images for user profile pictures + camera
 User can upload a picture file (from file selection) or take a new picture (with the camera), which will be saved in Firebase/Firestore (base image is Google profile picture if the user signed with Google). It is retreived by URL and display in the app.
 A plugin (@ionic/pwa-elements) was included to have the camera working on the web app environment.
+
+## Authentification
+### Normal Login
+### Google
+### Facebook
+
+Facebook done on redirect. User email not verified by default (see https://github.com/firebase/firebase-js-sdk/issues/340), therefore we've added a condition to pass emailVerification when the provider id is facebook.
