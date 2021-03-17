@@ -1,77 +1,76 @@
 {
-  "user_settings": "User settings",
-  "home": "Home",
-  "register": "Register",
-  "can_read" : "Can read",
-  "can_write" : "Can write",
-  "list_name" : "List name",
-  "username" : "Username (email)",
-  "password_reset" : "Reset password",
-  "password" : "Password",
-  "pseudonym" : "Pseudonym",
-  "language" : "Language",
-  "picture" : "Picture",
+  "user_settings": "Paramètres utilisateur",
+  "home": "Accueil",
+  "register": "Créer un compte",
+  "can_read" : "Droit en lecture",
+  "can_write" : "Droit en écriture",
+  "list_name" : "Nom de la liste",
+  "username" : "Login (email)",
+  "password_reset" : "Réinitialiser le mot de passe",
+  "password" : "Mot de passe",
+  "pseudonym" : "Pseudonyme",
+  "language" : "Langage",
+  "picture" : "Image",
   "email" : "E-mail",
   "login" : "Login",
   "todo_form" : {
-    "distance_from_location": "Approximately {{ dist }} km from your location",
-    "create_todo": "Create todo",
-    "update_todo": "Update todo",
+    "distance_from_location": "Environ {{ dist }}km de votre position",
+    "create_todo": "Créer une tâche",
+    "update_todo": "Mettre à jour la tâche",
     "validators" : {
-      "name_required" : "The Todo name is required."
+      "name_required" : "Le nom de la tâche est requis."
     }
   },
   "login_form" : {
     "options" : {
-      "login_with": "Login with {{ platform }}",
-      "register": "No account yet? Register"
+      "login_with": "Se connecter avec {{ platform }}",
+      "register": "Pas de compte ? En créer un"
     },
     "validators" : {
-      "login_required" : "The login is required.",
-      "valid_email" : "The email format must be valid.",
-      "password_required" : "The password is required."
+      "login_required" : "Le login est requis.",
+      "valid_email" : "L'e-mail doit respecter un format valide.",
+      "password_required" : "Le mot de passe est requis."
     }
   },
   "register_form" : {
     "validators" : {
-      "email_required" : "The email is required.",
-      "email_valid" : "The email must be valid.",
-      "password_required" : "The password is required.",
-      "password_valid" : "The password must contain at least 8 characters.",
-      "password_conf_required" : "The password confirmation is required.",
-      "password_conf_valid" : "The password and password confirmation must match."
+      "email_required" : "L'e-mail est requis.",
+      "email_valid" : "L'e-mail doit respecter un format valide.",
+      "password_required" : "Le mot de passe est requis.",
+      "password_valid" : "Le mot de passe doit contenir au moins 8 caractères.",
+      "password_conf_required" : "La confirmation de mot de passe est requise.",
+      "password_conf_valid" : "Le mot de passe et la confirmation de mot de passe doivent correspondre."
     },
-    "create_account": "Create account",
-    "password_confirmation": "Password confirmation"
+    "create_account": "Créer un compte",
+    "password_confirmation": "Confirmation du mot de passe"
   },
   "user_settings_form" : {
-    "update_settings": "Update Settings",
+    "update_settings": "Sauvegarder les paramètres",
     "help" : {
-      "pseudonym" : "Your pseudo name will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <b>you are advised to change it</b> on order for others to identify you.",
-      "save_changes" : "You must save changes to save your new picture."
+      "pseudonym" : "Votre pseudonyme sera affiché lorsque d'autres utilisateurs voudront partager leurs listes. Le pseudonyme de départ est généré aléatoirement, mais <b>nous vous conseillons de le modifier</b> pour que les autres utilisateurs puissent vous trouver.",
+      "save_changes" : "Vous devez sauvegarder les paramètres pour prendre en compte le changement d'image."
     }
   },
   "list_form" : {
-    "create_list": "Create list",
-    "update_list": "Update list",
+    "create_list": "Créer une liste",
+    "update_list": "Mettre à jour la liste",
     "validators" : {
-      "name_required" : "The list name is required."
+      "name_required" : "Le nom de la liste est requis."
     }
   },
   "image_form" : {
     "options" : {
-      "new" : "Take a new picture",
-      "upload" : "Upload a file",
-      "remove" : "Remove picture",
-      "cancel" : "Cancel"
+      "new" : "Prendre une nouvelle photo",
+      "upload" : "Envoyer un fichier",
+      "remove" : "Supprimer la photo",
+      "cancel" : "Annuler"
     }
   },
-  "todo_name" : "Todo name",
+  "todo_name" : "Nom de la tâche",
   "description" : "Description",
-  "address" : "Address",
+  "address" : "Addresse",
   "user_panel": {
-    "settings": "Settings",
-    "logout": "Logout"
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
   }
-
 }
