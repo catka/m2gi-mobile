@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { TodoDetailsPageRoutingModule } from './todo-details-routing.module';
 
 import { TodoDetailsPage } from './todo-details.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { TodoDetailsPage } from './todo-details.page';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    TodoDetailsPageRoutingModule
+    TodoDetailsPageRoutingModule,
+    TranslateModule
   ],
   declarations: [TodoDetailsPage]
 })

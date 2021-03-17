@@ -1,18 +1,18 @@
 <form [formGroup]="todoForm">
   <ion-item>
-    <ion-label position="floating">Todo name</ion-label>
+    <ion-label position="floating">{{'todo_name' | translate}}</ion-label>
     <ion-input formControlName="name" required autofocus></ion-input>
   </ion-item>
   <ng-container *ngIf="(todoForm.get('name').dirty || todoForm.get('name').touched)">
-    <div class="form-error" *ngIf="todoForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The todo name is required.</div>
+    <div class="form-error" *ngIf="todoForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{'todo_form.validators.name_required' | translate}}</div>
   </ng-container>
   <ion-item>
-    <ion-label position="floating">Todo description</ion-label>
+    <ion-label position="floating">{{'description' | translate}}</ion-label>
     <ion-input formControlName="description"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label position="floating">Todo address</ion-label>
+    <ion-label position="floating">{{'address' | translate}}</ion-label>
     <ion-input formControlName="address"></ion-input>
   </ion-item>
-  <ion-button color="success" expand="block" (click)="onSubmit()">{{ todo ? 'Update' : 'Create' }} Todo</ion-button>
+  <ion-button color="success" expand="block" (click)="onSubmit()">{{ (todo ? 'todo_form.update_todo' : 'todo_form.create_todo') | translate }}</ion-button>
 </form>

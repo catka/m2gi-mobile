@@ -12,29 +12,29 @@
 <ion-content>
   <form [formGroup]="registerForm">
     <ion-item>
-      <ion-label position="floating">Username (email)</ion-label>
+      <ion-label position="floating">{{"username" | translate}}</ion-label>
       <ion-input formControlName="username" type="email" required autofocus></ion-input>
   </ion-item>
   <ng-container *ngIf="(registerForm.get('username').dirty || registerForm.get('username').touched)">
-    <div class="form-error" *ngIf="registerForm.get('username').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The email is required.</div>
-    <div class="form-error" *ngIf="registerForm.get('username').hasError('email')"><ion-icon name="alert-circle-outline"></ion-icon> The email must be valid.</div>
+    <div class="form-error" *ngIf="registerForm.get('username').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.email_required" | translate}}</div>
+    <div class="form-error" *ngIf="registerForm.get('username').hasError('email')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.email_valid" | translate}}</div>
   </ng-container>
     <ion-item>
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating">{{"password" | translate}}</ion-label>
       <ion-input formControlName="password" type="password" required autofocus></ion-input>
   </ion-item>
   <ng-container *ngIf="(registerForm.get('password').dirty || registerForm.get('password').touched)">
-    <div class="form-error" *ngIf="registerForm.get('password').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The password is required.</div>
-    <div class="form-error" *ngIf="registerForm.get('password').hasError('minlength')"><ion-icon name="alert-circle-outline"></ion-icon> The password must contain at least 8 characters.</div>
+    <div class="form-error" *ngIf="registerForm.get('password').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.password_required" | translate}}</div>
+    <div class="form-error" *ngIf="registerForm.get('password').hasError('minlength')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.password_valid" | translate}}</div>
   </ng-container>
     <ion-item>
-      <ion-label position="floating">Password confirmation</ion-label>
+      <ion-label position="floating">{{ 'register_form.password_confirmation' | translate}}</ion-label>
       <ion-input formControlName="passwordConfirm" type="password" required autofocus></ion-input>
   </ion-item>
   <ng-container *ngIf="(registerForm.get('passwordConfirm').dirty || registerForm.get('passwordConfirm').touched)">
-    <div class="form-error" *ngIf="registerForm.get('passwordConfirm').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The password confirmation is required.</div>
-    <div class="form-error" *ngIf="registerForm.hasError('differentPasswords')"><ion-icon name="alert-circle-outline"></ion-icon> The password and password confirmation must match.</div>  
+    <div class="form-error" *ngIf="registerForm.get('passwordConfirm').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.password_conf_required" | translate}}</div>
+    <div class="form-error" *ngIf="registerForm.hasError('differentPasswords')"><ion-icon name="alert-circle-outline"></ion-icon> {{"register_form.validators.password_conf_valid" | translate}}</div>
   </ng-container>
-  <ion-button color="success" expand="block" (click)="onSubmit()">Create account!</ion-button>
+  <ion-button color="success" expand="block" (click)="onSubmit()">{{'register_form.create_account' | translate}}!</ion-button>
   </form>
 </ion-content>

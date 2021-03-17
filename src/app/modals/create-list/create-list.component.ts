@@ -60,7 +60,6 @@ export class CreateListComponent implements OnInit {
               this.showToast('There was an error creating the list', false);
             });
       } else {
-        debugger;
         this.listService.update(this.list, this.listForm.value)
             .then(() => {
               this.showToast('List successfully updated!', false);

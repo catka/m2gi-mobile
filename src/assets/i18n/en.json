@@ -1,6 +1,77 @@
 {
-  "HOME": {
-    "title" : "welcome"
+  "user_settings": "User settings",
+  "home": "Home",
+  "register": "Register",
+  "can_read" : "Can read",
+  "can_write" : "Can write",
+  "list_name" : "List name",
+  "username" : "Username (email)",
+  "password_reset" : "Reset password",
+  "password" : "Password",
+  "pseudonym" : "Pseudonym",
+  "language" : "Language",
+  "picture" : "Picture",
+  "email" : "E-mail",
+  "login" : "Login",
+  "todo_form" : {
+    "distance_from_location": "Approximately {{ dist }} km from your location",
+    "create_todo": "Create todo",
+    "update_todo": "Update todo",
+    "validators" : {
+      "name_required" : "The Todo name is required."
+    }
   },
-  "user_settings": "User settings"
+  "login_form" : {
+    "options" : {
+      "login_with": "Login with {{ platform }}",
+      "register": "No account yet? Register"
+    },
+    "validators" : {
+      "login_required" : "The login is required.",
+      "valid_email" : "The email format must be valid.",
+      "password_required" : "The password is required."
+    }
+  },
+  "register_form" : {
+    "validators" : {
+      "email_required" : "The email is required.",
+      "email_valid" : "The email must be valid.",
+      "password_required" : "The password is required.",
+      "password_valid" : "The password must contain at least 8 characters.",
+      "password_conf_required" : "The password confirmation is required.",
+      "password_conf_valid" : "The password and password confirmation must match."
+    },
+    "create_account": "Create account",
+    "password_confirmation": "Password confirmation"
+  },
+  "user_settings_form" : {
+    "update_settings": "Update Settings",
+    "help" : {
+      "pseudonym" : "Your pseudo name will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <b>you are advised to change it</b> on order for others to identify you.",
+      "save_changes" : "You must save changes to save your new picture."
+    }
+  },
+  "list_form" : {
+    "create_list": "Create list",
+    "update_list": "Update list",
+    "validators" : {
+      "name_required" : "The list name is required."
+    }
+  },
+  "image_form" : {
+    "options" : {
+      "new" : "Take a new picture",
+      "upload" : "Upload a file",
+      "remove" : "Remove picture",
+      "cancel" : "Cancel"
+    }
+  },
+  "todo_name" : "Todo name",
+  "description" : "Description",
+  "address" : "Address",
+  "user_panel": {
+    "settings": "Settings",
+    "logout": "Logout"
+  }
+
 }

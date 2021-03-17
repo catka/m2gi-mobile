@@ -3,26 +3,26 @@
 <ion-content>
   <form [formGroup]="loginForm">
     <ion-item>
-      <ion-label position="floating">E-mail</ion-label>
+      <ion-label position="floating">{{'email' |translate}}</ion-label>
       <ion-input type="email" formControlName="email" required autofocus></ion-input>
     </ion-item>
     <ng-container *ngIf="(loginForm.get('email').dirty || loginForm.get('email').touched)">
-      <div class="form-error" *ngIf="loginForm.get('email').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The login is required.</div>
-      <div class="form-error" *ngIf="loginForm.get('email').hasError('email')"><ion-icon name="alert-circle-outline"></ion-icon> The email format must be valid.</div>
+      <div class="form-error" *ngIf="loginForm.get('email').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{'login_form.validators.login_required' |translate}}</div>
+      <div class="form-error" *ngIf="loginForm.get('email').hasError('email')"><ion-icon name="alert-circle-outline"></ion-icon> {{'login_form.validators.valid_email' |translate}}</div>
     </ng-container>
     <ion-item>
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating">{{'password' |translate}}</ion-label>
       <ion-input type="password" formControlName="password" required autofocus></ion-input>
     </ion-item>
     <ng-container *ngIf="(loginForm.get('password').dirty || loginForm.get('password').touched)">
-      <div class="form-error" *ngIf="loginForm.get('password').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The password is required.</div>
+      <div class="form-error" *ngIf="loginForm.get('password').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{'login_form.validators.password_required' |translate}}</div>
     </ng-container>
-    <ion-button color="success" expand="block" (click)="login()">Login</ion-button>
+    <ion-button color="success" expand="block" (click)="login()">{{'login' |translate}}</ion-button>
   </form>
-  <ion-button color="primary" expand="block" (click)="goToRegister()">No account yet? Register</ion-button>
-  <ion-button color="secondary" expand="block" (click)="goToResetPassword()">Reset Password</ion-button>
+  <ion-button color="primary" expand="block" (click)="goToRegister()">{{'login_form.options.register' |translate }}</ion-button>
+  <ion-button color="secondary" expand="block" (click)="goToResetPassword()">{{'password_reset' | translate}}</ion-button>
   <div class="or">OR</div>
-  <ion-button color="light" expand="block" class="google loginwith" (click)="googleLogin()"><ion-icon slot="start" name="logo-google"></ion-icon> Login with google</ion-button>
-  <ion-button expand="block" class="facebook loginwith" (click)="authService.FacebookAuth()"><ion-icon slot="start" name="logo-facebook"></ion-icon> Login with facebook</ion-button>
+  <ion-button color="light" expand="block" class="google loginwith" (click)="googleLogin()"><ion-icon slot="start" name="logo-google"></ion-icon> {{'login_form.options.login_with' |translate:{'platform': 'Google'} }}</ion-button>
+  <ion-button expand="block" class="facebook loginwith" (click)="authService.FacebookAuth()"><ion-icon slot="start" name="logo-facebook"></ion-icon> {{'login_form.options.login_with' |translate:{'platform': 'Facebook'} }}</ion-button>
   <div class="or"></div>
 </ion-content>

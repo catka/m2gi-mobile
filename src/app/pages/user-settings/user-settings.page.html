@@ -2,12 +2,12 @@
   <ng-container *ngIf="(accountInfo$ | async) as acc">
     <form [formGroup]="userSettingsForm">
       <ion-item>
-        <ion-label position="floating">Pseudonym</ion-label>
+        <ion-label position="floating">{{'pseudonym' | translate}}</ion-label>
         <ion-input formControlName="sudoName" required autofocus></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Language</ion-label>
+        <ion-label position="floating">{{'language' | translate}}</ion-label>
         <ion-select multiple="false" formControlName="prefLanguage">
           <ion-select-option *ngFor="let lang of languages" value="{{lang.key}}">
             {{lang.value}}
@@ -16,17 +16,17 @@
       </ion-item>
 
       <ion-item (click)="imagePopover()">
-        <ion-label>Picture</ion-label>
+        <ion-label>{{'picture' | translate}}</ion-label>
         <ion-thumbnail slot="end">
           <img class="pp" *ngIf="photoUrl$|async as p" src="{{ p }}" />
         </ion-thumbnail>
       </ion-item>
-      <span class="hint" *ngIf="newPhotoUrl">You must save changes to save your new picture.</span>
-      <ion-button color="success" expand="block" (click)="onSubmit(acc.id)">Update Settings</ion-button>
+      <span class="hint" *ngIf="newPhotoUrl">{{'user_settings_form.help.save_changes' | translate}}</span>
+      <ion-button color="success" expand="block" (click)="onSubmit(acc.id)">{{'user_settings_form.update_settings' | translate}}</ion-button>
     </form>
   </ng-container>
   <ion-footer style="text-align: center">
-    <ion-note>Your pseudo name will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <b>you are advised to change it</b> on order for others to identify you.</ion-note>
+    <ion-note>{{'user_settings_form.help.pseudonym' | translate}}</ion-note>
   </ion-footer>
 </ion-content>
 

@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
     this.currentLists = this.listService.getAll().pipe(
       map((lists) => {
         lists.forEach(async (l) => {
-          l.ownerObj = this.accountInfoService.getOneObs(l.owner);
+          l.ownerObj = l.owner ? this.accountInfoService.getOneObs(l.owner) : null;
         });
         return lists;
       })

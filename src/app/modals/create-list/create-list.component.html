@@ -1,22 +1,22 @@
 <form [formGroup]="listForm">
   <ion-item>
-    <ion-label position="floating">List name</ion-label>
+    <ion-label position="floating">{{'list_name' | translate}}</ion-label>
     <ion-input formControlName="name" required autofocus></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label position="floating">Can read</ion-label>
+    <ion-label position="floating">{{'can_read' | translate}}</ion-label>
     <ion-select multiple="true" formControlName="canRead">
       <ion-select-option *ngFor="let acc of accountInfos | async" value="{{acc.id}}">{{acc.sudoName}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
-  <ion-label position="floating">Can write</ion-label>
+    <ion-label position="floating">{{'can_write' | translate}}</ion-label>
     <ion-select multiple="true" formControlName="canWrite">
       <ion-select-option *ngFor="let acc of accountInfos | async" value="{{acc.id}}">{{acc.sudoName}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ng-container *ngIf="(listForm.get('name').dirty || listForm.get('name').touched)">
-    <div class="form-error" *ngIf="listForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> The list name is required.</div>
+    <div class="form-error" *ngIf="listForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{'list_form.validators.name_required' | translate}}</div>
   </ng-container>
-  <ion-button color="success" expand="block" (click)="onSubmit()">{{ list ? 'Update' : 'Create' }} list</ion-button>
+  <ion-button color="success" expand="block" (click)="onSubmit()">{{ (list ? 'list_form.update_list' : 'list_form.create_list') | translate }}</ion-button>
 </form>
