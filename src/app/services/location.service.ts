@@ -25,14 +25,20 @@ export class LocationService {
 
   distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<number>
   {
-    return from(Geolocation.getCurrentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
+    return from(this.currentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
       return this.calculateDistanceKm(currentPosition.coords.latitude, currentPosition.coords.longitude,
                     destination.latitude, destination.longitude);
     }));
   }
 
+  currentPosition(): Promise<GeolocationPosition>
+  {
+    return Geolocation.getCurrentPosition({enableHighAccuracy: true, timeout: 5000, maximumAge: 0});
+  }
+
   private calculateDistanceKm(lat1: number, long1: number, lat2: number, long2: number): number
   {
+    // console.log(`${lat1}, ${long1}, ${lat2}, ${long2}`);
     const p = 0.017453292519943295;    // Math.PI / 180
     const c = Math.cos;
     const a = 0.5 - c((lat1 - lat2) * p) / 2 + c(lat2 * p) * c((lat1) * p) * (1 - c(((long1 - long2) * p))) / 2;
@@ -41,7 +47,7 @@ export class LocationService {
 
 
   geocode(address: string): Promise<any> {
-    const geocodeUrl = `${this.positionStackApiUrl}/v1/forward?access_key=${environment.positionstack.apiKey}&query=${address}`;
+    const geocodeUrl = `${this.positionStackApiUrl}/v1/forward?access_key=${environment.positionstack.apiKey}&query=${encodeURI(address)}`;
     // this.httpClient.get(geocodeUrl).subscribe((data) => {
     //   const lat = data.data[0].latitude;
     //   const long = data.data[0].longitude;

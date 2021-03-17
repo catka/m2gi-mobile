@@ -64,7 +64,7 @@ export class TodoDetailsPage implements OnInit {
         this.locationSpecificMapUrl = todo.address ? encodeURI(`${this.mapUrl}${todo.address}`) : null;
 
         // When todo loads, the distance is defined by the difference with the todo geopoint and the geolocation promise
-        if (todo.location !== null){
+        if (todo.location){
           this.distanceFromPosition$ = this.locationService.distanceFromCurrentPositionInKm(todo.location);
         } else{
           this.distanceFromPosition$ = null;
