@@ -12,6 +12,7 @@ import User = firebase.User;
 import { map, tap } from 'rxjs/operators';
 import { AccountInfoAutocompleteService } from 'src/app/services/account-info-autocomplete.service';
 import { AutoCompleteOptions } from 'ionic4-auto-complete';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-list',
@@ -29,7 +30,7 @@ export class CreateListComponent implements OnInit {
   canWriteUsers: AccountInfo[] = [];
 
   constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController,
-    public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService, public autocompleteService: AccountInfoAutocompleteService) { }
+    public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService, private translate: TranslateService, public autocompleteService: AccountInfoAutocompleteService) { }
 
   ngOnInit() {
 
@@ -61,32 +62,37 @@ export class CreateListComponent implements OnInit {
         this.listService.create(listToCreate)
             .then(() => {
               // this.showErrorToast('Created!!');
-              this.showToast('List successfully created!', false);
+              this.showToastWithKey('alerts.list.created', false);
             })
             .catch((error) => {
               console.error('Error updating list: ', error);
-              this.showToast('There was an error creating the list', false);
+              this.showToastWithKey('alerts.list.created_error', false);
             });
       } else {
         let listToUpdate = new List(this.listForm.get('name').value, this.list.owner, this.canReadUsers, this.canWriteUsers);
         this.listService.update(this.list, listToUpdate)
             .then(() => {
-              this.showToast('List successfully updated!', false);
+              this.showToastWithKey('alerts.list.updated', false);
             })
           .catch((error) => {
             console.error('Error updating list: ', error);
-            this.showToast('There was an error removing the updating the list', false);
+            this.showToastWithKey('alerts.list.updated_error', false);
           });
       }
       this.modalCtrl.dismiss();
     } else {
-      this.showToast('List name cannot be empty.', true);
+      this.showToastWithKey('alerts.list.empty_list', true);
     }
   }
 
   public cancel() {
     this.modalCtrl.dismiss();
   }
+
+  async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+    await this.showToast(this.translate.instant(translationKey, parameters), error);
+  }
+
 
   async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({

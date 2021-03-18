@@ -34,7 +34,7 @@ export class AuthService {
                             if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined){
                                 // Create user settings w/ default sudo name and redirect to user settings to change it
                                 this.updateAccountInfoWhenEmpty(snapshot, user).then(() => {
-                                    if (user.emailVerified) this.router.navigateByUrl('/user-settings');
+                                    if (user.emailVerified || user.providerData[0].providerId === 'facebook.com') this.router.navigateByUrl('/user-settings');
                                     else this.logout();
                                 });
                             }

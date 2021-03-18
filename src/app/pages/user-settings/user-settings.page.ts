@@ -11,6 +11,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopoverController, ToastController } from '@ionic/angular';
 import { LanguageService } from '../../services/language.service';
 import { map } from 'rxjs/operators';
+import {LocationService} from '../../services/location.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user-settings',
@@ -28,7 +30,7 @@ export class UserSettingsPage implements OnInit {
     oldPhotoUrl: string = null;
     newPhotoUrl: string = null;
 
-    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private accountInfoService: AccountInfoService, public toastController: ToastController, private languageService: LanguageService, public popoverController: PopoverController) {
+    constructor(private _fb: FormBuilder, private auth: AuthService, private router: Router, private accountInfoService: AccountInfoService, public toastController: ToastController, private languageService: LanguageService, public popoverController: PopoverController, private translate: TranslateService) {
         this.userSettingsForm = this._fb.group({
             sudoName: ['', Validators.required],
             prefLanguage: []
@@ -66,15 +68,20 @@ export class UserSettingsPage implements OnInit {
                     userSettings.photoUrl = this.newPhotoUrl;
                 }
                 await this.accountInfoService.createOrUpdate(userSettings, id);
-                this.showToast('Updated settings successfully.', false);
+                this.showToastWithKey('alerts.user_settings.updated', false);
                 this.router.navigateByUrl('home');
             } catch (error) {
-                this.showToast('Error submitting settings', true);
+                this.showToastWithKey('alerts.user_settings.error', true);
             }
         } else {
-            this.showToast('Invalid input.', true);
+            this.showToastWithKey('alerts.user_settings.invalid', true);
         }
     }
+
+    async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+        await this.showToast(this.translate.instant(translationKey, parameters), error);
+    }
+
 
     async showToast(alertMessage: string, error: boolean) {
         const toast = await this.toastController.create({

@@ -19,7 +19,7 @@ export class LoginPage implements OnInit {
 
     public loginForm: FormGroup = new FormGroup({});
 
-    constructor(private _fb: FormBuilder, public  afAuth: AngularFireAuth, private router: Router, public toastController: ToastController, public authService: AuthService) {
+    constructor(private _fb: FormBuilder, public  afAuth: AngularFireAuth, private router: Router, public toastController: ToastController, public authService: AuthService, private translate: TranslateService) {
     }
 
     ngOnInit() {
@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
         });
         this.afAuth.getRedirectResult().then((userCredential) => {
             if (userCredential.user !== null){
-                this.showToast('Logged in with Facebook.', false);
+                this.showToastWithKey('alerts.login.logged_in_with_fb', false);
                 this.router.navigateByUrl('home');
             }
         }).catch((error) => {
@@ -51,39 +51,42 @@ export class LoginPage implements OnInit {
                     const user = userCredential.user;
                     console.log('login successful');
                     if (!user.emailVerified) {
-                        this.showToast('Please confirm your email address before loggin in', true);
+                        this.showToastWithKey('alerts.login.email_confirm', true);
                         return;
                     }
-                    this.showToast(user.email + ' logged in successfully', false);
+                    this.showToastWithKey('alerts.login.success', false, {user: user.email + ' ' });
                     this.router.navigateByUrl('home');
                 })
                 .catch((error) => {
                     console.log('error logging in, code = ' + error.code + ', message = ' + error.message);
                     const errorCode = error.code;
                     if (errorCode === 'auth/user-not-found') {
-                        this.showToast('Email not found', true);
+                        this.showToastWithKey('alerts.login.email_not_found', true);
                     } else if (errorCode === 'auth/wrong-password') {
-                        this.showToast('Incorrect Password', true);
+                        this.showToastWithKey('alerts.login.password_error', true);
                     } else if (errorCode === 'auth/user-disabled') {
-                        this.showToast('Cannot login as a disabled user', true);
+                        this.showToastWithKey('alerts.login.user_disabled', true);
                     } else {
-                        this.showToast('Login unsuccessful', true);
+                        this.showToastWithKey('alerts.login.login_unsuccessful', true);
                     }
                 });
         } else {
-            this.showToast('Invalid inputs.', true);
+            this.showToastWithKey('alerts.login.input_error', true);
         }
     }
+    async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
+        await this.showToast(this.translate.instant(translationKey, parameters), error);
+    }
 
-    async showToast(alertMessage: string, error: boolean) {
+    async showToast(message: string, error: boolean) {
         const toast = await this.toastController.create({
-            message: alertMessage,
+            message,
             duration: 2000,
             color: error ? 'danger' : 'primary',
         });
         await toast.present();
     }
-
+    
     goToRegister() {
         this.router.navigateByUrl('register');
     }

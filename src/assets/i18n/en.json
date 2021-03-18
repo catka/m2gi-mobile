@@ -74,6 +74,49 @@
   "user_panel": {
     "settings": "Settings",
     "logout": "Logout"
+  },
+  "alerts": {
+    "list": {
+      "deleted_success" : "List successfully deleted!",
+      "deleted_error" : "There was an error removing the list",
+      "created" :"List successfully created!",
+      "created_error" :"There was an error creating the list",
+      "updated" :"List successfully updated!",
+      "updated_error" :"There was an error removing the updating the list",
+      "empty_list" :"List name cannot be empty."
+
+    },
+    "todo": {
+      "delete_confirm" : "This todo task will be deleted, are you sure?",
+      "error_address" : "Error finding address, please check your address input before saving or empty the field.",
+      "error_address_admin" :"Error finding address, please check your address input before saving or empty the field. If this problem persists, please contact the administrator",
+      "success" :"Updated successfully.",
+      "empty_name" :"Todo name cannot be empty.",
+      "permissions_error" :"You do not have permission to update this item."
+    },
+    "login": {
+      "logged_in_with_fb" : "Logged in with Facebook.",
+      "email_confirm" : "Please confirm your email address before logging in",
+      "success" : "{{ user }}logged in successfully",
+      "input_error" : "Invalid input(s). Please review",
+      "email_not_found" : "Email not found",
+      "user_not_found" : "User not found",
+      "password_error" : "Incorrect Password",
+      "user_disabled" : "Cannot login as a disabled user",
+      "login_unsuccessful" : "Login unsuccessful",
+      "password_reset" : "Reset password email sent for user: {{ user }}",
+      "user_created" : "User created, an email confirmation as been sent to: {{ user }}"
+    },
+    "user_settings": {
+      "updated" : "Updated settings successfully.",
+      "error" : "Error submitting settings",
+      "invalid" : "Invalid input. Please review"
+    },
+    "home": {
+      "deleted" : "List successfully deleted!",
+      "deleted_error" : "There was an error removing the list",
+      "shared_by" : "List shared by {{ name }}"
+    }
   }
 
 }
