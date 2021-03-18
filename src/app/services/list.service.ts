@@ -4,11 +4,12 @@ import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
-import {distinct, map, tap} from 'rxjs/operators';
+import { distinct, map, tap, flatMap, mergeMap } from 'rxjs/operators';
 import {AuthService} from './auth.service';
 import firebase from 'firebase';
 import User = firebase.User;
 import { combineLatest } from 'rxjs';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -40,17 +41,18 @@ export class ListService {
   }
 
 
-  getAll(): Observable<List[]> {
+  getAll(): Observable<any> {
     return combineLatest([this.owningCollection.snapshotChanges(), this.readSharedCollection.snapshotChanges(), this.writeSharedCollection.snapshotChanges()]).pipe(
       map(arr => arr.reduce((acc, cur) => acc.concat(cur))),
-      map(actions => this.convertSnapshotData<List>(actions)),
+      flatMap(actions => from(this.convertSnapshotData<List>(actions))),
+      tap((res) => console.log("retrieved lists:", res)),
       map((lists) => lists.filter((l, index, self) => index === self.findIndex((findL) => findL.id === l.id))), // removes list duplicates
     );
   }
 
   getOneObs(id: string): Observable<List>{
     return this.owningCollection?.doc(id + '').snapshotChanges().pipe(
-      map(actions => this.convertSingleSnapshotData<List>(actions))
+      flatMap(actions => from(this.convertSingleSnapshotData<List>(actions)))
     );
   }
 
@@ -66,45 +68,46 @@ export class ListService {
     return this.owningCollection?.doc(list.id + '').delete();
   }
 
-  private convertSnapshotData<T>(actions){
-    return actions.map(a => {
-      const data = a.payload.doc.data();
-      const id = a.payload.doc.id;
+  private async convertSnapshotData<T>(actions) {
+    for (let i = 0; i < actions.length; i++){
+      const data = actions[i].payload.doc.data();
+      const id = actions[i].payload.doc.id;
       let t = { id, ...data } as T;
-      t = this.convertRefs(t);
-
-      return t;
-    });
+      actions[i] = await this.convertRefs(t);
+    }
+    
+    return actions;
   }
-  private convertSingleSnapshotData<T>(actions){
+  private async convertSingleSnapshotData<T>(actions){
     const data = actions.payload.data();
     const id = actions.payload.id;
     let t = { id, ...data } as T;
 
-    t = this.convertRefs(t);
+    t = await this.convertRefs(t);
     
     return t;
   }
 
-  private convertRefs(t: any) {
+  private async convertRefs(t: any) {
     if (t.ownerRef) {
-      t.ownerRef.get().then(res => {
+      await t.ownerRef.get().then((res) => {
         t.owner = res.data();
-        t.ownerRef = null;
       });
+      t.ownerRef = null;
     }
+    
     if (t.canReadRef) {
       t.canRead = [];
-      t.canReadRef.forEach((aiRef) => {
-        aiRef.get().then(res => {
+      await t.canReadRef.forEach(async (aiRef) => {
+        await aiRef.get().then((res) => {
           t.canRead.push(res.data());
         });
       });
     }
     if (t.canWriteRef) {
       t.canWrite = [];
-      t.canWriteRef.forEach((aiRef) => {
-        aiRef.get().then(res => {
+      await t.canWriteRef.forEach(async (aiRef) => {
+        await aiRef.get().then((res) => {
           t.canWrite.push(res.data());
         });
       });
@@ -113,6 +116,7 @@ export class ListService {
     delete (t.ownerRef);
     delete (t.canReadRef);
     delete (t.canWriteRef);
+
 
     return t;
   }
