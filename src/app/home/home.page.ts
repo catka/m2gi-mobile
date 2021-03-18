@@ -22,14 +22,12 @@ export class HomePage implements OnInit {
 
 
   ngOnInit(): void {
-    this.currentLists = this.listService.getAll().pipe(
-      tap((lists) => console.log(lists))
-    );
+    this.currentLists = this.listService.getAll();
     this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user?.uid });
   }
 
   delete(list: List): void {
-    if (this.currentUid != list.owner.id && list.canWrite.find((ai) => ai.id === this.currentUid) != null)
+    if (this.currentUid != list.owner.id && list.canWrite && list.canWrite.find((ai) => ai.id === this.currentUid) != null)
       return;
     this.listService.delete(list)
       .then(() => { // TODO : ADD TO TOAST
@@ -77,6 +75,6 @@ export class HomePage implements OnInit {
 
 
   canWriteList(l: List): boolean {
-    return l.canWrite.find((ai) => ai.id === this.currentUid) != null;
+    return l.canWrite && l.canWrite.find((ai) => ai.id === this.currentUid) != null;
   }
 }

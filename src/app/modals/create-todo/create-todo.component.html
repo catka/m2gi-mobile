@@ -15,4 +15,5 @@
     <ion-input formControlName="address"></ion-input>
   </ion-item>
   <ion-button color="success" expand="block" (click)="onSubmit()">{{ (todo ? 'todo_form.update_todo' : 'todo_form.create_todo') | translate }}</ion-button>
+  <ion-button color="light" expand="block" (click)="cancel()">{{ 'todo_form.cancel' | translate }}</ion-button>
 </form>

@@ -98,6 +98,9 @@ export class CreateTodoComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.modalCtrl.dismiss();
+  }
 
   async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({

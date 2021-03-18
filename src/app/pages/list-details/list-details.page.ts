@@ -40,7 +40,7 @@ export class ListDetailsPage implements OnInit {
       }
       this.canWrite = this.owner;
       if (!this.owner) {
-        this.canWrite = list.canWrite.find((ai) => ai.id === uid) != null;
+        this.canWrite = list.canWrite && list.canWrite.find((ai) => ai.id === uid) != null;
       }
 
       this.listId = list.id;
@@ -53,16 +53,17 @@ export class ListDetailsPage implements OnInit {
 
   async newTodoModal(todo?: Todo) {
     if (this.canWrite) {
-      const modal = await this.modalController.create({
-        component: CreateTodoComponent,
-        cssClass: 'create-todo',
-        componentProps: {
-          listId: this.listId,
-          todo: todo,
-        }
-      });
+      this.router.navigateByUrl('lists/' + this.listId + '/todos/new')
+      // const modal = await this.modalController.create({
+      //   component: CreateTodoComponent,
+      //   cssClass: 'create-todo',
+      //   componentProps: {
+      //     listId: this.listId,
+      //     todo: todo,
+      //   }
+      // });
 
-      return await modal.present();
+      // return await modal.present();
     }
   }
 
