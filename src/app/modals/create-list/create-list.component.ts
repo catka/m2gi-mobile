@@ -9,6 +9,9 @@ import {Observable} from 'rxjs';
 import {AccountInfo} from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
+import { map, tap } from 'rxjs/operators';
+import { AccountInfoAutocompleteService } from 'src/app/services/account-info-autocomplete.service';
+import { AutoCompleteOptions } from 'ionic4-auto-complete';
 
 @Component({
   selector: 'app-create-list',
@@ -21,24 +24,31 @@ export class CreateListComponent implements OnInit {
   accountInfos: Observable<AccountInfo[]>;
   @Input() list: List;
   public user: User;
+  public account: AccountInfo;
+  canReadUsers: AccountInfo[] = [];
+  canWriteUsers: AccountInfo[] = [];
 
   constructor(private _fb: FormBuilder, private listService: ListService, private modalCtrl: ModalController,
-              public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService) {
-  }
+    public toastController: ToastController, private authService: AuthService, private accountInfoService: AccountInfoService, public autocompleteService: AccountInfoAutocompleteService) { }
 
   ngOnInit() {
 
-    this.authService.getConnectedUser().subscribe(user => this.user = user);
+    this.authService.getConnectedUser().subscribe((user) => {
+      this.user = user;
+      this.accountInfoService.getOneObs(this.user.uid).subscribe((ac) => {
+        this.account = ac;
+      });
+    });
 
     this.listForm = this._fb.group({
       name: ['', Validators.required],
-      canRead: [''],
-      canWrite: [''],
       owner: [''],
     });
 
     if (this.list) {
       this.listForm.patchValue(this.list);
+      this.canReadUsers = this.list.canRead;
+      this.canWriteUsers = this.list.canWrite;
     }
     // this.availableUserIds = this.authService.getAllUserIds();
     this.accountInfos = this.accountInfoService.getAll();
@@ -47,9 +57,7 @@ export class CreateListComponent implements OnInit {
   onSubmit() {
     if (this.listForm.valid) {
       if (!this.list) {
-        // getConnectedUser
-        // const listToCreate = new List(this.listForm.get('name').value, this.authService.getLoggedInUser(), this.listForm.get('canRead').value, this.listForm.get('canWrite').value);
-        const listToCreate = new List(this.listForm.get('name').value, this.user.uid, this.listForm.get('canRead').value, this.listForm.get('canWrite').value);
+        const listToCreate = new List(this.listForm.get('name').value, this.account, this.canReadUsers, this.canWriteUsers);
         this.listService.create(listToCreate)
             .then(() => {
               // this.showErrorToast('Created!!');
@@ -60,7 +68,8 @@ export class CreateListComponent implements OnInit {
               this.showToast('There was an error creating the list', false);
             });
       } else {
-        this.listService.update(this.list, this.listForm.value)
+        let listToUpdate = new List(this.listForm.get('name').value, this.list.owner, this.canReadUsers, this.canWriteUsers);
+        this.listService.update(this.list, listToUpdate)
             .then(() => {
               this.showToast('List successfully updated!', false);
             })
@@ -75,6 +84,9 @@ export class CreateListComponent implements OnInit {
     }
   }
 
+  public cancel() {
+    this.modalCtrl.dismiss();
+  }
 
   async showToast(alertMessage: string, error: boolean) {
     const toast = await this.toastController.create({
@@ -84,13 +96,4 @@ export class CreateListComponent implements OnInit {
     });
     await toast.present();
   }
-
-
-  // async showErrorToast(err: string) {
-  //   const toast = await this.toastController.create({
-  //     message: err,
-  //     duration: 2000
-  //   });
-  //   toast.present();
-  // }
 }

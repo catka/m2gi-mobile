@@ -17,6 +17,7 @@
     "distance_from_location": "Approximately {{ dist }} km from your location",
     "create_todo": "Create todo",
     "update_todo": "Update todo",
+    "cancel": "Cancel",
     "validators" : {
       "name_required" : "The Todo name is required."
     }
@@ -54,6 +55,7 @@
   "list_form" : {
     "create_list": "Create list",
     "update_list": "Update list",
+    "cancel": "Cancel",
     "validators" : {
       "name_required" : "The list name is required."
     }

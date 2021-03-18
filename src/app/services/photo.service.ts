@@ -39,7 +39,6 @@ export class PhotoService {
       contentType: file.type,
     };
     await imageRef.put(file, metadata).then((snapshot) => {
-      console.log(snapshot);
       console.log('Uploaded a file!');
     });
 
@@ -56,7 +55,6 @@ export class PhotoService {
       contentType: `image/${file.format}`,
     };
     await imageRef.putString(file.base64String, 'base64', metadata).then((snapshot) => {
-      console.log(snapshot);
       console.log('Uploaded a base64 string!');
     });
 

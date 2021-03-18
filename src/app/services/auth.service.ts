@@ -5,7 +5,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Subject, BehaviorSubject} from 'rxjs';
 import firebase from 'firebase';
-import {Plugins} from '@capacitor/core';
+import {AccessibilityPluginWeb, Plugins} from '@capacitor/core';
 import {AccountInfoService} from './account-info.service';
 import User = firebase.User;
 import {ActivatedRoute, Router} from '@angular/router';
@@ -16,6 +16,7 @@ import {LanguageService} from './language.service';
 })
 export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
+    private accountInfo: AccountInfo;
 
     constructor(private afAuth: AngularFireAuth,
                 private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService, private photoService: PhotoService) {
@@ -28,6 +29,7 @@ export class AuthService {
                     // Search for user
                     this.accountInfoService.getOneObs(user.uid).subscribe(
                         (snapshot) => {
+                            this.accountInfo = snapshot;
                             languageService.setLanguage(snapshot.prefLanguage);
                             if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined){
                                 // Create user settings w/ default sudo name and redirect to user settings to change it
@@ -61,6 +63,10 @@ export class AuthService {
 
     getConnectedUser() {
         return this.user$.asObservable();
+    }
+
+    getConnectedAccountInfo() {
+        return this.accountInfo;
     }
 
     async login(email: string, password: string) {

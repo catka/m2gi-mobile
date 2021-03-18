@@ -1,22 +1,35 @@
+<ng-template #users let-attrs="attrs">
+    <ion-item>
+        <ion-img class="userpic" [slot]="'start'" [src]="attrs.data.photoUrl"></ion-img>
+        <ion-text>
+            <span [innerHtml]="attrs.data.sudoName"></span>
+        </ion-text>
+    </ion-item>
+</ng-template>
+<ng-template #selectedUsers let-attrs="attrs">
+  <ion-chip>
+    <ion-avatar>
+      <img [src]="attrs.data.photoUrl">
+    </ion-avatar>
+    <ion-label>{{ attrs.data.sudoName }}</ion-label>
+    <ion-icon name="close-circle"></ion-icon>
+  </ion-chip>
+</ng-template>
+
 <form [formGroup]="listForm">
   <ion-item>
     <ion-label position="floating">{{'list_name' | translate}}</ion-label>
     <ion-input formControlName="name" required autofocus></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-label position="floating">{{'can_read' | translate}}</ion-label>
-    <ion-select multiple="true" formControlName="canRead">
-      <ion-select-option *ngFor="let acc of accountInfos | async" value="{{acc.id}}">{{acc.sudoName}}</ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">{{'can_write' | translate}}</ion-label>
-    <ion-select multiple="true" formControlName="canWrite">
-      <ion-select-option *ngFor="let acc of accountInfos | async" value="{{acc.id}}">{{acc.sudoName}}</ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-label class="auto-label">{{ 'can_read' | translate }}</ion-label>
+  <ion-auto-complete [(model)]="canReadUsers" [selectionTemplate]="selectedUsers" [multi]="true" [dataProvider]="autocompleteService" [template]="users" [maxResults]="5"></ion-auto-complete>
+  
+  <ion-label class="auto-label">{{ 'can_write' | translate }}</ion-label>
+  <ion-auto-complete [(model)]="canWriteUsers" [selectionTemplate]="selectedUsers" [multi]="true" [dataProvider]="autocompleteService" [template]="users" [maxResults]="5"></ion-auto-complete>
+  
   <ng-container *ngIf="(listForm.get('name').dirty || listForm.get('name').touched)">
     <div class="form-error" *ngIf="listForm.get('name').hasError('required')"><ion-icon name="alert-circle-outline"></ion-icon> {{'list_form.validators.name_required' | translate}}</div>
   </ng-container>
   <ion-button color="success" expand="block" (click)="onSubmit()">{{ (list ? 'list_form.update_list' : 'list_form.create_list') | translate }}</ion-button>
+  <ion-button color="light" expand="block" (click)="cancel()">{{ 'list_form.cancel' | translate }}</ion-button>
 </form>

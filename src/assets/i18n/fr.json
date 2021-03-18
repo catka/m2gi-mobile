@@ -2,8 +2,8 @@
   "user_settings": "Paramètres utilisateur",
   "home": "Accueil",
   "register": "Créer un compte",
-  "can_read" : "Droit en lecture",
-  "can_write" : "Droit en écriture",
+  "can_read" : "Partager pour lecture",
+  "can_write" : "Partager pour modification",
   "list_name" : "Nom de la liste",
   "username" : "Login (email)",
   "password_reset" : "Réinitialiser le mot de passe",
@@ -17,6 +17,7 @@
     "distance_from_location": "Environ {{ dist }}km de votre position",
     "create_todo": "Créer une tâche",
     "update_todo": "Mettre à jour la tâche",
+    "cancel": "Annuler",
     "validators" : {
       "name_required" : "Le nom de la tâche est requis."
     }
@@ -54,6 +55,7 @@
   "list_form" : {
     "create_list": "Créer une liste",
     "update_list": "Mettre à jour la liste",
+    "cancel": "Annuler",
     "validators" : {
       "name_required" : "Le nom de la liste est requis."
     }
@@ -68,7 +70,7 @@
   },
   "todo_name" : "Nom de la tâche",
   "description" : "Description",
-  "address" : "Addresse",
+  "address" : "Adresse",
   "user_panel": {
     "settings": "Paramètres",
     "logout": "Déconnexion"

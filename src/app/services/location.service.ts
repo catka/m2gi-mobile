@@ -26,8 +26,10 @@ export class LocationService {
   distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<number>
   {
     return from(Geolocation.getCurrentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
-      return this.calculateDistanceKm(currentPosition.coords.latitude, currentPosition.coords.longitude,
-                    destination.latitude, destination.longitude);
+      if (currentPosition && currentPosition.coords && destination) {
+        return this.calculateDistanceKm(currentPosition.coords.latitude, currentPosition.coords.longitude,
+          destination.latitude, destination.longitude);
+      }
     }));
   }
 

@@ -1,26 +1,27 @@
 import { AccountInfo } from 'src/app/models/accountInfo';
 import { Observable } from 'rxjs';
 import { Todo } from './todo';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export class List {
   id: string;
   name: string;
-  owner: string;
-  ownerObj: Observable<AccountInfo> = null;
-  canRead: string[];
-  canWrite: string[];
+  ownerRef: DocumentReference<AccountInfo>;
+  canReadRef: DocumentReference<AccountInfo>[] = [];
+  canWriteRef: DocumentReference<AccountInfo>[] = [];
+  owner: AccountInfo;
+  canRead: AccountInfo[] = [];
+  canWrite: AccountInfo[] = [];
   todos: Todo[] = [];
 
-  constructor(name: string, ownerId?: string, canRead?: string[], canWrite?: string[]) {
+  constructor(name: string, owner?: AccountInfo, canRead?: AccountInfo[], canWrite?: AccountInfo[]) {
     this.name = name;
-    this.owner = ownerId;
+    this.owner = owner;
     this.canRead = canRead;
     this.canWrite = canWrite;
-    // if(id)
-    //   this.id = id;
   }
 
   get stats(): string {
-    return   this.todos.filter((t) => t.isDone).length + "/" + this.todos.length;
+    return this.todos.length + ' todos';
   }
 }
