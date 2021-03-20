@@ -25,7 +25,6 @@ export class ListService {
   }
 
   private getLists() {
-    // TODO : IS THERE A WAY TO MAKE THIS CLEANER??
     this.authService.getConnectedUser().subscribe(user => {
       // Cannot have 'OR' queries in Firebase
       if (user && user.uid) {

@@ -28,10 +28,10 @@ export class TodoService {
         return this.af.collection('lists').doc(listId).collection('todos').doc(todoId).delete();
     }
 
-    nextId(): number {
-        this.currentListId++;
-        return this.currentListId;
-    }
+    // nextId(): number {
+    //     this.currentListId++;
+    //     return this.currentListId;
+    // }
 
     getOneObs(todoId: string, listId: string): Observable<Todo> {
         return this.af.collection('lists').doc(listId).collection('todos').doc(todoId).snapshotChanges().pipe(
