@@ -51,7 +51,7 @@ export class ListService {
 
   getOneObs(id: string): Observable<List>{
     return this.owningCollection?.doc(id + '').snapshotChanges().pipe(
-      flatMap(actions => from(this.convertSingleSnapshotData<List>(actions)))
+      flatMap(actions => this.convertSingleSnapshotData<List>(actions))
     );
   }
 

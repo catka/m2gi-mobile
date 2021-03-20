@@ -1,5 +1,4 @@
 import { AuthService } from './../../services/auth.service';
-import { CreateTodoComponent } from './../../modals/create-todo/create-todo.component';
 import { ToastController, ModalController } from '@ionic/angular';
 import { ListService } from './../../services/list.service';
 import { Component, OnInit } from '@angular/core';

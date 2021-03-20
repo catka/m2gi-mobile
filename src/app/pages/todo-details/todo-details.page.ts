@@ -7,8 +7,8 @@ import {ListService} from 'src/app/services/list.service';
 import {TodoService} from '../../services/todo.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
-import {combineLatest, from, Observable, of, pipe} from 'rxjs';
-import {flatMap, map, mergeMap} from 'rxjs/operators';
+import {combineLatest, forkJoin, from, Observable, of, pipe, zip} from 'rxjs';
+import { flatMap, map, mergeMap, startWith, tap } from 'rxjs/operators';
 import {List} from 'src/app/models/list';
 import {LocationService} from '../../services/location.service';
 import {Geolocation, GeolocationPosition} from '@capacitor/core';
@@ -24,15 +24,15 @@ export class TodoDetailsPage implements OnInit {
   listId: string;
   todoId: string;
   todo: Observable<Todo>;
-  list: Observable<List>;
+  list$: Observable<List>;
   distanceFromPosition$: Observable<number>;
   owner = false;
-  canWrite = false;
+  canWrite$: Observable<boolean>;
   mapUrl = 'https://maps.google.com/maps?daddr=';
   locationSpecificMapUrl = null;
 
   constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router,
-              private modalController: ModalController, private todoService: TodoService, private _location: Location,
+              private todoService: TodoService, private _location: Location,
               public toastController: ToastController, private auth: AuthService, private locationService: LocationService, private translate: TranslateService) {
     this.todoDetailsForm = this._fb.group({
       name: ['', Validators.required],
@@ -53,24 +53,24 @@ export class TodoDetailsPage implements OnInit {
       this.todo = this.todoService.getOneObs(this.todoId, this.listId);
     }
 
-    this.list = this.listService.getOneObs(this.listId);
+    this.list$ = this.listService.getOneObs(this.listId);
 
     const currentUid$ = this.auth.getConnectedUser().pipe(map((user) => user.uid));
-    combineLatest([currentUid$, this.list]).subscribe(([uid, list]) => {
-      if (list.owner) {
-        this.owner = list.owner.id == uid;
-      }
-      this.canWrite = this.owner;
-      if (!this.owner) {
-        this.canWrite = list.canWrite.find((ai) => ai.id === uid) != null;
-      }
 
-      if (this.canWrite) {
-        this.todoDetailsForm.enable();
-      } else {
-        this.todoDetailsForm.disable();
-      }
-    });
+    this.canWrite$ = combineLatest([this.list$, currentUid$]).pipe(
+      map(([list, uid]) => {
+        this.owner = list.owner.id == uid;
+        return list.canWrite.find((ai) => ai.id == uid) != null || this.owner;
+      }),
+      startWith(false),
+      tap((canWrite) => {
+        if (canWrite) {
+          this.todoDetailsForm.enable();
+        } else {
+          this.todoDetailsForm.disable();
+        }
+      })
+    );
 
     this.todo.subscribe(
       (todo) => {

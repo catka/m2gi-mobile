@@ -15,7 +15,7 @@
         </ion-select>
       </ion-item>
 
-      <ion-item (click)="imagePopover()">
+      <ion-item (click)="imagePopover($event)">
         <ion-label>{{'picture' | translate}}</ion-label>
         <ion-thumbnail slot="end">
           <img class="pp" *ngIf="photoUrl$|async as p" src="{{ p }}" />

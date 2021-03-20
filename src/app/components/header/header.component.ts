@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   public title$: Observable<any>;
   public user: User;
   public pseudoName: string;
-  private accountInfo$: Observable<AccountInfo>;
+  public accountInfo$: Observable<AccountInfo>;
   private route$: Observable<Event>;
   photoUrl$: Observable<string>;
   routeWithBack$: Observable<boolean>;
