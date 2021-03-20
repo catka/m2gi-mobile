@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Todo } from '../models/todo';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
-import { distinct, map, tap, flatMap, mergeMap } from 'rxjs/operators';
+import { distinct, map, tap, flatMap, mergeMap, delay } from 'rxjs/operators';
 import {AuthService} from './auth.service';
 import firebase from 'firebase';
 import User = firebase.User;
@@ -97,19 +97,19 @@ export class ListService {
     
     if (t.canReadRef) {
       t.canRead = [];
-      await t.canReadRef.forEach(async (aiRef) => {
-        await aiRef.get().then((res) => {
+      for (let i = 0; i < t.canReadRef.length; i++){
+        await t.canReadRef[i].get().then((res) => {
           t.canRead.push(res.data());
         });
-      });
+      }
     }
     if (t.canWriteRef) {
       t.canWrite = [];
-      await t.canWriteRef.forEach(async (aiRef) => {
-        await aiRef.get().then((res) => {
+      for (let i = 0; i < t.canWriteRef.length; i++){
+        await t.canWriteRef[i].get().then((res) => {
           t.canWrite.push(res.data());
         });
-      });
+      }
     }
 
     delete (t.ownerRef);
