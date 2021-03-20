@@ -100,6 +100,9 @@ export class CreateTodoComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.modalCtrl.dismiss();
+  }
 
   async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {
     await this.showToast(this.translate.instant(translationKey, parameters), error);

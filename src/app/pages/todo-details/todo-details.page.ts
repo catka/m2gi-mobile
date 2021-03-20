@@ -7,8 +7,8 @@ import {ListService} from 'src/app/services/list.service';
 import {TodoService} from '../../services/todo.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Location} from '@angular/common';
-import {combineLatest, from, Observable, pipe} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {combineLatest, from, Observable, of, pipe} from 'rxjs';
+import {flatMap, map, mergeMap} from 'rxjs/operators';
 import {List} from 'src/app/models/list';
 import {LocationService} from '../../services/location.service';
 import {Geolocation, GeolocationPosition} from '@capacitor/core';
@@ -46,25 +46,41 @@ export class TodoDetailsPage implements OnInit {
     this.listId = this.route.snapshot.paramMap.get('listId');
     this.todoId = this.route.snapshot.paramMap.get('todoId');
 
-    this.todo = this.todoService.getOneObs(this.todoId, this.listId);
+    if (this.todoId == 'new') {
+      this.todoId = null;
+      this.todo = of(new Todo());
+    } else {
+      this.todo = this.todoService.getOneObs(this.todoId, this.listId);
+    }
+
     this.list = this.listService.getOneObs(this.listId);
 
     const currentUid$ = this.auth.getConnectedUser().pipe(map((user) => user.uid));
     combineLatest([currentUid$, this.list]).subscribe(([uid, list]) => {
-      this.owner = list.owner == uid;
+      if (list.owner) {
+        this.owner = list.owner.id == uid;
+      }
       this.canWrite = this.owner;
       if (!this.owner) {
-        this.canWrite = list.canWrite.includes(uid);
+        this.canWrite = list.canWrite.find((ai) => ai.id === uid) != null;
+      }
+
+      if (this.canWrite) {
+        this.todoDetailsForm.enable();
+      } else {
+        this.todoDetailsForm.disable();
       }
     });
 
     this.todo.subscribe(
       (todo) => {
-        this.todoDetailsForm.patchValue(todo);
-        this.locationSpecificMapUrl = todo.address ? encodeURI(`${this.mapUrl}${todo.address}`) : null;
+        if (todo) {
+          this.todoDetailsForm.patchValue(todo);
+          this.locationSpecificMapUrl = todo.address ? encodeURI(`${this.mapUrl}${todo.address}`) : null;
+        }
 
         // When todo loads, the distance is defined by the difference with the todo geopoint and the geolocation promise
-        if (todo.location){
+        if (todo && todo.location !== null){
           this.distanceFromPosition$ = this.locationService.distanceFromCurrentPositionInKm(todo.location);
         } else{
           this.distanceFromPosition$ = null;
@@ -101,7 +117,6 @@ export class TodoDetailsPage implements OnInit {
   async onSubmit() {
     if (this.canWrite) {
       if (this.todoDetailsForm.valid) {
-        if (this.todoId) {
           const todo = new Todo();
           try {
             await this.processLocationForForm(todo);
@@ -115,16 +130,19 @@ export class TodoDetailsPage implements OnInit {
             }
             // Cancel submit
             return;
-          }
-          todo.id = this.todoId;
-          Object.assign(todo, this.todoDetailsForm.value);
-          await this.todoService.update(todo, this.listId);
-          // this.showToast('Updated successfully.', false);
-          this.showToastWithKey('alerts.todo.success', false);
+        }
+        
+        Object.assign(todo, this.todoDetailsForm.value);
 
+        if (!this.todoId) {
+          await this.todoService.create(todo, this.listId);
+          this.showToastWithKey('alerts.todo.success', false);
           this.backToList();
         } else {
-          console.log('Cannot update empty todo object!');
+          todo.id = this.todoId;
+          await this.todoService.update(todo, this.listId);
+          this.showToast('Updated successfully.', false);
+          this.backToList();
         }
       } else {
         this.showToastWithKey('alerts.todo.empty_name', true);

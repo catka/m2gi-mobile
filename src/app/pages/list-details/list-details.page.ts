@@ -36,10 +36,12 @@ export class ListDetailsPage implements OnInit {
 
     let currentUid$ = this.auth.getConnectedUser().pipe(map((user) => user.uid));
     combineLatest([currentUid$, this.list]).subscribe(([uid, list]) => {
-      this.owner = list.owner == uid;
+      if (list.owner) {
+        this.owner = list.owner.id == uid;
+      }
       this.canWrite = this.owner;
       if (!this.owner) {
-        this.canWrite = list.canWrite.includes(uid);
+        this.canWrite = list.canWrite && list.canWrite.find((ai) => ai.id === uid) != null;
       }
 
       this.listId = list.id;
@@ -52,16 +54,17 @@ export class ListDetailsPage implements OnInit {
 
   async newTodoModal(todo?: Todo) {
     if (this.canWrite) {
-      const modal = await this.modalController.create({
-        component: CreateTodoComponent,
-        cssClass: 'create-todo',
-        componentProps: {
-          listId: this.listId,
-          todo: todo,
-        }
-      });
+      this.router.navigateByUrl('lists/' + this.listId + '/todos/new')
+      // const modal = await this.modalController.create({
+      //   component: CreateTodoComponent,
+      //   cssClass: 'create-todo',
+      //   componentProps: {
+      //     listId: this.listId,
+      //     todo: todo,
+      //   }
+      // });
 
-      return await modal.present();
+      // return await modal.present();
     }
   }
 

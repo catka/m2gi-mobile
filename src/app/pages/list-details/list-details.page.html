@@ -15,11 +15,14 @@
     <ion-list>
       <ion-item-sliding *ngFor="let todo of (list | async)?.todos">
         <ion-item>
-          <ion-label (click)="goToTodo(todo)">{{ todo.name }}</ion-label>
+          <ion-label (click)="goToTodo(todo)">
+            <h2>{{ todo.name }}</h2>
+            <ion-note>{{ todo.description }}</ion-note>
+          </ion-label>
           <ion-toggle slot="start" [ngModel]="todo.isDone" [disabled]="!canWrite" (click)="toggleTodoDone(todo)"></ion-toggle>
-          <ion-note slot="end">
-            {{ todo.description }}
-          </ion-note>
+          <!-- <ion-note slot="end">
+            8km // Can put the distance here!
+          </ion-note> -->
         </ion-item>
         <ion-item-options *ngIf="canWrite">
           <ion-item-option color="primary" [disabled]="!canWrite" (click)="updateTodo(todo)">

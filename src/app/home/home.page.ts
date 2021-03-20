@@ -7,7 +7,7 @@ import { List } from '../models/list';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -23,19 +23,12 @@ export class HomePage implements OnInit {
 
 
   ngOnInit(): void {
-    this.currentLists = this.listService.getAll().pipe(
-      map((lists) => {
-        lists.forEach(async (l) => {
-          l.ownerObj = l.owner ? this.accountInfoService.getOneObs(l.owner) : null;
-        });
-        return lists;
-      })
-    );
+    this.currentLists = this.listService.getAll();
     this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user?.uid });
   }
 
   delete(list: List): void {
-    if (this.currentUid != list.owner && list.canWrite.indexOf(this.currentUid) < 0)
+    if (this.currentUid != list.owner.id && list.canWrite && list.canWrite.find((ai) => ai.id === this.currentUid) != null)
       return;
     this.listService.delete(list)
       .then(() => { // TODO : ADD TO TOAST
@@ -47,7 +40,7 @@ export class HomePage implements OnInit {
   }
 
   update(list: List): void {
-    if (this.currentUid != list.owner && list.canWrite.indexOf(this.currentUid) < 0)
+    if (this.currentUid != list.owner.id && !this.canWriteList(list))
       return;
     this.newListModal(list);
   }
@@ -86,4 +79,7 @@ export class HomePage implements OnInit {
   }
 
 
+  canWriteList(l: List): boolean {
+    return l.canWrite && l.canWrite.find((ai) => ai.id === this.currentUid) != null;
+  }
 }

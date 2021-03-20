@@ -11,7 +11,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CreateTodoComponent } from './modals/create-todo/create-todo.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -23,6 +22,8 @@ import { UserPanelComponent } from './modals/user-panel/user-panel.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { CommonModule } from '@angular/common';
 import { UserSettingsImagePopoverComponent } from './modals/user-settings-image-popover/user-settings-image-popover.component';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
+import { AccountInfoAutocompleteService } from './services/account-info-autocomplete.service';
 
 export function createTranslateLoader(http : HttpClient){
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json')
@@ -32,7 +33,6 @@ export function createTranslateLoader(http : HttpClient){
     declarations: [
         AppComponent,
         CreateListComponent,
-        CreateTodoComponent,
         HeaderComponent,
         UserPanelComponent,
         UserSettingsImagePopoverComponent
@@ -50,6 +50,7 @@ export function createTranslateLoader(http : HttpClient){
         AngularFirestoreModule,
         AngularFireStorageModule,
         HttpClientModule,
+        AutoCompleteModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -62,6 +63,7 @@ export function createTranslateLoader(http : HttpClient){
     providers: [
         StatusBar,
         SplashScreen,
+        AccountInfoAutocompleteService,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ],
     bootstrap: [AppComponent]

@@ -55,4 +55,8 @@ export class AccountInfoService {
   private getJSObject(customObj: any){
     return Object.assign({}, customObj);
   }
+
+  getRef(account: AccountInfo) {
+    return this.accountInfoCollection.doc(account.id).ref;
+  }
 }
