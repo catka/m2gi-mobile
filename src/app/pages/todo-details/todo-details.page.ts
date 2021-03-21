@@ -169,4 +169,11 @@ export class TodoDetailsPage implements OnInit {
     await toast.present();
   }
 
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
 }
