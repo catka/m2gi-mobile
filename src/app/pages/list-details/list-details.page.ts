@@ -9,6 +9,7 @@ import { TodoService } from '../../services/todo.service';
 import { merge, Observable, combineLatest } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
+import {LocationService} from '../../services/location.service';
 
 @Component({
   selector: 'app-list-details',
@@ -21,7 +22,7 @@ export class ListDetailsPage implements OnInit {
   owner: boolean = false;
   canWrite: boolean = false;
 
-  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService, private auth: AuthService, private translate: TranslateService) { }
+  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService, private auth: AuthService, private translate: TranslateService, private locationService: LocationService) { }
 
   ngOnInit() {
     const listId = this.route.snapshot.paramMap.get('listId');
@@ -29,6 +30,7 @@ export class ListDetailsPage implements OnInit {
       switchMap((l: List) => this.todoService.getListTodos(l).pipe(
         map((todos) => l.todos = todos),
         map((_) => l.todos.sort((a: Todo, b: Todo) => a.createdAt - b.createdAt)),
+        map((_) => l.todos.forEach( x => {x.distanceFromLocation$ = this.locationService.distanceFromCurrentPositionInKm(x.location); } ) ),
         map((_) => l),
       ))
     );

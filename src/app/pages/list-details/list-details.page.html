@@ -20,9 +20,9 @@
             <ion-note>{{ todo.description }}</ion-note>
           </ion-label>
           <ion-toggle slot="start" [ngModel]="todo.isDone" [disabled]="!canWrite" (click)="toggleTodoDone(todo)"></ion-toggle>
-          <!-- <ion-note slot="end">
-            8km // Can put the distance here!
-          </ion-note> -->
+          <ion-note slot="end" *ngIf="(todo.distanceFromLocation$ | async) as dist">
+            <ion-icon name="location-outline"></ion-icon> {{dist}}km
+          </ion-note>
         </ion-item>
         <ion-item-options *ngIf="canWrite">
           <ion-item-option color="primary" [disabled]="!canWrite" (click)="updateTodo(todo)">

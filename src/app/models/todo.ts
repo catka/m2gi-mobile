@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import GeoPoint = firebase.firestore.GeoPoint;
+import {Observable} from 'rxjs';
 
 export class Todo {
   id: string;
@@ -9,6 +10,7 @@ export class Todo {
   createdAt: any = new Date().getTime();
   location: GeoPoint;
   address: string;
+  distanceFromLocation$: Observable<number>;
 
 
   constructor(name?: string, description?: string, address?: string) {
