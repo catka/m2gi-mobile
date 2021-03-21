@@ -48,7 +48,7 @@
   "user_settings_form" : {
     "update_settings": "Sauvegarder les paramètres",
     "help" : {
-      "pseudonym" : "Votre pseudonyme sera affiché lorsque d'autres utilisateurs voudront partager leurs listes. Le pseudonyme de départ est généré aléatoirement, mais <b>nous vous conseillons de le modifier</b> pour que les autres utilisateurs puissent vous trouver.",
+      "pseudonym" : "Votre pseudonyme sera affiché lorsque d'autres utilisateurs voudront partager leurs listes. Le pseudonyme de départ est généré aléatoirement, mais <ins><b>nous vous conseillons de le modifier</b></ins> pour que les autres utilisateurs puissent vous trouver.",
       "save_changes" : "Vous devez sauvegarder les paramètres pour prendre en compte le changement d'image."
     }
   },
@@ -71,6 +71,7 @@
   "todo_name" : "Nom de la tâche",
   "description" : "Description",
   "address" : "Adresse",
+  "address_placeholder" : "nº rue, code postal ville",
   "user_panel": {
     "settings": "Paramètres",
     "logout": "Déconnexion"

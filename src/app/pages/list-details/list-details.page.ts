@@ -32,6 +32,10 @@ export class ListDetailsPage implements OnInit {
         map((_) => l),
       ))
     );
+    //
+    // const todoDistances$ = this.list.pipe((list : List) => {
+    //   return
+    // });
 
     let currentUid$ = this.auth.getConnectedUser().pipe(map((user) => user.uid));
     combineLatest([currentUid$, this.list]).subscribe(([uid, list]) => {

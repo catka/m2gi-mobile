@@ -48,7 +48,7 @@
   "user_settings_form" : {
     "update_settings": "Update Settings",
     "help" : {
-      "pseudonym" : "Your pseudo name will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <b>you are advised to change it</b> on order for others to identify you.",
+      "pseudonym" : "Your pseudonym will be displayed when others are wanting to share their lists, this is assigned randomly on first connection but <ins><b>you are advised to change it</b></ins> on order for others to identify you.",
       "save_changes" : "You must save changes to save your new picture."
     }
   },
@@ -71,6 +71,7 @@
   "todo_name" : "Todo name",
   "description" : "Description",
   "address" : "Address",
+  "address_placeholder" : "nº street, city, postcode",
   "user_panel": {
     "settings": "Settings",
     "logout": "Logout"
