@@ -57,25 +57,9 @@ export class ListDetailsPage implements OnInit {
     this.router.navigateByUrl('/home');
   }
 
-  async newTodoModal(todo?: Todo) {
-    if (this.canWrite) {
-      this.router.navigateByUrl('lists/' + this.listId + '/todos/new')
-      // const modal = await this.modalController.create({
-      //   component: CreateTodoComponent,
-      //   cssClass: 'create-todo',
-      //   componentProps: {
-      //     listId: this.listId,
-      //     todo: todo,
-      //   }
-      // });
-
-      // return await modal.present();
-    }
-  }
-
   updateTodo(todo: Todo): void {
     if (this.canWrite) {
-      this.newTodoModal(todo);
+      this.router.navigateByUrl('lists/' + this.listId + '/todos/' + todo.id);
     }
   }
 
@@ -85,6 +69,10 @@ export class ListDetailsPage implements OnInit {
         this.todoService.delete(todo.id, this.listId);
       }
     }
+  }
+
+  addNewTodo(): void {
+    this.router.navigateByUrl('/lists/' + this.listId + '/todos/new');
   }
 
   goToTodo(todo: Todo): void {

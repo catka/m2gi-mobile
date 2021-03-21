@@ -68,9 +68,11 @@ export class TodoDetailsPage implements OnInit {
       }
     });
 
+    console.log(this.todoId);
     this.todo.subscribe(
       (todo) => {
         if (todo) {
+          console.log(todo);
           this.todoDetailsForm.patchValue(todo);
           this.locationSpecificMapUrl = todo.address ? encodeURI(`${this.mapUrl}${todo.address}`) : null;
         }

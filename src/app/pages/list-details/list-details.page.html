@@ -38,7 +38,7 @@
 </ion-content>
 
 
-<ion-fab *ngIf="canWrite" vertical="bottom" horizontal="end" slot="fixed" (click)="newTodoModal()">
+<ion-fab *ngIf="canWrite" vertical="bottom" horizontal="end" slot="fixed" (click)="addNewTodo()">
   <ion-fab-button [disabled]="!canWrite">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
