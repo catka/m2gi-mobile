@@ -100,7 +100,17 @@ export class HeaderComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    const urlSplit = this.location.path().split('/');
+    if (urlSplit[1] === 'lists') {
+      if (urlSplit.length > 3) {
+        if (urlSplit[3] === 'todos') {
+          return this.router.navigateByUrl(urlSplit.slice(0, 3).join('/'));
+        }
+      } else if (urlSplit.length === 3 && urlSplit[1] === 'lists'){
+        return this.router.navigateByUrl('home');
+      }
+    }
+    return this.location.back();
   }
 
   textReduce(stringLong) {
