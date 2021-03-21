@@ -60,7 +60,8 @@ export class TodoService {
     }
 
     private getJSObject(customObj: any){
-        return Object.assign({}, customObj);
+        const jsonObject =  Object.assign({}, customObj);
+        return (({ distanceFromLocation$, ...o }) => o)(jsonObject);  // distanceFromLocation$ is a temporary field and shouldn't be persisted to firebase
     }
 
 }

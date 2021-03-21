@@ -23,7 +23,7 @@ export class LocationService {
   //   });
   // }
 
-  distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<number>
+  distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<string>
   {
     return from(this.currentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
       if (currentPosition && currentPosition.coords && destination) {
@@ -38,13 +38,13 @@ export class LocationService {
     return Geolocation.getCurrentPosition({enableHighAccuracy: true, timeout: 5000, maximumAge: 0});
   }
 
-  private calculateDistanceKm(lat1: number, long1: number, lat2: number, long2: number): number
+  private calculateDistanceKm(lat1: number, long1: number, lat2: number, long2: number): string
   {
     // console.log(`${lat1}, ${long1}, ${lat2}, ${long2}`);
     const p = 0.017453292519943295;    // Math.PI / 180
     const c = Math.cos;
     const a = 0.5 - c((lat1 - lat2) * p) / 2 + c(lat2 * p) * c((lat1) * p) * (1 - c(((long1 - long2) * p))) / 2;
-    return Math.round((12742 * Math.asin(Math.sqrt(a)))); // 2 * R; R
+    return '' + Math.round((12742 * Math.asin(Math.sqrt(a)))); // 2 * R; R
   }
 
 

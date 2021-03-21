@@ -27,7 +27,7 @@
                 <ion-label position="floating">{{'address' | translate}}</ion-label>
                 <ion-input placeholder="{{'address_placeholder' | translate}}"  formControlName="address"></ion-input>
             </ion-item>
-            <ion-item button (click)="openMapUrl()" color="secondary" *ngIf="(distanceFromPosition$ | async) as dist">
+            <ion-item button (click)="openMapUrl()" color="secondary" *ngIf="(this.distanceFromPosition$ | async) as dist">
                 <ion-icon name="location-outline"></ion-icon><ion-text>{{'todo_form.distance_from_location' | translate:{'dist':dist} }}</ion-text>
             </ion-item>
             <ion-button color="success" expand="block" (click)="onSubmit()">{{'todo_form.update_todo' | translate}}</ion-button>

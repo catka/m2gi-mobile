@@ -10,7 +10,7 @@ export class Todo {
   createdAt: any = new Date().getTime();
   location: GeoPoint;
   address: string;
-  distanceFromLocation$: Observable<number>;
+  distanceFromLocation$: Observable<string>;
 
 
   constructor(name?: string, description?: string, address?: string) {

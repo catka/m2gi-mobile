@@ -25,7 +25,7 @@ export class TodoDetailsPage implements OnInit {
   todoId: string;
   todo: Observable<Todo>;
   list$: Observable<List>;
-  distanceFromPosition$: Observable<number>;
+  distanceFromPosition$: Observable<string>;
   owner = false;
   canWrite$: Observable<boolean>;
   canWrite: boolean = false;

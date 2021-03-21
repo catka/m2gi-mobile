@@ -21,7 +21,7 @@
           </ion-label>
           <ion-toggle slot="start" [ngModel]="todo.isDone" [disabled]="!canWrite" (click)="toggleTodoDone(todo)"></ion-toggle>
           <ion-note slot="end" *ngIf="(todo.distanceFromLocation$ | async) as dist">
-            <ion-icon name="location-outline"></ion-icon> {{dist}}km
+            <ion-icon name="location-outline"></ion-icon> {{todo.distanceFromLocation$ | async}}km
           </ion-note>
         </ion-item>
         <ion-item-options *ngIf="canWrite">
