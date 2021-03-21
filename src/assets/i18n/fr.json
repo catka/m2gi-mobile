@@ -11,7 +11,7 @@
   "pseudonym" : "Pseudonyme",
   "language" : "Langage",
   "picture" : "Image",
-  "email" : "E-mail",
+  "email" : "Email",
   "login" : "Login",
   "todo_form" : {
     "distance_from_location": "Environ {{ dist }}km de votre position",
@@ -29,14 +29,14 @@
     },
     "validators" : {
       "login_required" : "Le login est requis.",
-      "valid_email" : "L'e-mail doit respecter un format valide.",
+      "valid_email" : "L'email doit respecter un format valide.",
       "password_required" : "Le mot de passe est requis."
     }
   },
   "register_form" : {
     "validators" : {
-      "email_required" : "L'e-mail est requis.",
-      "email_valid" : "L'e-mail doit respecter un format valide.",
+      "email_required" : "L'email est requis.",
+      "email_valid" : "L'email doit respecter un format valide.",
       "password_required" : "Le mot de passe est requis.",
       "password_valid" : "Le mot de passe doit contenir au moins 8 caractères.",
       "password_conf_required" : "La confirmation de mot de passe est requise.",
@@ -77,45 +77,45 @@
   },
   "alerts": {
     "list": {
-      "deleted_success" : "List successfully deleted!",
-      "deleted_error" : "There was an error removing the list",
-      "created" :"List successfully created!",
-      "created_error" :"There was an error creating the list",
-      "updated" :"List successfully updated!",
-      "updated_error" :"There was an error removing the updating the list",
-      "empty_list" :"List name cannot be empty."
+      "deleted_success" : "La liste a bien été supprimée.",
+      "deleted_error" : "Une erreur s'est produite lors de la suppression de la liste",
+      "created" :"La liste a bien été créée",
+      "created_error" :"Une erreur s'est produite lors de la création de la liste",
+      "updated" :"La liste a bien été mise à jour.",
+      "updated_error" :"Une erreur s'est produite lors de la mise à jour de la liste",
+      "empty_list" :"Le nom de la liste ne peut pas être vide."
 
     },
     "todo": {
-      "delete_confirm" : "This todo task will be deleted, are you sure?",
-      "error_address" : "Error finding address, please check your address input before saving or empty the field.",
-      "error_address_admin" :"Error finding address, please check your address input before saving or empty the field. If this problem persists, please contact the administrator",
-      "success" :"Updated successfully.",
-      "empty_name" :"Todo name cannot be empty.",
-      "permissions_error" :"You do not have permission to update this item."
+      "delete_confirm" : "Cette tâche sera supprimée définitivement. Êtes-vous sûr(e) ?",
+      "error_address" : "Adresse non trouvée, vérifiez et corrigez votre saisie pour réessayer.",
+      "error_address_admin" :"Adresse non trouvée, vérifiez et corrigez votre saisie pour réessayer. Si le problème persiste, vous pouvez ontacter un administrateur.",
+      "success" :"Mise à jour réussie.",
+      "empty_name" :"Le nom de la tâche ne peut pas être vide.",
+      "permissions_error" :"Vous n'avez pas la permission de modifier cette tâche."
     },
     "login": {
-      "logged_in_with_fb" : "Logged in with Facebook.",
-      "email_confirm" : "Please confirm your email address before logging in",
-      "success" : "{{ user }}logged in successfully",
-      "input_error" : "Invalid input(s). Please review",
-      "email_not_found" : "Email not found",
-      "user_not_found" : "User not found",
-      "password_error" : "Incorrect Password",
-      "user_disabled" : "Cannot login as a disabled user",
-      "login_unsuccessful" : "Login unsuccessful",
-      "password_reset" : "Reset password email sent for user: {{ user }}",
-      "user_created" : "User created, an email confirmation as been sent to: {{ user }}"
+      "logged_in_with_fb" : "Connecté(e) avec Facebook.",
+      "email_confirm" : "Merci de confirmer votre adresse email avant de vous connecter.",
+      "success" : "Connexion de {{ user }} réussie",
+      "input_error" : "La saisie est incorrecte. Veuilez la corriger et réessayer.",
+      "email_not_found" : "L'email n'a pas été trouvé",
+      "user_not_found" : "L'utilisateur n'a pas été trouvé",
+      "password_error" : "Mot de passe incorrect",
+      "user_disabled" : "La connexion n'est pas autorisée pour les comptes désactivés.",
+      "login_unsuccessful" : "Connexion réussie",
+      "password_reset" : "Envoi du mail de réinitialisation de mot de passe pour : {{ user }}",
+      "user_created" : "Votre compte a été créé, un email de confirmation a été envoyé à : {{ user }}"
     },
     "user_settings": {
-      "updated" : "Updated settings successfully.",
-      "error" : "Error submitting settings",
-      "invalid" : "Invalid input. Please review"
+      "updated" : "Les paramètres ont bien été mis à jour.",
+      "error" : "Une erreur est survenue lors de la sauvegarde des paramètres.",
+      "invalid" : "La saisie est incorrecte. Veuilez la corriger et réessayer."
     },
     "home": {
-      "deleted" : "List successfully deleted!",
-      "deleted_error" : "There was an error removing the list",
-      "shared_by" : "List shared by {{ name }}"
+      "deleted" : "La liste a bien été supprimée.",
+      "deleted_error" : "Une erreur s'est produite lors de la suppression de la liste",
+      "shared_by" : "Liste partagée par {{ name }}"
     }
   }
 
