@@ -33,7 +33,7 @@
           <ion-item-option color="primary" (click)="update(l)" [disabled]="(!l.owner || l.owner.id != currentUid) && !canWriteList(l)">
             <ion-icon slot="start" name="pencil"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger" (click)="delete(l)" [disabled]="(!l.owner || l.owner.id != currentUid) && !canWriteList(l)">
+          <ion-item-option color="danger" (click)="deleteList(l)" [disabled]="(!l.owner || l.owner.id != currentUid) && !canWriteList(l)">
             <ion-icon slot="start" name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>

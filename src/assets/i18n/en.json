@@ -78,6 +78,7 @@
   },
   "alerts": {
     "list": {
+      "delete_confirm" : "This list will be deleted, are you sure?",
       "deleted_success" : "List successfully deleted!",
       "deleted_error" : "There was an error removing the list",
       "created" :"List successfully created!",
@@ -116,6 +117,7 @@
     "home": {
       "deleted" : "List successfully deleted!",
       "deleted_error" : "There was an error removing the list",
+      "deleted_premission_error" : "You do not have permission to delete this item.",
       "shared_by" : "List shared by {{ name }}"
     }
   }

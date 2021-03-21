@@ -27,16 +27,20 @@ export class HomePage implements OnInit {
     this.auth.getConnectedUser().subscribe((user) => { this.currentUid = user?.uid });
   }
 
-  delete(list: List): void {
-    if (this.currentUid != list.owner.id && list.canWrite && list.canWrite.find((ai) => ai.id === this.currentUid) != null)
+  deleteList(list: List): void {
+    if (this.currentUid != list.owner.id && !this.canWriteList(list)) {
+      this.showToastWithKey('alerts.home.deleted_premission_error', true);
       return;
-    this.listService.delete(list)
+    }
+    if (confirm(this.translate.instant('alerts.list.delete_confirm'))) {
+      this.listService.delete(list)
       .then(() => { // TODO : ADD TO TOAST
         this.showToastWithKey('alerts.home.deleted', false);
       }).catch((error) => {
         console.error('Error removing list: ', error);
         this.showToastWithKey('alerts.home.deleted_error', true);
       });
+    }
   }
 
   update(list: List): void {
