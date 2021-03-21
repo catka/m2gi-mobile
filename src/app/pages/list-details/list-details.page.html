@@ -15,7 +15,7 @@
     <ion-list>
       <ion-item-sliding *ngFor="let todo of (list | async)?.todos">
         <ion-item>
-          <ion-label (click)="goToTodo(todo)">
+          <ion-label (click)="goToTodo(todo)" class="ion-text-wrap">
             <h2>{{ todo.name }}</h2>
             <ion-note>{{ todo.description }}</ion-note>
           </ion-label>

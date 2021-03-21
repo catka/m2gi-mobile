@@ -17,7 +17,7 @@
     <ion-list>
       <ion-item-sliding *ngFor="let l of currentLists | async">
         <ion-item>
-          <ion-label (click)="goToList(l)">
+          <ion-label (click)="goToList(l)" class="ion-text-wrap">
             {{ l.name }}
           </ion-label>
           <ion-note slot="end">
