@@ -9,10 +9,18 @@
 <!--  </ion-toolbar>-->
 <!--</ion-header>-->
 
-<ion-content>
+<ion-content *ngIf="(list | async) as l">
 <!--  <ion-button *ngIf="!(list | async)" expand="block" fill="outline" (click)="back()">Back to home</ion-button>-->
-  <ng-container *ngIf="(list | async)">
     <ion-list>
+      <ion-item color="secondary" *ngIf="!owner">
+        <ion-label>
+          {{ "list_shared_by" | translate:{'name': l.owner.sudoName} }}
+        </ion-label>
+        <ion-thumbnail class="thumb">
+          <img *ngIf="l.owner.photoUrl" [src]="l.owner.photoUrl" />
+          <ion-icon *ngIf="!l.owner.photoUrl" name="person-outline"></ion-icon>
+        </ion-thumbnail>
+      </ion-item>
       <ion-item-sliding *ngFor="let todo of (list | async)?.todos">
         <ion-item>
           <ion-label (click)="goToTodo(todo)" class="ion-text-wrap">
@@ -34,7 +42,6 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
-  </ng-container>
 </ion-content>
 
 

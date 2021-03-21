@@ -72,6 +72,7 @@
   "description" : "Description",
   "address" : "Address",
   "address_placeholder" : "nº street, city, postcode",
+  "list_shared_by" : "Shared by {{ name }}",
   "user_panel": {
     "settings": "Settings",
     "logout": "Logout"

@@ -72,6 +72,7 @@
   "description" : "Description",
   "address" : "Adresse",
   "address_placeholder" : "nº rue, code postal ville",
+  "list_shared_by" : "Partagé par {{ name }}",
   "user_panel": {
     "settings": "Paramètres",
     "logout": "Déconnexion"
