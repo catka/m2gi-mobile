@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
-import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../../services/auth.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -44,28 +43,8 @@ export class PasswordResetPage implements OnInit {
               }
           }
       } else{
-            // this.showToast('Invalid inputs.', true);
           this.showToastWithKey(this.translate.instant('alerts.login.input_error'), true);
-
       }
-      //       .then(() => {
-      //         this.showToast(`Reset password email sent for user: ${username}`, false);
-      //         this.router.navigateByUrl('login');
-      //       })
-      //       .catch((error) => {
-      //         const errorCode = error.code;
-      //         if (errorCode === 'auth/user-not-found') {
-      //             this.showToast('User not found', true);
-      //         } else if (errorCode === 'auth/invalid-email') {
-      //             this.showToast('Email not found', true);
-      //         } else {
-      //             this.showToast('Login unsuccessful', true);
-      //             console.log(errorCode);
-      //         }
-      //       });
-      // } else {
-      //   this.showToast('Invalid inputs.', true);
-      // }
     }
 
     async showToastWithKey(translationKey: string, error: boolean, parameters = {}) {

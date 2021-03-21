@@ -1,13 +1,12 @@
 import { AuthService } from './../../services/auth.service';
-import { ToastController, ModalController } from '@ionic/angular';
 import { ListService } from './../../services/list.service';
 import { Component, OnInit } from '@angular/core';
 import { List } from 'src/app/models/list';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Todo } from 'src/app/models/todo';
 import { TodoService } from '../../services/todo.service';
-import { merge, Observable, combineLatest } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 import {LocationService} from '../../services/location.service';
 
@@ -22,7 +21,7 @@ export class ListDetailsPage implements OnInit {
   owner: boolean = false;
   canWrite: boolean = false;
 
-  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private toast: ToastController, private modalController: ModalController, private todoService: TodoService, private auth: AuthService, private translate: TranslateService, private locationService: LocationService) { }
+  constructor(private listService: ListService, private route: ActivatedRoute, private router: Router, private todoService: TodoService, private auth: AuthService, private translate: TranslateService, private locationService: LocationService) { }
 
   ngOnInit() {
     const listId = this.route.snapshot.paramMap.get('listId');
@@ -34,10 +33,6 @@ export class ListDetailsPage implements OnInit {
         map((_) => l),
       ))
     );
-    //
-    // const todoDistances$ = this.list.pipe((list : List) => {
-    //   return
-    // });
 
     let currentUid$ = this.auth.getConnectedUser().pipe(map((user) => user.uid));
     combineLatest([currentUid$, this.list]).subscribe(([uid, list]) => {

@@ -1,17 +1,16 @@
 import { AuthService } from 'src/app/services/auth.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastController, ModalController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { Todo } from 'src/app/models/todo';
 import { ListService } from 'src/app/services/list.service';
 import { TodoService } from '../../services/todo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import { combineLatest, forkJoin, from, Observable, of, pipe, zip } from 'rxjs';
-import { flatMap, map, mergeMap, startWith, tap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { List } from 'src/app/models/list';
 import { LocationService } from '../../services/location.service';
-import { Geolocation, GeolocationPosition } from '@capacitor/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -33,8 +32,7 @@ export class TodoDetailsPage implements OnInit {
   locationSpecificMapUrl = null;
 
   constructor(private _fb: FormBuilder, private listService: ListService, private route: ActivatedRoute, private router: Router,
-    private todoService: TodoService, private _location: Location,
-    public toastController: ToastController, private auth: AuthService, private locationService: LocationService, private translate: TranslateService) {
+    private todoService: TodoService, private _location: Location, public toastController: ToastController, private auth: AuthService, private locationService: LocationService, private translate: TranslateService) {
     this.todoDetailsForm = this._fb.group({
       name: ['', Validators.required],
       isDone: [false],

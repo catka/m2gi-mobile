@@ -1,15 +1,14 @@
 import { PhotoService } from './photo.service';
 import { AccountInfo } from './../models/accountInfo';
-import {Injectable} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {Subject, BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { BehaviorSubject } from 'rxjs';
 import firebase from 'firebase';
-import {AccessibilityPluginWeb, Plugins} from '@capacitor/core';
-import {AccountInfoService} from './account-info.service';
+import { Plugins } from '@capacitor/core';
+import { AccountInfoService } from './account-info.service';
 import User = firebase.User;
-import {ActivatedRoute, Router} from '@angular/router';
-import {LanguageService} from './language.service';
+import { Router } from '@angular/router';
+import { LanguageService } from './language.service';
 
 @Injectable({
     providedIn: 'root'
@@ -18,39 +17,38 @@ export class AuthService {
     private user$: BehaviorSubject<firebase.User>;
     private accountInfo: AccountInfo;
 
-    constructor(private afAuth: AngularFireAuth,
-                private af: AngularFirestore, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService, private photoService: PhotoService) {
+    constructor(private afAuth: AngularFireAuth, private accountInfoService: AccountInfoService, private router: Router, private languageService: LanguageService, private photoService: PhotoService) {
 
         this.user$ = new BehaviorSubject(null);
         this.afAuth.onAuthStateChanged(user => {
-                this.user$.next(user);
-                // If sign in
-                if (user){
-                    // Search for user
-                    this.accountInfoService.getOneObs(user.uid).subscribe(
-                        (snapshot) => {
-                            this.accountInfo = snapshot;
-                            languageService.setLanguage(snapshot.prefLanguage);
-                            if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined){
-                                // Create user settings w/ default sudo name and redirect to user settings to change it
-                                this.updateAccountInfoWhenEmpty(snapshot, user).then(() => {
-                                    if (user.emailVerified || user.providerData[0].providerId === 'facebook.com') this.router.navigateByUrl('/user-settings');
-                                    else this.logout();
-                                });
-                            }
-                            
-                        },
-                        (error) => console.log(error)
-                    );
-                }
+            this.user$.next(user);
+            // If sign in
+            if (user) {
+                // Search for user
+                this.accountInfoService.getOneObs(user.uid).subscribe(
+                    (snapshot) => {
+                        this.accountInfo = snapshot;
+                        this.languageService.setLanguage(snapshot.prefLanguage);
+                        if (snapshot.sudoName === undefined || snapshot.photoUrl === undefined) {
+                            // Create user settings w/ default sudo name and redirect to user settings to change it
+                            this.updateAccountInfoWhenEmpty(snapshot, user).then(() => {
+                                if (user.emailVerified || user.providerData[0].providerId === 'facebook.com') this.router.navigateByUrl('/user-settings');
+                                else this.logout();
+                            });
+                        }
+
+                    },
+                    (error) => console.log(error)
+                );
+            }
         }
-    );
+        );
     }
 
     // Create sudo name using email in firebase
     async updateAccountInfoWhenEmpty(accountInfo: AccountInfo, user: User) {
         if (!accountInfo.photoUrl) {
-            if(user.photoURL)
+            if (user.photoURL)
                 accountInfo.photoUrl = user.photoURL;
             else
                 accountInfo.photoUrl = await this.photoService.getDefaultUserPicture();
@@ -70,11 +68,10 @@ export class AuthService {
     }
 
     async login(email: string, password: string) {
-        // TODO : CHECK IF ACCOUNTINFO EXISTS - IF NOT, CREATE ONE!
+        // TODO : CHECK IF ACCOUNTINFO EXISTS - IF NOT, CREATE ONE! // Done by firestore?
         return await this.afAuth.signInWithEmailAndPassword(email, password);
     }
 
-    // TODO : NEED TO ADD THIS FUNCTIONALITY
     async logout() {
         return await this.afAuth.signOut();
     }
@@ -95,7 +92,6 @@ export class AuthService {
 
     async googleLogin() {
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
-        // let pseudo = googleUser.name;
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         return this.afAuth.signInAndRetrieveDataWithCredential(credential);
     }
@@ -109,23 +105,6 @@ export class AuthService {
     AuthLogin(provider) {
         return this.afAuth.signInWithRedirect(provider);
     }
-
-    // TODO :: THIS NEEDS TO BE ACTUAL LOGGED IN USER
-    // Warning: unused
-    // getLoggedInUser(): string {
-    //     // return 'AzzaujI8wCcnXJujpOBrhVKLYOP2';
-    //     return this.afAuth.idToken;
-    // }
-
-    // // TODO :: THIS NEEDS TO BE ACTUAL AVAILABLE USERS
-    // getAllUserIds(): string[] {
-    //     return [
-    //         'AzzaujI8wCcnXJujpOBrhVKLYOP2',
-    //         'cNeSKu5b27MKxPFJMIkXD4GEvS62',
-    //     ];
-    //
-    // }
-
 }
 
 

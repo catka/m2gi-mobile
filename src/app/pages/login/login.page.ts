@@ -3,9 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
-import firebase from 'firebase';
 import { AuthService } from '../../services/auth.service';
-import { Plugins } from '@capacitor/core';
 import '@codetrix-studio/capacitor-google-auth';
 import {TranslateService} from '@ngx-translate/core';
 

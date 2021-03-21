@@ -12,10 +12,6 @@ export class LanguageService {
     const lang = this.translate.getBrowserLang() ? this.translate.getBrowserLang() : 'en';
     this.translate.setDefaultLang(lang);
   }
-  //
-  // getLang(): string {
-  //   return this.translate.currentLang;
-  // }
 
   // TODO : ADD IMAGE WITH FLAG AND LOAD IN FORM
   getAvailableLanguages()

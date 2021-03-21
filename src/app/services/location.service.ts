@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
-import {from, Observable, pipe} from 'rxjs';
-import {Geolocation, GeolocationPosition} from '@capacitor/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { Geolocation, GeolocationPosition } from '@capacitor/core';
 import firebase from 'firebase';
 import GeoPoint = firebase.firestore.GeoPoint;
 
@@ -23,8 +23,7 @@ export class LocationService {
   //   });
   // }
 
-  distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<string>
-  {
+  distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<string> {
     return from(this.currentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
       if (currentPosition && currentPosition.coords && destination) {
         return this.calculateDistanceKm(currentPosition.coords.latitude, currentPosition.coords.longitude,
@@ -33,13 +32,11 @@ export class LocationService {
     }));
   }
 
-  currentPosition(): Promise<GeolocationPosition>
-  {
-    return Geolocation.getCurrentPosition({enableHighAccuracy: true, timeout: 5000, maximumAge: 0});
+  currentPosition(): Promise<GeolocationPosition> {
+    return Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
   }
 
-  private calculateDistanceKm(lat1: number, long1: number, lat2: number, long2: number): string
-  {
+  private calculateDistanceKm(lat1: number, long1: number, lat2: number, long2: number): string {
     // console.log(`${lat1}, ${long1}, ${lat2}, ${long2}`);
     const p = 0.017453292519943295;    // Math.PI / 180
     const c = Math.cos;
@@ -57,15 +54,15 @@ export class LocationService {
     // });
     return (this.httpClient.get(geocodeUrl).pipe(
       map((data: any) => {
-          // Api can potentially return an empty data set for an address not found
-          if (!data || data.data.length === 0) {
-            throw new Error(this.ADDRESS_NOT_FOUND_ERROR);
-          } else {
-            const lat = data.data[0].latitude;
-            const long = data.data[0].longitude;
-            return [lat, long];
-          }
+        // Api can potentially return an empty data set for an address not found
+        if (!data || data.data.length === 0) {
+          throw new Error(this.ADDRESS_NOT_FOUND_ERROR);
+        } else {
+          const lat = data.data[0].latitude;
+          const long = data.data[0].longitude;
+          return [lat, long];
         }
+      }
       )
     )).toPromise();
   }
@@ -79,8 +76,8 @@ export class LocationService {
 
     this.httpClient.get(reverseGeocodeUrl).pipe(
       map((data: any) => {
-          return data.data[0].name;
-        }
+        return data.data[0].name;
+      }
       )
     );
   }

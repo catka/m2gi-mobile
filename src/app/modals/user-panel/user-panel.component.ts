@@ -1,14 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {AccountInfoService} from '../../services/account-info.service';
-import {Observable} from 'rxjs';
-import {AccountInfo} from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MenuController, ToastController} from '@ionic/angular';
-import {LanguageService} from '../../services/language.service';
 
 @Component({
   selector: 'app-user-panel',
@@ -22,7 +17,6 @@ export class UserPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
     this.auth.getConnectedUser().subscribe(user => {
       this.user = user;
     });

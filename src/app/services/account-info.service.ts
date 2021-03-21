@@ -8,7 +8,6 @@ import {AccountInfo} from '../models/accountInfo';
   providedIn: 'root'
 })
 export class AccountInfoService {
-  private accountInfos: AccountInfo[] = [];
   private accountInfoCollection: AngularFirestoreCollection<AccountInfo>;
 
   constructor(private af: AngularFirestore) {
@@ -30,14 +29,6 @@ export class AccountInfoService {
     // Account info id not automatically generated, can pass in id
     return this.accountInfoCollection.doc(id).set(this.getJSObject(accountInfo));
   }
-  //
-  // update(accountInfo: AccountInfo, value): Promise<void>{
-  //   return this.accountInfoCollection.doc(accountInfo.id + '').set(value);
-  // }
-  //
-  // delete(accountInfo: AccountInfo): Promise<void>{
-  //   return this.accountInfoCollection.doc(accountInfo.id + '').delete();
-  // }
 
   private convertSnapshotData<T>(actions){
     return actions.map(a => {

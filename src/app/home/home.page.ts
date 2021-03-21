@@ -7,7 +7,6 @@ import { List } from '../models/list';
 import { ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -34,7 +33,7 @@ export class HomePage implements OnInit {
     }
     if (confirm(this.translate.instant('alerts.list.delete_confirm'))) {
       this.listService.delete(list)
-      .then(() => { // TODO : ADD TO TOAST
+      .then(() => {
         this.showToastWithKey('alerts.home.deleted', false);
       }).catch((error) => {
         console.error('Error removing list: ', error);

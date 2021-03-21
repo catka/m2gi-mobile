@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { filter, flatMap, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { filter, flatMap, map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ListService } from 'src/app/services/list.service';
 import { AuthService } from 'src/app/services/auth.service';
 import firebase from 'firebase';
 import User = firebase.User;
-import { Location, TitleCasePipe } from '@angular/common';
+import { Location } from '@angular/common';
 import { TodoService } from '../../services/todo.service';
 import { AccountInfoService } from '../../services/account-info.service';
 import { AccountInfo } from '../../models/accountInfo';
 import { MenuController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { appInitialize } from '@ionic/angular/app-initialize';
 import { of } from 'rxjs';
 
 @Component({
@@ -37,15 +36,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
     this.auth.getConnectedUser().subscribe(user => {
       this.user = user;
       if (user) {
         // Search for user
         this.accountInfo$ = this.accountInfoService.getOneObs(user.uid);
         this.photoUrl$ = this.accountInfo$.pipe(map((ai) => ai.photoUrl));
-
-        // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
       } else {
         this.accountInfo$ = null;
       }

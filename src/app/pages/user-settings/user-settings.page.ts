@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PopoverController, ToastController } from '@ionic/angular';
 import { LanguageService } from '../../services/language.service';
 import { map } from 'rxjs/operators';
-import {LocationService} from '../../services/location.service';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -39,7 +38,6 @@ export class UserSettingsPage implements OnInit {
 
     ngOnInit() {
         this.languages = this.languageService.getAvailableLanguages();
-        // TODO : CLEAN THIS UP - USE AUTH SERVICE VARIABLE?
         this.auth.getConnectedUser().subscribe(user => {
             this.user = user;
             if (user) {
@@ -50,7 +48,6 @@ export class UserSettingsPage implements OnInit {
                     this.userSettingsForm.patchValue(accountInfo);
                 });
                 this.photoUrl$.subscribe((p) => this.oldPhotoUrl = p);
-                // this.accountInfo = this.accountInfoService.getOneObs(user.uid);
             } else {
                 this.accountInfo$ = null;
             }

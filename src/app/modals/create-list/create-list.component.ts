@@ -1,6 +1,6 @@
 import { ListService } from './../../services/list.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List } from 'src/app/models/list';
 import { ModalController, ToastController } from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
@@ -9,9 +9,7 @@ import {Observable} from 'rxjs';
 import {AccountInfo} from '../../models/accountInfo';
 import firebase from 'firebase';
 import User = firebase.User;
-import { map, tap } from 'rxjs/operators';
 import { AccountInfoAutocompleteService } from 'src/app/services/account-info-autocomplete.service';
-import { AutoCompleteOptions } from 'ionic4-auto-complete';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
@@ -21,7 +19,6 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class CreateListComponent implements OnInit {
   public listForm: FormGroup = new FormGroup({});
-  // public availableUserIds: string[] = [];
   accountInfos: Observable<AccountInfo[]>;
   @Input() list: List;
   public user: User;
@@ -51,7 +48,6 @@ export class CreateListComponent implements OnInit {
       this.canReadUsers = this.list.canRead;
       this.canWriteUsers = this.list.canWrite;
     }
-    // this.availableUserIds = this.authService.getAllUserIds();
     this.accountInfos = this.accountInfoService.getAll();
   }
 
@@ -61,7 +57,6 @@ export class CreateListComponent implements OnInit {
         const listToCreate = new List(this.listForm.get('name').value, this.account, this.canReadUsers, this.canWriteUsers);
         this.listService.create(listToCreate)
             .then(() => {
-              // this.showErrorToast('Created!!');
               this.showToastWithKey('alerts.list.created', false);
             })
             .catch((error) => {
