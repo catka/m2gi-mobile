@@ -17,6 +17,7 @@
         <form [formGroup]="todoDetailsForm">
             <ion-item>
                 <ion-toggle formControlName="isDone"></ion-toggle>
+                <ion-text>{{ todoDetailsForm.get('isDone').value ? ('done' | translate) : ('not_done' | translate)}}</ion-text>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">{{'todo_name' | translate}}</ion-label>

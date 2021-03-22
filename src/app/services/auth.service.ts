@@ -98,7 +98,9 @@ export class AuthService {
 
     // Sign in with Facebook
     FacebookAuth() {
-        return this.AuthLogin(new firebase.auth.FacebookAuthProvider());
+        return this.AuthLogin(new firebase.auth.FacebookAuthProvider().setCustomParameters({
+            display: 'popup'
+        }));
     }
 
     // Auth logic to run auth providers

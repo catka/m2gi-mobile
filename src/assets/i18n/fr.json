@@ -1,6 +1,8 @@
 {
   "user_settings": "Paramètres utilisateur",
   "home": "Accueil",
+  "done": "Terminé",
+  "not_done": "À faire",
   "register": "Créer un compte",
   "can_read" : "Partager pour lecture",
   "can_write" : "Partager pour modification",

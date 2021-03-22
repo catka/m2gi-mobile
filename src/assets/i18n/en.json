@@ -1,6 +1,8 @@
 {
   "user_settings": "User settings",
   "home": "Home",
+  "done": "Done",
+  "not_done": "To do",
   "register": "Register",
   "can_read" : "Can read",
   "can_write" : "Can write",
