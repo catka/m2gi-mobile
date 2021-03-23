@@ -76,7 +76,7 @@ This is an implementation of the package: https://www.npmjs.com/package/ionic4-a
 #### Address and Api geocoding
 
 + A user can choose a location of a todo with specifying an address in the todo form.
-+ An <b>API call to is used to geocode</b> the address and the lat and long are saved as a GeoPoint in firebase.
++ An <b>API call is used to geocode</b> the address and the lat and long are saved as a GeoPoint in firebase.
 
 <b>positionstack.com</b> was used instead of the google geocoder as the first 25,000 calls a free. The reason for using this over the commonly used google geocoder as we found two issues with it:
 
@@ -99,5 +99,5 @@ Splash screen from: <a href='https://fr.freepik.com/vecteurs/affaires'>Affaires 
 #### Images:
 ##### App icon:
 ![App Icon](android/app/src/main/res/mipmap-hdpi/ic_launcher.png)
-##### Splash screen icon:
+##### Splash screen image:
 ![Splash Screen](android/app/src/main/res/drawable/splash.png)
