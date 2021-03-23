@@ -97,6 +97,7 @@ For positionstack, the billing information was not required. It should be noted 
 Splash screen from: <a href='https://fr.freepik.com/vecteurs/affaires'>Affaires vecteur créé par jcomp - fr.freepik.com</a>
 
 #### Images:
-
+##### App icon:
 ![App Icon](android/app/src/main/res/mipmap-hdpi/ic_launcher.png)
+##### Splash screen icon:
 ![Splash Screen](android/app/src/main/res/drawable/splash.png)
