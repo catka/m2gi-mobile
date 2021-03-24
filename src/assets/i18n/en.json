@@ -15,6 +15,7 @@
   "picture" : "Picture",
   "email" : "E-mail",
   "login" : "Login",
+  "reset_password" : "Send reset password link",
   "todo_form" : {
     "distance_from_location": "Approximately {{ dist }} km from your location",
     "create_todo": "Create todo",

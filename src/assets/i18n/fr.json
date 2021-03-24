@@ -15,6 +15,7 @@
   "picture" : "Image",
   "email" : "Email",
   "login" : "Login",
+  "reset_password" : "Réinitialisation du mot de passe",
   "todo_form" : {
     "distance_from_location": "Environ {{ dist }}km de votre position",
     "create_todo": "Créer une tâche",

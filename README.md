@@ -2,25 +2,25 @@
 
 ## Firestore Documents
 ### accountInfo
-Contains account information, including firebase user uid, pseudonym (used to identify users when sharing), language and a profile photo url.
+An connected application user has an associated firebase user uid - this serves as the unique document Id for the accountInfo document. This document contains information specific to the connected user including their pseudonym (used to identify users when sharing), language and a profile photo url.
 
 The photo url is typically a link to a photo stored in the following locations:
 
 + <b>Firebase</b>  (https://firebasestorage....): For uploaded photos in the application i.e. taken by camera or uploaded from file.
-+ <b>Google</b>    (https://lh3.googleusercont.): For uploaded photos on linked to a google account
-+ <b>Facebook</b>  (https://graph.facebook.....): For uploaded photos on linked to a facebook account
++ <b>Google</b>    (https://lh3.googleusercont.): For uploaded photos linked to a google account
++ <b>Facebook</b>  (https://graph.facebook.....): For uploaded photos linked to a facebook account
 
 ### lists
-Lists contain name, owner accountInfo reference, description, sharing information (read & write) & todos document collection.
-#### Sharing
-Both read and write are collections of references to accountInfo documents. This allows easy identification of shared users with the accountInfo document Id equal to the firebase user uid.
+Lists contain name, owner accountInfo reference, description, sharing information (read & write) & a todos document collection.
+
+Both read and write properties are collections of references to accountInfo documents. This allows easy identification of shared users with the accountInfo document Id equal to the firebase user uid.
 
 #### todos
-Contains the name, description, created date, if it's done and location information (address and corresponding geopoint)
+Contains the name, description, created date, if it's done and location information (address and corresponding lat & long geopoint).
 
 ## Firestore Rules
 
-See Microsoft Teams channel *Group 2* file uploads for the commented firestore rule code included in firestore for lists, todos and accountInfo.
+See Microsoft Teams channel *Group 2* file uploads for the commented firestore rule code included in firestore to restrict access to lists, todos and accountInfo.
 
 ## Ionic application
 
@@ -28,7 +28,7 @@ For development the envionrment.ts is needed, see Microsoft Teams channel *Group
 
 ### Authentication
 
-A user can login in a few different ways:
+A user can connect to the application in a few different ways:
 
 #### Normal Login
 Users can register an account in firebase with an email and password. They can then login with these credentials on the login page.
@@ -39,9 +39,12 @@ If the user forgets the password they also have the option of resetting their pa
 On registering on the app with an email/password, a custom form validator is used to check the matching of the two passwords.
 
 #### Google
+
+Google connection setup using the instructions in microsoft teams (configuration with google-services.json & implementation with <b>@codetrix-studio/capacitor-google-auth</b>).
+
 #### Facebook
 
-Facebook done on redirect. User email not verified by default (see https://github.com/firebase/firebase-js-sdk/issues/340), therefore we've added a condition to pass emailVerification when the provider id is facebook.
+Facebook connection done on redirect. User email not verified by default (see https://github.com/firebase/firebase-js-sdk/issues/340), therefore we've added a condition to pass emailVerification when the provider id is facebook.
 
 #### Guard
 
@@ -94,10 +97,21 @@ For positionstack, the billing information was not required. It should be noted 
 
 ### Custom Icon and splash screen
 
-Splash screen from: <a href='https://fr.freepik.com/vecteurs/affaires'>Affaires vecteur créé par jcomp - fr.freepik.com</a>
+<b>@ionic-native/splash-screen/ngx</b> used for implementing the splash screen.
 
-#### Images:
+Splash screen image taken from: <a href='https://fr.freepik.com/vecteurs/affaires'>Affaires vecteur créé par jcomp - fr.freepik.com</a>
+
+
+#### Images
 ##### App icon:
 ![App Icon](android/app/src/main/res/mipmap-hdpi/ic_launcher.png)
 ##### Splash screen image:
 ![Splash Screen](android/app/src/main/res/drawable/splash.png)
+
+
+
+### RxJS examples
+Examples of using the event-based operations library can be found in the following classes (<b>these are just single examples - RxJS has been used in many places within the codebase)</b>:
++  <b>filter, flatMap, map, startWith, of</b>: src/app/components/header/header.component.ts
++  <b>tap</b>: src/app/services/list.service.ts
++  <b>switchMap, combineLatest</b>: src/app/pages/list-details/list-details.page.ts
