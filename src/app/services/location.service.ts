@@ -18,11 +18,6 @@ export class LocationService {
   constructor(public httpClient: HttpClient) {
   }
 
-  // watchPosition() {
-  //   const wait = Geolocation.watchPosition({}, (position, err) => {
-  //   });
-  // }
-
   distanceFromCurrentPositionInKm(destination: GeoPoint): Observable<string> {
     return from(this.currentPosition()).pipe(map((currentPosition: GeolocationPosition) => {
       if (currentPosition && currentPosition.coords && destination) {
@@ -47,11 +42,7 @@ export class LocationService {
 
   geocode(address: string): Promise<any> {
     const geocodeUrl = `${this.positionStackApiUrl}/v1/forward?access_key=${environment.positionstack.apiKey}&query=${encodeURI(address)}`;
-    // this.httpClient.get(geocodeUrl).subscribe((data) => {
-    //   const lat = data.data[0].latitude;
-    //   const long = data.data[0].longitude;
-    //   debugger;
-    // });
+
     return (this.httpClient.get(geocodeUrl).pipe(
       map((data: any) => {
         // Api can potentially return an empty data set for an address not found
@@ -69,10 +60,6 @@ export class LocationService {
 
   reverseGeocode(lat: string, long: string) {
     const reverseGeocodeUrl = `${this.positionStackApiUrl}/v1/reverse?access_key=${environment.positionstack.apiKey}&query=${lat},${long}`;
-    // this.httpClient.get(reverseGeocodeUrl).subscribe((data) => {
-    //     const address = data.data[0].name;
-    //     debugger;
-    // });
 
     this.httpClient.get(reverseGeocodeUrl).pipe(
       map((data: any) => {

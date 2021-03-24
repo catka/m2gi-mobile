@@ -2,7 +2,7 @@
 
 ## Firestore Documents
 ### accountInfo
-An connected application user has an associated firebase user uid - this serves as the unique document Id for the accountInfo document. This document contains information specific to the connected user including their pseudonym (used to identify users when sharing), language and a profile photo url.
+A connected user has an associated firebase user uid - this serves as the unique document Id for the accountInfo document. This document contains information specific to the connected user including their pseudonym (used to identify users when sharing), language and a profile photo url.
 
 The photo url is typically a link to a photo stored in the following locations:
 
@@ -28,7 +28,7 @@ For development the envionrment.ts is needed, see Microsoft Teams channel *Group
 
 ### Authentication
 
-A user can connect to the application in a few different ways:
+A user can connect to the application in a few different ways. The bulk of this code is contained within the src/app/pages/login & src/app/services/auth.service.ts directories.
 
 #### Normal Login
 Users can register an account in firebase with an email and password. They can then login with these credentials on the login page.
@@ -36,7 +36,7 @@ Users can register an account in firebase with an email and password. They can t
 If the user forgets the password they also have the option of resetting their password.
 
 ##### Form advanced validation
-On registering on the app with an email/password, a custom form validator is used to check the matching of the two passwords.
+On registering on the app with an email/password, a custom form validator is used to check the matching of the two passwords (see src/app/validators/matching-password-validator.ts)
 
 #### Google
 
@@ -48,19 +48,31 @@ Facebook connection done on redirect. User email not verified by default (see ht
 
 #### Guard
 
-Unauthenticated users cannot access pages other than login. The authguard service canActivate method is run on all other routes to check this.
+Unauthenticated users cannot access pages other than login. The authguard service (src/app/guard/auth-guard.guard.ts) canActivate method is run on all other routes to check this (see src/app/app-routing.module.ts).
 
 ### Internationalization
-<b>@ngx-translate/core and @ngx-translate/http-loader</b> used to allow for multiple languages. Translations are stored in the assets/i18n folder. 
+
+Internationalization allows for people that use different languages to navigate throughout the application easily. English and French translations have been setup in this application (although other languages can easily be added).
+
+<b>@ngx-translate/core and @ngx-translate/http-loader</b> have been used for setting up multiple language support. Translations for each language are stored in json files contained within the assets/i18n folder (e.g. en.json). 
 
 The user can change the application language in the account settings page and is stored in firebase under the accountInfo document associated with their uid.
 
-+ Get translated text in typescript: this.translate.instant('translate_key', parametersJsonArray);
+Usage of translation keys in the code (parameters can also be passed into the translation): 
+
++ Get translated text in typescript: this.translate.instant('translate_key', {paramName: paramValue});
 + Get translate in html: {{ "translate_key" | translate }}
-+ Or with key {{'login_form.options.login_with' | translate:{'keyName': 'KeyValue'} }}
++ Or with parameter(s) {{'login_form.options.login_with' | translate:{'paramName': 'paramValue'} }}
+
+An example of this can be found in the login.page.ts where an alert is shown on login success, passing in the username to be shown in the alert:
++ Lines 55 & 75 in src/app/pages/login/login.page.ts
++ Using the translation in line 106 in src/assets/i18n/en.json or src/assets/i18n/fr.json
 
 ### Firebase Firestorage of images for user profile pictures + camera
-Within the account settings page a user can upload a profile picture from file or with the devices camera. This image is saved in Firebase (note that the on Google authentication the image is set to the default Google profile picture on first connection). 
+
+Adding a profile picture is another way for other users to identify another. It also adds to the asthetics and personalisation of the application. 
+
+Within the account settings page a user can upload a profile picture from file or with the devices camera. This image is saved in Firebase (note that on Google authentication the image is set to the default Google profile picture on first connection). 
 
 The <b>@ionic/pwa-elements</b> plugin has been included in order to use the camera when in the web environment.
 
@@ -71,11 +83,17 @@ The profile picture is typically used for sharing. Displayed next to the users p
 
 
 ### Ionic 4 Autocomplete
-When a user wants to share his list to other users, an autocomplete list helps them find other users.
-This is an implementation of the package: https://www.npmjs.com/package/ionic4-auto-complete
+When a user wants to share his list to other users, an autocomplete list helps them easily find other users. This makes it much quicker to search for user especially when there is a lot of registered users. See line 25 of src/app/modals/create-list/create-list.component.html for an example using the ion-auto-complete tag.
+
+This is an implementation of the package: https://www.npmjs.com/package/ionic4-auto-complete.
 
 
 ### Localisation
+
+A user may be more inclined to do a task if it is not far away. Allowing geocoding of the address and geolocation allows users to identify the distance of the task from their location.
+
+The bulk of the code used for this service is with the src/app/services/location.service.ts class.
+
 #### Address and Api geocoding
 
 + A user can choose a location of a todo with specifying an address in the todo form.
@@ -115,3 +133,4 @@ Examples of using the event-based operations library can be found in the followi
 +  <b>filter, flatMap, map, startWith, of</b>: src/app/components/header/header.component.ts
 +  <b>tap</b>: src/app/services/list.service.ts
 +  <b>switchMap, combineLatest</b>: src/app/pages/list-details/list-details.page.ts
++  <b>from</b>: src/app/services/location.service.ts
